@@ -146,14 +146,14 @@ function scegliModalita(modalita) {
  var btnNuova = document.getElementById('btn-nuova');
  var btnModifica = document.getElementById('btn-modifica');
  if (modalita === 'nuova') {
-  btnNuova.style.borderColor = '#CFF09E';
-  btnNuova.style.background = 'rgba(207,240,158,0.12)';
-  btnModifica.style.borderColor = '#3B8686';
+  btnNuova.style.borderColor = 'var(--gs-accento)';
+  btnNuova.style.background = 'rgba(var(--gs-accento-rgb),0.12)';
+  btnModifica.style.borderColor = 'var(--gs-medio)';
   btnModifica.style.background = 'rgba(0,0,0,0.2)';
  } else {
-  btnModifica.style.borderColor = '#CFF09E';
-  btnModifica.style.background = 'rgba(207,240,158,0.12)';
-  btnNuova.style.borderColor = '#3B8686';
+  btnModifica.style.borderColor = 'var(--gs-accento)';
+  btnModifica.style.background = 'rgba(var(--gs-accento-rgb),0.12)';
+  btnNuova.style.borderColor = 'var(--gs-medio)';
   btnNuova.style.background = 'rgba(0,0,0,0.2)';
  }
  setTimeout(function() {
@@ -167,13 +167,13 @@ function costruisciGalleriaPalette() {
  var html = ''; 
  
  if (stato.modalita === 'modifica') { 
-  html += '<div class="pal-card" onclick="selezionaPalette(\'mantieni\')" id="card-mantieni" style="cursor:pointer; border:2px dashed #3B8686; border-radius:12px; overflow:hidden; transition:all 0.3s; width:220px; display:inline-block; margin:12px; vertical-align:top; box-shadow:0 4px 15px rgba(0,0,0,0.3);">'; 
-  html += '<div style="height:140px; background:#0B486B; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">'; 
-  html += '<i class="fa-solid fa-rotate-left" style="font-size:2.2em; color:#8FBEBA;"></i>'; 
-  html += '<span style="color:#8FBEBA; font-size:0.85em; font-style:italic;">Modifica solo il contenuto, non la struttura!</span>'; 
+  html += '<div class="pal-card" onclick="selezionaPalette(\'mantieni\')" id="card-mantieni" style="cursor:pointer; border:2px dashed var(--gs-medio); border-radius:12px; overflow:hidden; transition:all 0.3s; width:220px; display:inline-block; margin:12px; vertical-align:top; box-shadow:0 4px 15px rgba(0,0,0,0.3);">'; 
+  html += '<div style="height:140px; background:var(--gs-fondo); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">'; 
+  html += '<i class="fa-solid fa-rotate-left" style="font-size:2.2em; color:var(--gs-tenue);"></i>'; 
+  html += '<span style="color:var(--gs-tenue); font-size:0.85em; font-style:italic;">Modifica solo il contenuto, non la struttura!</span>'; 
   html += '</div>'; 
-  html += '<div style="padding:10px 14px; background:#0B486B; border-top:1px solid #3B8686;">'; 
-  html += '<span style="color:#8FBEBA; font-family:\'Montserrat\'; font-size:1.2em;">Mantieni le Personalizzazioni!</span>'; 
+  html += '<div style="padding:10px 14px; background:var(--gs-fondo); border-top:1px solid var(--gs-medio);">'; 
+  html += '<span style="color:var(--gs-tenue); font-family:\'Montserrat\'; font-size:1.2em;">Mantieni le Personalizzazioni!</span>'; 
   html += '</div></div>'; 
  } 
  
@@ -222,8 +222,8 @@ function selezionaPalette(paletteId) {
  var sel = document.getElementById('card-' + paletteId); 
  if (sel) { 
   sel.style.transform = 'scale(1.05)'; 
-  sel.style.boxShadow = '0 0 25px rgba(207,240,158,0.35)'; 
-  sel.style.outline = '2px solid #CFF09E'; 
+  sel.style.boxShadow = '0 0 25px rgba(var(--gs-accento-rgb),0.35)'; 
+  sel.style.outline = '2px solid var(--gs-accento)'; 
  } 
  setTimeout(function() { 
   mostraSchermata('schermata-form'); 
@@ -234,10 +234,10 @@ function selezionaPalette(paletteId) {
 // ============================================================
 // STILI BASE
 // ============================================================
-var STILE_SEZIONE = 'background:#0B486B; border:2px solid #292354; border-radius:12px; padding:25px; margin-bottom:20px;';
-var STILE_INPUT = 'width:100%; padding:10px 14px; background:#292354; border:1px solid #3B8686; border-radius:6px; color:#E2F7C4; font-family:\'Montserrat\'; font-size:1em; box-sizing:border-box; outline:none;';
-var STILE_LABEL = 'display:block; color:#CFF09E; font-size:0.9em; margin-bottom:5px; font-family:\'Montserrat\';';
-var STILE_READONLY = 'display:block; padding:10px 14px; background:#292354; border:1px solid #3B8686; border-radius:6px; color:#8FBEBA; font-family:\'Montserrat\'; font-size:1em; opacity:0.75;';
+var STILE_SEZIONE = 'background:var(--gs-fondo); border:2px solid var(--gs-scuro); border-radius:12px; padding:25px; margin-bottom:20px;';
+var STILE_INPUT = 'width:100%; padding:10px 14px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; color:var(--gs-chiaro); font-family:\'Montserrat\'; font-size:1em; box-sizing:border-box; outline:none;';
+var STILE_LABEL = 'display:block; color:var(--gs-accento); font-size:0.9em; margin-bottom:5px; font-family:\'Montserrat\';';
+var STILE_READONLY = 'display:block; padding:10px 14px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; color:var(--gs-tenue); font-family:\'Montserrat\'; font-size:1em; opacity:0.75;';
 
 // ============================================================
 // HELPERS LAYOUT
@@ -303,7 +303,7 @@ function costruisciForm() {
  html += sezioneForm('<i class="fa-solid fa-layer-group"></i> Slide Extra', costruisciSlideExtra(isNuova));
 
  html += '<div style="text-align:center; margin-top:40px; padding-bottom:40px;">';
- html += '<button onclick="generaScheda()" style="background:linear-gradient(135deg,#A8DBA8 0%,#79BD9A 100%); color:#1a2e1a; border:none; padding:18px 60px; font-size:1.3em; font-weight:700; border-radius:10px; cursor:pointer; font-family:\'Montserrat\'; box-shadow:0 6px 25px rgba(0,0,0,0.4); text-transform:uppercase; letter-spacing:2px; transition:all 0.3s;">';
+ html += '<button onclick="generaScheda()" style="background:linear-gradient(135deg,var(--gs-verde) 0%,var(--gs-verde2) 100%); color:var(--gs-btn-testo); border:none; padding:18px 60px; font-size:1.3em; font-weight:700; border-radius:10px; cursor:pointer; font-family:\'Montserrat\'; box-shadow:0 6px 25px rgba(0,0,0,0.4); text-transform:uppercase; letter-spacing:2px; transition:all 0.3s;">';
  html += '<i class="fa-solid fa-wand-magic-sparkles"></i> Genera Scheda</button>';
  html += '</div>';
 
@@ -323,7 +323,7 @@ function costruisciForm() {
 
 function sezioneForm(titolo, contenuto) {
  return '<div style="' + STILE_SEZIONE + '">' +
-  '<h3 style="color:#CFF09E; font-family:\'Montserrat\'; font-size:1.35em; margin-bottom:20px; border-bottom:1px solid #3B8686; padding-bottom:10px;">' + titolo + '</h3>' +
+  '<h3 style="color:var(--gs-accento); font-family:\'Montserrat\'; font-size:1.35em; margin-bottom:20px; border-bottom:1px solid var(--gs-medio); padding-bottom:10px;">' + titolo + '</h3>' +
   contenuto + '</div>';
 }
 
@@ -343,13 +343,13 @@ function inputDate(id, label) {
  for (var g = 1; g <= 31; g++) { opG += '<option value="' + (g < 10 ? '0'+g : g) + '">' + g + '</option>'; }
  for (var m = 0; m < 12; m++) { opM += '<option value="' + mesi[m] + '">' + mesi[m] + '</option>'; }
  for (var a = 2017; a >= 1900; a--) { opA += '<option value="' + a + '">' + a + '</option>'; }
- var sel = STILE_INPUT + ' background:#292354;';
+ var sel = STILE_INPUT + ' background:var(--gs-scuro);';
  return '<div style="margin-bottom:14px;">' +
   '<label style="' + STILE_LABEL + '">' + label + '</label>' +
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
-  '<td style="width:25%; padding-right:6px; vertical-align:top;"><select id="' + id + '-g" style="' + sel + '">' + opG + '</select><div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Giorno</div></td>' +
-  '<td style="width:45%; padding-left:3px; padding-right:3px; vertical-align:top;"><select id="' + id + '-m" style="' + sel + '">' + opM + '</select><div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Mese</div></td>' +
-  '<td style="width:30%; padding-left:6px; vertical-align:top;"><select id="' + id + '-a" style="' + sel + '">' + opA + '</select><div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Anno</div></td>' +
+  '<td style="width:25%; padding-right:6px; vertical-align:top;"><select id="' + id + '-g" style="' + sel + '">' + opG + '</select><div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Giorno</div></td>' +
+  '<td style="width:45%; padding-left:3px; padding-right:3px; vertical-align:top;"><select id="' + id + '-m" style="' + sel + '">' + opM + '</select><div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Mese</div></td>' +
+  '<td style="width:30%; padding-left:6px; vertical-align:top;"><select id="' + id + '-a" style="' + sel + '">' + opA + '</select><div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Anno</div></td>' +
   '</tr></table></div>';
 }
 
@@ -380,7 +380,7 @@ function inputTextarea(id, label, placeholder, righe) {
 function inputSelect(id, label, opzioni) {
  var html = '<div style="margin-bottom:14px;">' +
   '<label style="' + STILE_LABEL + '">' + label + '</label>' +
-  '<select id="' + id + '" style="' + STILE_INPUT + ' background:#292354;">';
+  '<select id="' + id + '" style="' + STILE_INPUT + ' background:var(--gs-scuro);">';
  for (var i = 0; i < opzioni.length; i++) {
   html += '<option value="' + opzioni[i] + '">' + opzioni[i] + '</option>';
  }
@@ -406,7 +406,7 @@ function voceRemovibile(id, contenuto, obbligatoria) {
  if (!obbligatoria) VOCI_DATI_CONFIG[id] = contenuto; // salva per eventuale riaggiunta
  if (obbligatoria) return '<div id="'+id+'">' + contenuto + '</div>';
  return '<div id="'+id+'" style="position:relative;">' +
-  '<button onclick="rimuoviVoceDati(\''+id+'\')" title="Rimuovi questa voce" style="position:absolute; top:0; right:0; background:rgba(80,0,0,0.35); color:#F9C6C6; border:1px solid #6b0b0b; padding:3px 8px; border-radius:4px; cursor:pointer; font-size:0.8em; z-index:1;"><i class="fa-solid fa-xmark"></i></button>' +
+  '<button onclick="rimuoviVoceDati(\''+id+'\')" title="Rimuovi questa voce" style="position:absolute; top:0; right:0; background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:3px 8px; border-radius:4px; cursor:pointer; font-size:0.8em; z-index:1;"><i class="fa-solid fa-xmark"></i></button>' +
   contenuto +
   '</div>';
 }
@@ -425,7 +425,7 @@ function rimuoviVoceDati(id) {
   'vd-soldi':'Jenny / HC'
  };
  var label = nomeLeggibile[id] || id;
- placeholder.innerHTML = '<button onclick="riaggiunciVoceDati(\''+id+'\')" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; width:100%; text-align:left;">' +
+ placeholder.innerHTML = '<button onclick="riaggiunciVoceDati(\''+id+'\')" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; width:100%; text-align:left;">' +
   '<i class="fa-solid fa-plus" style="margin-right:6px;"></i>Aggiungi: ' + label + '</button>';
  el.parentNode.insertBefore(placeholder, el);
  el.parentNode.removeChild(el);
@@ -441,7 +441,7 @@ function riaggiunciVoceDati(id) {
  nuovoEl.id = id;
  nuovoEl.style.cssText = 'position:relative;';
  nuovoEl.innerHTML =
-  '<button onclick="rimuoviVoceDati(\''+id+'\')" title="Rimuovi questa voce" style="position:absolute; top:0; right:0; background:rgba(80,0,0,0.35); color:#F9C6C6; border:1px solid #6b0b0b; padding:3px 8px; border-radius:4px; cursor:pointer; font-size:0.8em; z-index:1;"><i class="fa-solid fa-xmark"></i></button>' +
+  '<button onclick="rimuoviVoceDati(\''+id+'\')" title="Rimuovi questa voce" style="position:absolute; top:0; right:0; background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:3px 8px; border-radius:4px; cursor:pointer; font-size:0.8em; z-index:1;"><i class="fa-solid fa-xmark"></i></button>' +
   contenuto;
  placeholder.parentNode.insertBefore(nuovoEl, placeholder);
  placeholder.parentNode.removeChild(placeholder);
@@ -468,7 +468,7 @@ function costruisciDatiPersonali(isNuova) {
   riga2(
    inputText('campo-genere','Genere','Uomo / Donna / Neutro / Ecc.'),
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Razza</label>' +
-   '<select id="campo-razza" onchange="aggiornaRazza('+isNuova+')" style="'+STILE_INPUT+' background:#292354;">' +
+   '<select id="campo-razza" onchange="aggiornaRazza('+isNuova+')" style="'+STILE_INPUT+' background:var(--gs-scuro);">' +
    '<option value="Umano">Umano</option>' +
    '<option value="Bestia Demoniaca">Bestia Demoniaca</option>' +
    '<option value="Animale">Animale</option>' +
@@ -480,7 +480,7 @@ function costruisciDatiPersonali(isNuova) {
  // Specie + Rank (visibilità gestita da aggiornaRazza, sempre presenti nel DOM)
  html += '<div id="campo-specie-wrap" style="display:none; margin-bottom:14px;">' +
   '<label style="'+STILE_LABEL+'">Specie</label>' +
-  '<select id="campo-specie" onchange="aggiornaRazza('+isNuova+')" style="'+STILE_INPUT+' background:#292354;">';
+  '<select id="campo-specie" onchange="aggiornaRazza('+isNuova+')" style="'+STILE_INPUT+' background:var(--gs-scuro);">';
  for (var sp = 0; sp < SPECIE_BESTIA.length; sp++) {
   html += '<option value="'+SPECIE_BESTIA[sp]+'">'+SPECIE_BESTIA[sp]+'</option>';
  }
@@ -517,19 +517,19 @@ function costruisciDatiPersonali(isNuova) {
  // Classe — non removibile
  html += voceRemovibile('vd-classe',
   '<div id="campo-classe-wrap"><div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Classe</label>' +
-  '<select id="campo-classe" style="'+STILE_INPUT+' background:#292354;"></select></div></div>',
+  '<select id="campo-classe" style="'+STILE_INPUT+' background:var(--gs-scuro);"></select></div></div>',
   true
  );
  html += voceRemovibile('vd-fedina',
   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Fedina Penale</label>' +
-  '<select id="campo-fedina" onchange="aggiornaFedina(false)" style="'+STILE_INPUT+' background:#292354;">' +
+  '<select id="campo-fedina" onchange="aggiornaFedina(false)" style="'+STILE_INPUT+' background:var(--gs-scuro);">' +
   '<option value="Incensurato">Incensurato</option>' +
   '<option value="Ricercato">Ricercato</option>' +
   '</select></div>' +
   '<div id="campo-taglia-wrap" style="display:none;">' +
   riga2(
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Classificazione Taglia</label>' +
-   '<select id="campo-classtaglia" onchange="aggiornaTaglia()" style="'+STILE_INPUT+' background:#292354;">' + opzioniTaglia + '</select></div>',
+   '<select id="campo-classtaglia" onchange="aggiornaTaglia()" style="'+STILE_INPUT+' background:var(--gs-scuro);">' + opzioniTaglia + '</select></div>',
    inputText('campo-valtaglia','Valore Taglia (Jenny)','Es. 1000')
   ) + '</div>'
  );
@@ -632,14 +632,14 @@ function campoCropHTML(campoId, label, cropId, slotW, slotH) {
  html += '<div style="margin-top:8px; display:flex; align-items:center; gap:10px;">';
  html += '<button type="button" id="crop-btn-'+cropId+'" '
   + 'onclick="cropApriModal(\''+cropId+'\','+slotW+','+slotH+')" '
-  + 'style="background:#292354; color:#CFF09E; border:1px solid #3B8686; '
+  + 'style="background:var(--gs-scuro); color:var(--gs-accento); border:1px solid var(--gs-medio); '
   + 'padding:7px 14px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; '
   + 'font-size:0.85em; display:flex; align-items:center; gap:8px; transition:border-color 0.2s;">'
   + '<i class="fa-solid fa-scissors"></i> Scegli inquadratura'
   + '<span class="crop-btn-thumb" style="display:none; width:40px; height:24px; '
-  + 'border-radius:3px; border:1px solid #3B8686; background-size:cover; flex-shrink:0;"></span>'
+  + 'border-radius:3px; border:1px solid var(--gs-medio); background-size:cover; flex-shrink:0;"></span>'
   + '</button>';
- html += '<span style="color:#8FBEBA; font-size:0.75em; font-style:italic;">Slot: '+slotW+'×'+slotH+'px</span>';
+ html += '<span style="color:var(--gs-tenue); font-size:0.75em; font-style:italic;">Slot: '+slotW+'×'+slotH+'px</span>';
  html += '</div>';
  html += '<input type="hidden" id="crop-x-'+cropId+'" value="0">';
  html += '<input type="hidden" id="crop-y-'+cropId+'" value="0">';
@@ -666,27 +666,27 @@ function cropApriModal(id, slotW, slotH) {
  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;'
   + 'display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
  overlay.innerHTML =
-  '<div id="crop-modal-box" style="background:#0B486B;border:2px solid #3B8686;border-radius:14px;'
+  '<div id="crop-modal-box" style="background:var(--gs-fondo);border:2px solid var(--gs-medio);border-radius:14px;'
   + 'padding:24px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;'
   + 'display:flex;flex-direction:column;gap:16px;font-family:\'Montserrat\';">'
   + '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;">'
-  + '<span style="font-size:1.15em;font-weight:700;color:#CFF09E;"><i class="fa-solid fa-scissors"></i> Scegli inquadratura</span>'
-  + '<button onclick="cropChiudiModal()" style="background:none;border:none;color:#8FBEBA;font-size:1.2em;cursor:pointer;padding:4px 8px;border-radius:4px;">✕</button>'
+  + '<span style="font-size:1.15em;font-weight:700;color:var(--gs-accento);"><i class="fa-solid fa-scissors"></i> Scegli inquadratura</span>'
+  + '<button onclick="cropChiudiModal()" style="background:none;border:none;color:var(--gs-tenue);font-size:1.2em;cursor:pointer;padding:4px 8px;border-radius:4px;">✕</button>'
   + '</div>'
-  + '<p style="margin:0;font-size:0.82em;color:#8FBEBA;">Trascina il riquadro per spostarlo</p>'
+  + '<p style="margin:0;font-size:0.82em;color:var(--gs-tenue);">Trascina il riquadro per spostarlo</p>'
   + '<div id="crop-canvas" style="position:relative;width:100%;user-select:none;-webkit-user-select:none;border-radius:8px;overflow:hidden;background:#111;cursor:grab;">'
   + '<img id="crop-modal-img" src="'+url+'" style="display:block;width:100%;height:auto;max-height:400px;object-fit:contain;pointer-events:none;" draggable="false" onload="cropModalImgCaricata()" onerror="document.getElementById(\'crop-canvas-err\').style.display=\'\'">'
-  + '<div id="crop-canvas-err" style="display:none;padding:20px;color:#F9C6C6;font-size:0.9em;">⚠️ Immagine non caricabile. Controlla il URL.</div>'
+  + '<div id="crop-canvas-err" style="display:none;padding:20px;color:var(--gs-errore);font-size:0.9em;">⚠️ Immagine non caricabile. Controlla il URL.</div>'
   + '<div id="crop-darken" style="position:absolute;inset:0;background:rgba(0,0,0,0.5);pointer-events:none;display:none;"></div>'
-  + '<div id="crop-box" style="display:none;position:absolute;box-sizing:border-box;cursor:grab;box-shadow:0 0 0 9999px rgba(0,0,0,0.52),inset 0 0 0 2px #CFF09E;">'
+  + '<div id="crop-box" style="display:none;position:absolute;box-sizing:border-box;cursor:grab;box-shadow:0 0 0 9999px rgba(0,0,0,0.52),inset 0 0 0 2px var(--gs-accento);">'
   + '<div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);pointer-events:none;">'
   + '<div style="border:1px solid rgba(255,255,255,0.12);"></div><div style="border:1px solid rgba(255,255,255,0.12);"></div><div style="border:1px solid rgba(255,255,255,0.12);"></div>'
   + '<div style="border:1px solid rgba(255,255,255,0.12);"></div><div style="border:1px solid rgba(255,255,255,0.12);"></div><div style="border:1px solid rgba(255,255,255,0.12);"></div>'
   + '<div style="border:1px solid rgba(255,255,255,0.12);"></div><div style="border:1px solid rgba(255,255,255,0.12);"></div><div style="border:1px solid rgba(255,255,255,0.12);"></div>'
   + '</div></div></div>'
-  + '<div style="display:flex;justify-content:flex-end;gap:12px;padding-top:12px;border-top:1px solid #3B8686;">'
-  + '<button onclick="cropChiudiModal()" style="background:#292354;color:#8FBEBA;border:1px solid #3B8686;padding:9px 22px;border-radius:6px;cursor:pointer;font-family:\'Montserrat\';">Annulla</button>'
-  + '<button onclick="cropConferma()" style="background:linear-gradient(135deg,#A8DBA8,#79BD9A);color:#1a2e1a;border:none;padding:9px 22px;border-radius:6px;cursor:pointer;font-family:\'Montserrat\';font-weight:700;">Conferma</button>'
+  + '<div style="display:flex;justify-content:flex-end;gap:12px;padding-top:12px;border-top:1px solid var(--gs-medio);">'
+  + '<button onclick="cropChiudiModal()" style="background:var(--gs-scuro);color:var(--gs-tenue);border:1px solid var(--gs-medio);padding:9px 22px;border-radius:6px;cursor:pointer;font-family:\'Montserrat\';">Annulla</button>'
+  + '<button onclick="cropConferma()" style="background:linear-gradient(135deg,var(--gs-verde),var(--gs-verde2));color:var(--gs-btn-testo);border:none;padding:9px 22px;border-radius:6px;cursor:pointer;font-family:\'Montserrat\';font-weight:700;">Conferma</button>'
   + '</div></div>';
  document.body.appendChild(overlay);
  overlay.addEventListener('mousedown', function(e) { if (e.target === overlay) cropChiudiModal(); });
@@ -842,20 +842,20 @@ function costruisciInfo() {
 
 function costruisciStatistiche(isNuova) {
   // NPC: sempre input liberi, nessuna restrizione
-  var html = '<p style="color:#8FBEBA; font-size:0.85em; margin-bottom:15px; font-style:italic;">Nessuna restrizione — gli NPC possono avere qualsiasi valore.</p>';
+  var html = '<p style="color:var(--gs-tenue); font-size:0.85em; margin-bottom:15px; font-style:italic;">Nessuna restrizione — gli NPC possono avere qualsiasi valore.</p>';
   var nomiStat = ['Forza','Resistenza','Velocità','Riflessi','Destrezza','Mira','Intelligenza','Carisma','Istinto','Fortuna'];
   var ls = ['forza','resistenza','velocita','riflessi','destrezza','mira','intelligenza','carisma','istinto','fortuna'];
 
   function buildStat(nome, id, defaultVal, step) {
     return (
-      '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' +
-      '<div style="color:#8FBEBA; font-size:0.75em; margin-bottom:4px;">' + nome + '</div>' +
+      '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:8px 4px;">' +
+      '<div style="color:var(--gs-tenue); font-size:0.75em; margin-bottom:4px;">' + nome + '</div>' +
       '<input type="text" id="stat-' + id + '" value="' + defaultVal + '" ' +
-      'style="width:60px; background:transparent; border:none; color:#CFF09E; font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' +
+      'style="width:60px; background:transparent; border:none; color:var(--gs-accento); font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' +
       '<div style="display:flex; justify-content:center; gap:4px; margin-top:5px;">' +
-      '<button onclick="stepStatNpc(\'' + id + '\',-' + step + ')" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' +
-      '<button onclick="stepStatNpc(\'' + id + '\',' + step + ')" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' +
-      '<button onclick="document.getElementById(\'stat-' + id + '\').value=\'???\';" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.75em; padding:0;">?</button>' +
+      '<button onclick="stepStatNpc(\'' + id + '\',-' + step + ')" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' +
+      '<button onclick="stepStatNpc(\'' + id + '\',' + step + ')" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' +
+      '<button onclick="document.getElementById(\'stat-' + id + '\').value=\'???\';" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.75em; padding:0;">?</button>' +
       '</div></div>'
     );
   }
@@ -871,12 +871,12 @@ function costruisciStatistiche(isNuova) {
     buildStat('Aura', 'aura', 500, 100)
   );
  // Competenze: sempre tutte sbloccate, nessuna restrizione di livello
- html += '<div style="margin-top:22px; border-top:1px solid #3B8686; padding-top:18px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:14px;"><i class="fa-solid fa-puzzle-piece"></i> Competenze</h4>';
- html += '<p style="color:#8FBEBA; font-size:0.85em; margin-bottom:14px; font-style:italic;">Tutti gli slot sono sempre disponibili per gli NPC.</p>';
+ html += '<div style="margin-top:22px; border-top:1px solid var(--gs-medio); padding-top:18px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:14px;"><i class="fa-solid fa-puzzle-piece"></i> Competenze</h4>';
+ html += '<p style="color:var(--gs-tenue); font-size:0.85em; margin-bottom:14px; font-style:italic;">Tutti gli slot sono sempre disponibili per gli NPC.</p>';
  for (var n = 0; n < 5; n++) {
-  html += '<div style="background:#292354; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:10px;">';
-  html += '<div style="color:#CFF09E; font-size:0.82em; margin-bottom:10px;"><i class="fa-solid fa-lock-open"></i> Slot ' + (n+1) + '</div>';
+  html += '<div style="background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:10px;">';
+  html += '<div style="color:var(--gs-accento); font-size:0.82em; margin-bottom:10px;"><i class="fa-solid fa-lock-open"></i> Slot ' + (n+1) + '</div>';
   html += inputText('comp-nome-'+n,'Nome competenza','Es. Maestro del Combattimento');
   html += riga2(inputText('comp-lv-'+n,'Livello','Es. 3'), inputText('comp-oggetto-'+n,'Oggetto','Es. Carte'));
   html += inputTextarea('comp-desc-'+n,'Descrizione','Descrizione della competenza...', 2);
@@ -891,17 +891,17 @@ function costruisciNen(isNuova) {
  html += riga2(inputText('campo-nen','Nen (%)','Es. 100'), inputText('campo-tenacia','Tenacia (%)','Es. 100'));
 
  // Toggle modalità Hatsu
- html += '<div style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px; margin-bottom:16px;">';
- html += '<label style="display:block; color:#CFF09E; font-size:0.9em; margin-bottom:8px; font-family:\'Montserrat\';">Modalità Hatsu</label>';
+ html += '<div style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px; margin-bottom:16px;">';
+ html += '<label style="display:block; color:var(--gs-accento); font-size:0.9em; margin-bottom:8px; font-family:\'Montserrat\';">Modalità Hatsu</label>';
  html += '<div style="display:flex; gap:10px;">';
- html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:#292354; border:1px solid #3B8686; border-radius:6px; padding:8px 16px; color:#CFF09E; font-size:0.88em;"><input type="radio" name="nen-modalita" value="completo" checked onchange="aggiornaModoNen()"> Completo</label>';
- html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:#292354; border:1px solid #3B8686; border-radius:6px; padding:8px 16px; color:#CFF09E; font-size:0.88em;"><input type="radio" name="nen-modalita" value="speedduel" onchange="aggiornaModoNen()"> Speed Duel</label>';
+ html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; padding:8px 16px; color:var(--gs-accento); font-size:0.88em;"><input type="radio" name="nen-modalita" value="completo" checked onchange="aggiornaModoNen()"> Completo</label>';
+ html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; padding:8px 16px; color:var(--gs-accento); font-size:0.88em;"><input type="radio" name="nen-modalita" value="speedduel" onchange="aggiornaModoNen()"> Speed Duel</label>';
  html += '</div></div>';
 
  // Box 1: Potere Nen
- html += '<div style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="mdi mdi-fire"></i> Potere Nen</h4>';
- html += '<p style="color:#8FBEBA; font-size:0.85em; margin-bottom:12px; font-style:italic;">Il titolo del box sarà il tipo di Hatsu selezionato sopra.</p>';
+ html += '<div style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="mdi mdi-fire"></i> Potere Nen</h4>';
+ html += '<p style="color:var(--gs-tenue); font-size:0.85em; margin-bottom:12px; font-style:italic;">Il titolo del box sarà il tipo di Hatsu selezionato sopra.</p>';
  html += inputText('nen-nomepotere', 'Nome potere', 'Es. Filo d\'Ambra');
  html += inputTextarea('nen-descrizione', 'Descrizione', 'Descrizione del potere...', 3);
  html += inputTextarea('nen-funzionamento', 'Funzionamento e regole', 'Come funziona il potere, le regole...', 3);
@@ -909,17 +909,17 @@ function costruisciNen(isNuova) {
  html += '</div>';
 
  // Immagine nen
- html += '<div style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-image"></i> Immagine Nen</h4>';
+ html += '<div style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-image"></i> Immagine Nen</h4>';
  html += campoCropHTML('nen-img', 'URL immagine — dimensioni ideali: 664×200px', 'img-nen', 664, 200);
  html += '</div>';
 
  // Box 2: Profili (nascosto in Speed Duel)
- html += '<div id="nen-sezione-profili" style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-layer-group"></i> Profili</h4>';
+ html += '<div id="nen-sezione-profili" style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-layer-group"></i> Profili</h4>';
  for (var p = 1; p <= 4; p++) {
-  html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:12px;">';
-  html += '<div style="color:#CFF09E; font-size:0.9em; font-weight:600; margin-bottom:10px;">Profilo ' + p + '</div>';
+  html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:12px;">';
+  html += '<div style="color:var(--gs-accento); font-size:0.9em; font-weight:600; margin-bottom:10px;">Profilo ' + p + '</div>';
   html += inputText('profilo-'+p+'-nome', 'Nome profilo', 'Es. Filo Singolo');
   html += inputTextarea('profilo-'+p+'-desc', 'Descrizione', 'Descrizione del profilo...', 2);
   html += inputTextarea('profilo-'+p+'-bonus', 'Bonus', 'Descrizione del bonus...', 2);
@@ -938,11 +938,11 @@ function costruisciNen(isNuova) {
 
 function costruisciBoxTecniche(id, label, num) {
  if (num === undefined) num = id === '100' ? 1 : 2;
- var html = '<div style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-bolt"></i> Tecniche ' + label + '</h4>';
+ var html = '<div style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-bolt"></i> Tecniche ' + label + '</h4>';
  for (var t = 1; t <= num; t++) {
-  html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:12px;">';
-  html += '<div style="color:#CFF09E; font-size:0.9em; font-weight:600; margin-bottom:10px;">Tecnica ' + t + '</div>';
+  html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:12px;">';
+  html += '<div style="color:var(--gs-accento); font-size:0.9em; font-weight:600; margin-bottom:10px;">Tecnica ' + t + '</div>';
   html += inputText('tecnica-'+id+'-'+t+'-nome', 'Nome tecnica', 'Es. Taglio Rapido');
   html += inputTextarea('tecnica-'+id+'-'+t+'-desc', 'Descrizione', 'Descrizione della tecnica...', 2);
   html += inputTextarea('tecnica-'+id+'-'+t+'-bonus', 'Bonus', 'Descrizione del bonus...', 2);
@@ -965,7 +965,7 @@ function aggiornaModoNen() {
 
 function costruisciApparizioni(isNuova) {
  var html = '<div id="lista-apparizioni"></div>';
- html += '<button onclick="aggiungiApparizione()" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Apparizione</button>';
+ html += '<button onclick="aggiungiApparizione()" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Apparizione</button>';
  return html;
 }
 
@@ -980,7 +980,7 @@ function aggiungiApparizione() {
   '<td style="width:44%; padding-right:5px; vertical-align:bottom;">' + inputText('apparizione-nome-'+idx,'Nome apparizione','Es. La Prima Missione') + '</td>' +
   '<td style="width:44%; padding-left:5px; padding-right:5px; vertical-align:bottom;">' + inputText('apparizione-link-'+idx,'Link','https://...') + '</td>' +
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' +
-  '<button onclick="rimuoviElemento(\'apparizione-row-'+idx+'\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
+  '<button onclick="rimuoviElemento(\'apparizione-row-'+idx+'\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
   '</td></tr></table>';
  lista.appendChild(div);
 }
@@ -989,9 +989,9 @@ function aggiungiApparizione() {
 // CAMPI DATI EXTRA (label + valore liberi, aggiungibili)
 // ============================================================
 function costruisciCampiExtra() {
- var html = '<p style="color:#8FBEBA; font-size:0.88em; margin-bottom:12px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Aggiungi campi personalizzati alla slide Dati. Puoi scegliere sia il testo del label che il contenuto.</p>';
+ var html = '<p style="color:var(--gs-tenue); font-size:0.88em; margin-bottom:12px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Aggiungi campi personalizzati alla slide Dati. Puoi scegliere sia il testo del label che il contenuto.</p>';
  html += '<div id="lista-campi-extra"></div>';
- html += '<button onclick="aggiungiCampoExtra()" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Campo</button>';
+ html += '<button onclick="aggiungiCampoExtra()" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Campo</button>';
  return html;
 }
 
@@ -1000,13 +1000,13 @@ function aggiungiCampoExtra() {
  var idx = lista.children.length;
  var div = document.createElement('div');
  div.id = 'extra-row-' + idx;
- div.style.cssText = 'background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px; margin-bottom:10px;';
+ div.style.cssText = 'background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px; margin-bottom:10px;';
  div.innerHTML =
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
   '<td style="width:35%; padding-right:5px; vertical-align:bottom;">' + inputText('extra-label-'+idx,'Testo del Label','Es. Affiliazione:') + '</td>' +
   '<td style="width:53%; padding-left:5px; padding-right:5px; vertical-align:bottom;">' + inputText('extra-val-'+idx,'Contenuto','Es. Associazione Hunter') + '</td>' +
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' +
-  '<button onclick="rimuoviElemento(\'extra-row-'+idx+'\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
+  '<button onclick="rimuoviElemento(\'extra-row-'+idx+'\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
   '</td></tr></table>';
  lista.appendChild(div);
 }
@@ -1025,9 +1025,9 @@ function costruisciBalue() {
  for (var i = 0; i < categorie.length; i++) {
   var cat = categorie[i];
   html += '<div style="margin-bottom:18px;">';
-  html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; font-size:1.2em; margin-bottom:8px;">' + cat.nome + '</h4>';
+  html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; font-size:1.2em; margin-bottom:8px;">' + cat.nome + '</h4>';
   html += '<div id="lista-' + cat.id + '"></div>';
-  html += '<button onclick="aggiungiItem(\'' + cat.id + '\')" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:6px 16px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; font-size:1em;"><i class="fa-solid fa-plus"></i> Aggiungi</button>';
+  html += '<button onclick="aggiungiItem(\'' + cat.id + '\')" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:6px 16px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; font-size:1em;"><i class="fa-solid fa-plus"></i> Aggiungi</button>';
   html += '</div>';
  }
  return html;
@@ -1038,14 +1038,14 @@ function aggiungiItem(categoria) {
  var idx = lista.children.length;
  var div = document.createElement('div');
  div.id = categoria + '-row-' + idx;
- div.style.cssText = 'background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px; margin-bottom:10px;';
+ div.style.cssText = 'background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px; margin-bottom:10px;';
  var riga1 = '';
  if (categoria === 'materiali') {
   riga1 = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
    '<td style="width:78%; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-nome-'+idx,'Nome','Es. Erba medicinale') + '</td>' +
    '<td style="width:12%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-qt-'+idx,'Qt','1') + '</td>' +
    '<td style="width:10%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' +
-   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
+   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
    '</td></tr></table>';
  } else if (categoria === 'oggetti') {
   riga1 = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
@@ -1053,7 +1053,7 @@ function aggiungiItem(categoria) {
    '<td style="width:16%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-qt-'+idx,'Qt','1') + '</td>' +
    '<td style="width:22%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-usi-'+idx,'Usi (es. 0/3)','0/3') + '</td>' +
    '<td style="width:10%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' +
-   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
+   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
    '</td></tr></table>';
  } else {
   riga1 = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
@@ -1062,13 +1062,13 @@ function aggiungiItem(categoria) {
    '<td style="width:22%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' +
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Livello (max 5)</label>' +
    '<div style="display:flex; align-items:center; gap:6px;">' +
-   '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', -1)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">&#8722;</button>' +
+   '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', -1)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">&#8722;</button>' +
    '<input type="number" id="'+categoria+'-lv-'+idx+'" value="0" min="0" max="5" style="'+STILE_INPUT+' text-align:center; flex:1;">' +
-   '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', 1)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">+</button>' +
+   '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', 1)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">+</button>' +
    '</div></div>' +
    '</td>' +
    '<td style="width:10%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' +
-   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
+   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
    '</td></tr></table>';
  }
  var riga2esp = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
@@ -1076,7 +1076,7 @@ function aggiungiItem(categoria) {
   '<td style="width:50%; padding-left:6px; vertical-align:bottom;">' + inputText(categoria+'-exp-link-'+idx,'Link espansione','https://...') + '</td>' +
   '</tr></table>';
  var riga3desc = '<div style="margin-bottom:6px;">' +
-  '<label style="'+STILE_LABEL+'">Descrizione <span style="color:#8FBEBA; font-size:0.85em; font-weight:400;">(opzionale — HTML consentito)</span></label>' +
+  '<label style="'+STILE_LABEL+'">Descrizione <span style="color:var(--gs-tenue); font-size:0.85em; font-weight:400;">(opzionale — HTML consentito)</span></label>' +
   '<textarea id="'+categoria+'-desc-'+idx+'" rows="2" placeholder="Es. Una spada antica forgiata in acciaio stellare..." style="'+STILE_INPUT+' font-family:\'Montserrat\'; font-size:0.95em; resize:vertical;"></textarea>' +
   '</div>';
  div.innerHTML = riga1 + riga2esp + riga3desc;
@@ -1085,13 +1085,13 @@ function aggiungiItem(categoria) {
 
 function costruisciMusica() {
  return '<div style="display:flex; gap:10px; margin-bottom:6px; align-items:center;">' +
-  '<label style="color:#8FBEBA; font-size:0.85em;">Piattaforma:</label>' +
-  '<select id="campo-musica-piattaforma" onchange="aggiornaMusicaHelp()" style="background:#292354; color:#CFF09E; border:1px solid #3B8686; border-radius:6px; padding:4px 8px; font-family:\'Montserrat\';">' +
+  '<label style="color:var(--gs-tenue); font-size:0.85em;">Piattaforma:</label>' +
+  '<select id="campo-musica-piattaforma" onchange="aggiornaMusicaHelp()" style="background:var(--gs-scuro); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:6px; padding:4px 8px; font-family:\'Montserrat\';">' +
   '<option value="youtube">YouTube</option>' +
   '<option value="soundcloud">SoundCloud</option>' +
   '</select></div>' +
   inputText('campo-musica','ID traccia','Es. cjqwwIRnmuQ') +
-  '<p id="musica-help" style="color:#8FBEBA; font-size:0.82em; margin-top:-10px; font-style:italic;">Inserisci SOLO l\'ID del video (Gli 11 caratteri dopo "watch?v=" nell\'URL di YouTube)</p>';
+  '<p id="musica-help" style="color:var(--gs-tenue); font-size:0.82em; margin-top:-10px; font-style:italic;">Inserisci SOLO l\'ID del video (Gli 11 caratteri dopo "watch?v=" nell\'URL di YouTube)</p>';
 }
 
 function aggiornaMusicaHelp() {
@@ -1109,20 +1109,20 @@ function aggiornaMusicaHelp() {
 }
 
 function costruisciImporta() {
- return '<p style="color:#8FBEBA; font-size:0.88em; margin-bottom:12px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Incolla il codice HTML della scheda esistente e premi "Importa Dati".</p>' +
+ return '<p style="color:var(--gs-tenue); font-size:0.88em; margin-bottom:12px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Incolla il codice HTML della scheda esistente e premi "Importa Dati".</p>' +
   '<label style="' + STILE_LABEL + '">Codice HTML della scheda esistente:</label>' +
   '<textarea id="campo-importa" placeholder="Incolla il codice HTML..." rows="6" style="' + STILE_INPUT + ' font-family:\'Montserrat\'; font-size:1em; resize:vertical;"></textarea>' +
-  '<button onclick="importaScheda()" style="margin-top:10px; background:#292354; color:#8FBEBA; border:1px solid #3B8686; padding:10px 25px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-file-import"></i> Importa Dati</button>';
+  '<button onclick="importaScheda()" style="margin-top:10px; background:var(--gs-scuro); color:var(--gs-tenue); border:1px solid var(--gs-medio); padding:10px 25px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-file-import"></i> Importa Dati</button>';
 }
 
 // ============================================================
 // SLIDE EXTRA
 // ============================================================
 function costruisciSlideExtra(isNuova) {
- var html = '<p style="color:#8FBEBA; font-size:0.88em; margin-bottom:16px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Puoi aggiungere una slide opzionale alla scheda NPC. Scegli il tipo o lascia "Nessuna".</p>';
+ var html = '<p style="color:var(--gs-tenue); font-size:0.88em; margin-bottom:16px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Puoi aggiungere una slide opzionale alla scheda NPC. Scegli il tipo o lascia "Nessuna".</p>';
  html += '<div style="margin-bottom:20px;">';
  html += '<label style="' + STILE_LABEL + '">Tipo di slide extra</label>';
- html += '<select id="campo-slide-extra" onchange="aggiornaSlideExtra()" style="' + STILE_INPUT + ' background:#292354;">';
+ html += '<select id="campo-slide-extra" onchange="aggiornaSlideExtra()" style="' + STILE_INPUT + ' background:var(--gs-scuro);">';
  html += '<option value="nessuna">Nessuna</option>';
  html += '<option value="moveset">Moveset</option>';
  html += '<option value="valutazioni">Valutazioni</option>';
@@ -1131,23 +1131,23 @@ function costruisciSlideExtra(isNuova) {
 
  // --- Pannello MOVESET ---
  html += '<div id="pannello-moveset" style="display:none;">';
- html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:14px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-fist-raised"></i> Attribuzione Punti</h4>';
+ html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:14px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-fist-raised"></i> Attribuzione Punti</h4>';
  html += riga3(
   inputText('moveset-colpovalido','Colpo Valido','Es. 10'),
   inputText('moveset-colpocritico','Colpo Critico','Es. 20'),
   inputText('moveset-garantiti','Punti Garantiti','Es. 5')
  );
  html += '</div>';
- html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:14px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-burst"></i> Attacchi</h4>';
+ html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:14px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-burst"></i> Attacchi</h4>';
  html += '<div id="lista-attacchi"></div>';
- html += '<button onclick="aggiungiTecnicaSlide(\'lista-attacchi\')" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Attacco</button>';
+ html += '<button onclick="aggiungiTecnicaSlide(\'lista-attacchi\')" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Attacco</button>';
  html += '</div>';
- html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:14px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-shield-halved"></i> Difese</h4>';
+ html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:14px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-shield-halved"></i> Difese</h4>';
  html += '<div id="lista-difese"></div>';
- html += '<button onclick="aggiungiTecnicaSlide(\'lista-difese\')" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Difesa</button>';
+ html += '<button onclick="aggiungiTecnicaSlide(\'lista-difese\')" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Difesa</button>';
  html += '</div>';
  html += '</div>'; // fine pannello-moveset
 
@@ -1155,8 +1155,8 @@ function costruisciSlideExtra(isNuova) {
  html += '<div id="pannello-valutazioni" style="display:none;">';
  html += inputText('val-titolo','Titolo valutazione','Valutazione degli Esaminatori');
  html += '<div id="lista-valutazioni"></div>';
- html += '<button onclick="aggiungiValutazione()" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Valutazione</button>';
- html += '<div style="margin-top:18px; border-top:1px solid #3B8686; padding-top:14px;">';
+ html += '<button onclick="aggiungiValutazione()" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Valutazione</button>';
+ html += '<div style="margin-top:18px; border-top:1px solid var(--gs-medio); padding-top:14px;">';
  html += inputText('val-verdetto','Verdetto (opzionale — appare sotto le valutazioni)','Es. Probabilità di promozione: 15%');
  html += '</div>';
  html += '</div>'; // fine pannello-valutazioni
@@ -1164,7 +1164,7 @@ function costruisciSlideExtra(isNuova) {
  // --- Pannello ALTRO ---
  html += '<div id="pannello-altro" style="display:none;">';
  html += '<div id="lista-altro"></div>';
- html += '<button onclick="aggiungiCampoAltro()" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Campo</button>';
+ html += '<button onclick="aggiungiCampoAltro()" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:8px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:5px;"><i class="fa-solid fa-plus"></i> Aggiungi Campo</button>';
  html += '</div>'; // fine pannello-altro
 
  return html;
@@ -1186,12 +1186,12 @@ function aggiungiTecnicaSlide(listaId) {
  var idx = lista.children.length;
  var div = document.createElement('div');
  div.id = listaId + '-row-' + idx;
- div.style.cssText = 'background:#0d1f30; border:1px solid #3B8686; border-radius:8px; padding:12px; margin-bottom:10px;';
+ div.style.cssText = 'background:var(--gs-box2); border:1px solid var(--gs-medio); border-radius:8px; padding:12px; margin-bottom:10px;';
  div.innerHTML =
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed; margin-bottom:6px;"><tr>' +
   '<td style="width:88%; padding-right:6px; vertical-align:bottom;">' + inputText(listaId+'-nome-'+idx,'Nome','Es. Pugno di Ferro') + '</td>' +
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' +
-  '<button onclick="rimuoviElemento(\'' + listaId + '-row-' + idx + '\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
+  '<button onclick="rimuoviElemento(\'' + listaId + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
   '</td></tr></table>' +
   inputTextarea(listaId+'-desc-'+idx,'Descrizione','Descrizione...', 2);
  lista.appendChild(div);
@@ -1202,19 +1202,19 @@ function aggiungiValutazione() {
  var idx = lista.children.length;
  var div = document.createElement('div');
  div.id = 'val-row-' + idx;
- div.style.cssText = 'background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px; margin-bottom:10px;';
+ div.style.cssText = 'background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px; margin-bottom:10px;';
  div.innerHTML =
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
   '<td style="width:55%; padding-right:5px; vertical-align:bottom;">' + inputText('val-nome-'+idx,'Nome valutazione','Es. Combattività') + '</td>' +
   '<td style="width:33%; padding-left:5px; padding-right:5px; vertical-align:middle;">' +
   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Punteggio (1-5)</label>' +
   '<div style="display:flex; gap:6px; align-items:center;">' +
-  [1,2,3,4,5].map(function(n){ return '<button onclick="setStella(\'val-stelle-'+idx+'\','+n+')" id="val-stella-'+idx+'-'+n+'" style="background:transparent; border:none; cursor:pointer; font-size:22px; color:#3B8686; padding:0;">★</button>'; }).join('') +
+  [1,2,3,4,5].map(function(n){ return '<button onclick="setStella(\'val-stelle-'+idx+'\','+n+')" id="val-stella-'+idx+'-'+n+'" style="background:transparent; border:none; cursor:pointer; font-size:22px; color:var(--gs-medio); padding:0;">★</button>'; }).join('') +
   '<input type="hidden" id="val-stelle-'+idx+'" value="0">' +
   '</div></div>' +
   '</td>' +
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' +
-  '<button onclick="rimuoviElemento(\'val-row-'+idx+'\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
+  '<button onclick="rimuoviElemento(\'val-row-'+idx+'\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
   '</td></tr></table>';
  lista.appendChild(div);
 }
@@ -1227,7 +1227,7 @@ function setStella(hiddenId, valore) {
  var idx = hiddenId.replace('val-stelle-','');
  for (var n = 1; n <= 5; n++) {
   var btn = document.getElementById('val-stella-'+idx+'-'+n);
-  if (btn) btn.style.color = n <= valore ? '#CFF09E' : '#3B8686';
+  if (btn) btn.style.color = n <= valore ? 'var(--gs-accento)' : 'var(--gs-medio)';
  }
 }
 
@@ -1236,13 +1236,13 @@ function aggiungiCampoAltro() {
  var idx = lista.children.length;
  var div = document.createElement('div');
  div.id = 'altro-row-' + idx;
- div.style.cssText = 'background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px; margin-bottom:10px;';
+ div.style.cssText = 'background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px; margin-bottom:10px;';
  div.innerHTML =
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' +
   '<td style="width:35%; padding-right:5px; vertical-align:bottom;">' + inputText('altro-label-'+idx,'Testo del Label','Es. Affiliazione:') + '</td>' +
   '<td style="width:53%; padding-left:5px; padding-right:5px; vertical-align:bottom;">' + inputText('altro-val-'+idx,'Contenuto','Es. Associazione Hunter') + '</td>' +
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' +
-  '<button onclick="rimuoviElemento(\'altro-row-'+idx+'\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
+  '<button onclick="rimuoviElemento(\'altro-row-'+idx+'\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' +
   '</td></tr></table>';
  lista.appendChild(div);
 }
@@ -1256,10 +1256,10 @@ function costruisciStatusMultipli() {
  html += '<label style="'+STILE_LABEL+'">Status</label>';
  html += '<div id="lista-status">';
  html += '<div id="status-row-0" style="display:flex; gap:6px; margin-bottom:6px; align-items:center;">';
- html += '<select id="campo-status-0" style="'+STILE_INPUT+' background:#292354; flex:1;">'+opzioni+'</select>';
+ html += '<select id="campo-status-0" style="'+STILE_INPUT+' background:var(--gs-scuro); flex:1;">'+opzioni+'</select>';
  html += '</div>';
  html += '</div>';
- html += '<button onclick="aggiungiStatus()" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; margin-top:2px;"><i class="fa-solid fa-plus"></i> Aggiungi status</button>';
+ html += '<button onclick="aggiungiStatus()" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; margin-top:2px;"><i class="fa-solid fa-plus"></i> Aggiungi status</button>';
  html += '</div>';
  return html;
 }
@@ -1272,8 +1272,8 @@ function aggiungiStatus() {
  div.id = 'status-row-' + idx;
  div.style.cssText = 'display:flex; gap:6px; margin-bottom:6px; align-items:center;';
  div.innerHTML =
-  '<select id="campo-status-'+idx+'" style="'+STILE_INPUT+' background:#292354; flex:1;">'+opzioni+'</select>' +
-  '<button onclick="rimuoviElemento(\'status-row-'+idx+'\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:8px 10px; border-radius:6px; cursor:pointer; flex-shrink:0;"><i class="fa-solid fa-xmark"></i></button>';
+  '<select id="campo-status-'+idx+'" style="'+STILE_INPUT+' background:var(--gs-scuro); flex:1;">'+opzioni+'</select>' +
+  '<button onclick="rimuoviElemento(\'status-row-'+idx+'\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:8px 10px; border-radius:6px; cursor:pointer; flex-shrink:0;"><i class="fa-solid fa-xmark"></i></button>';
  lista.appendChild(div);
 }
 
