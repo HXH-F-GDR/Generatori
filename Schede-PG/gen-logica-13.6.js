@@ -3338,6 +3338,13 @@ function importaScheda() {
  // sommerebbero a quelle della nuova scheda (es. baule con oggetti di 
  // due schede diverse). Cancella anche la bozza, che sta per essere 
  // sostituita dai dati della scheda importata. 
+ // Il form viene ricostruito da zero: così OGNI campo torna vuoto o al 
+ // valore iniziale, compresi quelli che la scheda importata non ha (es. 
+ // tutta la sezione Nen di un PG senza Nen). L'import scrive solo i 
+ // campi che trova, quindi senza questo resterebbero i dati del PG 
+ // importato prima. Il codice incollato è già stato letto qui sopra. 
+ if (typeof bozzaCancella === 'function') bozzaCancella(); 
+ costruisciForm(); 
  importaPuliziaForm(); 
  // Converte BBCode in HTML (ForumFree trasforma img e link in BBCode nei post) 
  htmlScheda = bbcodeToHtml(htmlScheda); 
