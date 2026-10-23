@@ -45,10 +45,10 @@ function scegliModalita(modalita) {
  var btnModifica = document.getElementById('btn-modifica'); 
  var boxes = [btnNuova, btnModifica]; 
  for (var bi = 0; bi < boxes.length; bi++) { 
-  if (boxes[bi]) { boxes[bi].style.borderColor = '#3B8686'; boxes[bi].style.background = '#0B486B'; } 
+  if (boxes[bi]) { boxes[bi].style.borderColor = 'var(--gs-medio)'; boxes[bi].style.background = 'var(--gs-fondo)'; } 
  } 
  var attivo = modalita === 'nuova' ? btnNuova : btnModifica; 
- if (attivo) { attivo.style.borderColor = '#CFF09E'; attivo.style.background = 'rgba(207,240,158,0.12)'; } 
+ if (attivo) { attivo.style.borderColor = 'var(--gs-accento)'; attivo.style.background = 'rgba(var(--gs-accento-rgb),0.12)'; } 
 
  setTimeout(function() { 
   mostraSchermata('schermata-palette'); 
@@ -64,13 +64,13 @@ function costruisciGalleriaPalette() {
  var html = ''; 
  
  if (stato.modalita === 'modifica') { 
-  html += '<div class="pal-card" onclick="selezionaPalette(\'mantieni\')" id="card-mantieni" style="cursor:pointer; border:2px dashed #3B8686; border-radius:12px; overflow:hidden; transition:all 0.3s; width:220px; display:inline-block; margin:12px; vertical-align:top; box-shadow:0 4px 15px rgba(0,0,0,0.3);">'; 
-  html += '<div style="height:140px; background:#0B486B; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">'; 
-  html += '<i class="fa-solid fa-rotate-left" style="font-size:2.2em; color:#8FBEBA;"></i>'; 
-  html += '<span style="color:#8FBEBA; font-size:0.85em; font-style:italic;">Modifica solo il contenuto, non la struttura!</span>'; 
+  html += '<div class="pal-card" onclick="selezionaPalette(\'mantieni\')" id="card-mantieni" style="cursor:pointer; border:2px dashed var(--gs-medio); border-radius:12px; overflow:hidden; transition:all 0.3s; width:220px; display:inline-block; margin:12px; vertical-align:top; box-shadow:0 4px 15px rgba(0,0,0,0.3);">'; 
+  html += '<div style="height:140px; background:var(--gs-fondo); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">'; 
+  html += '<i class="fa-solid fa-rotate-left" style="font-size:2.2em; color:var(--gs-tenue);"></i>'; 
+  html += '<span style="color:var(--gs-tenue); font-size:0.85em; font-style:italic;">Modifica solo il contenuto, non la struttura!</span>'; 
   html += '</div>'; 
-  html += '<div style="padding:10px 14px; background:#0B486B; border-top:1px solid #3B8686;">'; 
-  html += '<span style="color:#8FBEBA; font-family:\'Montserrat\'; font-size:1.2em;">Mantieni le Personalizzazioni!</span>'; 
+  html += '<div style="padding:10px 14px; background:var(--gs-fondo); border-top:1px solid var(--gs-medio);">'; 
+  html += '<span style="color:var(--gs-tenue); font-family:\'Montserrat\'; font-size:1.2em;">Mantieni le Personalizzazioni!</span>'; 
   html += '</div></div>'; 
  } 
  
@@ -119,8 +119,8 @@ function selezionaPalette(paletteId) {
  var sel = document.getElementById('card-' + paletteId); 
  if (sel) { 
   sel.style.transform = 'scale(1.05)'; 
-  sel.style.boxShadow = '0 0 25px rgba(207,240,158,0.35)'; 
-  sel.style.outline = '2px solid #CFF09E'; 
+  sel.style.boxShadow = '0 0 25px rgba(var(--gs-accento-rgb),0.35)'; 
+  sel.style.outline = '2px solid var(--gs-accento)'; 
  } 
  setTimeout(function() { 
   mostraSchermata('schermata-form'); 
@@ -131,8 +131,8 @@ function selezionaPalette(paletteId) {
 // ============================================================ 
 // STILI BASE (pannello del generatore, non della scheda finale) 
 // ============================================================ 
-var STILE_INPUT = 'width:100%; padding:10px 14px; background:#292354; border:1px solid #3B8686; border-radius:6px; color:#E2F7C4; font-family:\'Montserrat\'; font-size:1em; box-sizing:border-box; outline:none;'; 
-var STILE_LABEL = 'display:block; color:#CFF09E; font-size:0.9em; margin-bottom:5px; font-family:\'Montserrat\';'; 
+var STILE_INPUT = 'width:100%; padding:10px 14px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; color:var(--gs-chiaro); font-family:\'Montserrat\'; font-size:1em; box-sizing:border-box; outline:none;'; 
+var STILE_LABEL = 'display:block; color:var(--gs-accento); font-size:0.9em; margin-bottom:5px; font-family:\'Montserrat\';'; 
 
 function riga2(a, b) { 
  return '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' + 
@@ -165,19 +165,19 @@ function inputDataOG(id, label) {
  for (var g = 1; g <= 31; g++) opG += '<option value="' + (g < 10 ? '0'+g : g) + '">' + g + '</option>'; 
  for (var m = 0; m < 12; m++) opM += '<option value="' + mesi[m] + '">' + mesi[m] + '</option>'; 
  for (var a = 2017; a >= 1900; a--) opA += '<option value="' + a + '">' + a + '</option>'; 
- var sel = STILE_INPUT + ' background:#292354;'; 
+ var sel = STILE_INPUT + ' background:var(--gs-scuro);'; 
  return '<div style="margin-bottom:14px;">' + 
   '<label style="' + STILE_LABEL + '">' + label + '</label>' + 
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' + 
   '<td style="width:25%; padding-right:6px; vertical-align:top;">' + 
   '<select id="' + id + '-g" style="' + sel + '">' + opG + '</select>' + 
-  '<div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Giorno</div></td>' + 
+  '<div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Giorno</div></td>' + 
   '<td style="width:45%; padding-left:3px; padding-right:3px; vertical-align:top;">' + 
   '<select id="' + id + '-m" style="' + sel + '">' + opM + '</select>' + 
-  '<div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Mese</div></td>' + 
+  '<div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Mese</div></td>' + 
   '<td style="width:30%; padding-left:6px; vertical-align:top;">' + 
   '<select id="' + id + '-a" style="' + sel + '">' + opA + '</select>' + 
-  '<div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Anno</div></td>' + 
+  '<div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Anno</div></td>' + 
   '</tr></table></div>'; 
 } 
 
@@ -213,8 +213,8 @@ function impostaDataOG(id, str) {
 } 
 
 function sezioneForm(titolo, contenuto) { 
- return '<div style="background:#0B486B; border:2px solid #292354; border-radius:12px; padding:22px; margin-bottom:20px;">' + 
-  '<h3 style="color:#CFF09E; font-size:1.2em; margin:0 0 18px; border-bottom:1px solid #3B8686; padding-bottom:10px;">' + titolo + '</h3>' + 
+ return '<div style="background:var(--gs-fondo); border:2px solid var(--gs-scuro); border-radius:12px; padding:22px; margin-bottom:20px;">' + 
+  '<h3 style="color:var(--gs-accento); font-size:1.2em; margin:0 0 18px; border-bottom:1px solid var(--gs-medio); padding-bottom:10px;">' + titolo + '</h3>' + 
   contenuto + '</div>'; 
 } 
 
@@ -231,13 +231,13 @@ function costruisciForm() {
 
  // Contenitore delle slide + bottone aggiungi 
  html += sezioneForm('<i class="fa-solid fa-layer-group"></i> Sezioni del Diario', 
-  '<p style="color:#8FBEBA; font-size:0.9em; font-style:italic; margin-top:0;"><i class="fa-solid fa-info-circle"></i> Da 1 a 6 sezioni con nome libero (es. Quest, Role, Allenamenti, Appunti). Ognuna contiene le sue voci.</p>' + 
+  '<p style="color:var(--gs-tenue); font-size:0.9em; font-style:italic; margin-top:0;"><i class="fa-solid fa-info-circle"></i> Da 1 a 6 sezioni con nome libero (es. Quest, Role, Allenamenti, Appunti). Ognuna contiene le sue voci.</p>' + 
   '<div id="lista-slide"></div>' + 
-  '<button id="btn-aggiungi-slide" onclick="aggiungiSlide()" style="background:transparent; color:#CFF09E; border:1px dashed #3B8686; padding:10px 22px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:8px;"><i class="fa-solid fa-plus"></i> Aggiungi Sezione</button>'); 
+  '<button id="btn-aggiungi-slide" onclick="aggiungiSlide()" style="background:transparent; color:var(--gs-accento); border:1px dashed var(--gs-medio); padding:10px 22px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:8px;"><i class="fa-solid fa-plus"></i> Aggiungi Sezione</button>'); 
 
  // Pulsante genera 
  html += '<div style="text-align:center; margin:10px 0 30px;">' + 
-  '<button onclick="generaDiario()" style="background:linear-gradient(135deg,#A8DBA8,#79BD9A); color:#1a2e1a; border:none; padding:14px 40px; font-size:1.1em; font-weight:700; border-radius:8px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-wand-magic-sparkles"></i> Genera Diario</button>' + 
+  '<button onclick="generaDiario()" style="background:linear-gradient(135deg,var(--gs-verde),var(--gs-verde2)); color:var(--gs-btn-testo); border:none; padding:14px 40px; font-size:1.1em; font-weight:700; border-radius:8px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-wand-magic-sparkles"></i> Genera Diario</button>' + 
   '</div>'; 
 
  container.innerHTML = html; 
@@ -254,12 +254,12 @@ function costruisciForm() {
 function costruisciImportBox() { 
  var sez = document.getElementById('schermata-form'); 
  var box = document.createElement('div'); 
- box.style.cssText = 'background:#292354; border:2px solid #3B8686; border-radius:12px; padding:22px; margin:0 20px 20px;'; 
+ box.style.cssText = 'background:var(--gs-scuro); border:2px solid var(--gs-medio); border-radius:12px; padding:22px; margin:0 20px 20px;'; 
  box.innerHTML = 
-  '<h3 style="color:#CFF09E; font-size:1.2em; margin:0 0 12px;"><i class="fa-solid fa-file-import"></i> Importa Diario da modificare</h3>' + 
-  '<p style="color:#8FBEBA; font-size:0.9em; margin-top:0;">Incolla qui il codice HTML del tuo diario attuale e premi Importa: verranno ricreate tutte le sezioni e le voci, pronte da modificare.</p>' + 
+  '<h3 style="color:var(--gs-accento); font-size:1.2em; margin:0 0 12px;"><i class="fa-solid fa-file-import"></i> Importa Diario da modificare</h3>' + 
+  '<p style="color:var(--gs-tenue); font-size:0.9em; margin-top:0;">Incolla qui il codice HTML del tuo diario attuale e premi Importa: verranno ricreate tutte le sezioni e le voci, pronte da modificare.</p>' + 
   '<textarea id="campo-import" rows="6" placeholder="Incolla qui il codice del diario..." style="' + STILE_INPUT + ' resize:vertical;"></textarea>' + 
-  '<button onclick="importaDiario()" style="margin-top:12px; background:#0B486B; color:#CFF09E; border:1px solid #3B8686; padding:10px 24px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-download"></i> Importa</button>'; 
+  '<button onclick="importaDiario()" style="margin-top:12px; background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); padding:10px 24px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-download"></i> Importa</button>'; 
  var formContainer = document.getElementById('form-container'); 
  sez.insertBefore(box, formContainer); 
 } 
@@ -273,20 +273,20 @@ function aggiungiSlide(nome) {
  var div = document.createElement('div'); 
  div.id = 'slide-block-' + sid; 
  div.setAttribute('data-slide', sid); 
- div.style.cssText = 'background:#292354; border:1px solid #3B8686; border-radius:10px; padding:16px; margin-bottom:14px;'; 
+ div.style.cssText = 'background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:10px; padding:16px; margin-bottom:14px;'; 
  div.innerHTML = 
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed; margin-bottom:8px;"><tr>' + 
   '<td style="width:76%; padding-right:8px; vertical-align:bottom;">' + 
   inputText('slide-nome-'+sid,'Nome sezione','Es. Quest', nome) + '</td>' + 
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
-  '<button onclick="spostaSlide(\'slide-block-'+sid+'\',-1)" title="Sposta su" style="background:#0B486B; color:#8FBEBA; border:1px solid #3B8686; padding:6px 9px; border-radius:6px 6px 0 0; cursor:pointer; display:block; width:100%;"><i class="fa-solid fa-chevron-up"></i></button>' + 
-  '<button onclick="spostaSlide(\'slide-block-'+sid+'\',1)" title="Sposta giù" style="background:#0B486B; color:#8FBEBA; border:1px solid #3B8686; border-top:none; padding:6px 9px; border-radius:0 0 6px 6px; cursor:pointer; display:block; width:100%;"><i class="fa-solid fa-chevron-down"></i></button>' + 
+  '<button onclick="spostaSlide(\'slide-block-'+sid+'\',-1)" title="Sposta su" style="background:var(--gs-fondo); color:var(--gs-tenue); border:1px solid var(--gs-medio); padding:6px 9px; border-radius:6px 6px 0 0; cursor:pointer; display:block; width:100%;"><i class="fa-solid fa-chevron-up"></i></button>' + 
+  '<button onclick="spostaSlide(\'slide-block-'+sid+'\',1)" title="Sposta giù" style="background:var(--gs-fondo); color:var(--gs-tenue); border:1px solid var(--gs-medio); border-top:none; padding:6px 9px; border-radius:0 0 6px 6px; cursor:pointer; display:block; width:100%;"><i class="fa-solid fa-chevron-down"></i></button>' + 
   '</td>' + 
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
-  '<button onclick="rimuoviSlide(\'slide-block-'+sid+'\')" title="Elimina sezione" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>' + 
+  '<button onclick="rimuoviSlide(\'slide-block-'+sid+'\')" title="Elimina sezione" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>' + 
   '</td></tr></table>' + 
   '<div id="lista-voci-'+sid+'"></div>' + 
-  '<button onclick="aggiungiVoce('+sid+')" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:7px 18px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:4px; font-size:0.9em;"><i class="fa-solid fa-plus"></i> Aggiungi voce</button>'; 
+  '<button onclick="aggiungiVoce('+sid+')" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:7px 18px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; margin-top:4px; font-size:0.9em;"><i class="fa-solid fa-plus"></i> Aggiungi voce</button>'; 
  lista.appendChild(div); 
  aggiornaBottoneSlide(); 
  return sid; 
@@ -340,17 +340,17 @@ function aggiungiVoce(sid, dati) {
  var vid = _voceSeq++; 
  var div = document.createElement('div'); 
  div.id = 'voce-row-' + vid; 
- div.style.cssText = 'background:#0B486B; border:1px solid #3B8686; border-radius:8px; padding:12px; margin-bottom:10px;'; 
+ div.style.cssText = 'background:var(--gs-fondo); border:1px solid var(--gs-medio); border-radius:8px; padding:12px; margin-bottom:10px;'; 
  div.innerHTML = 
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed; margin-bottom:6px;"><tr>' + 
   '<td style="width:44%; padding-right:6px; vertical-align:bottom;">' + inputText('voce-nome-'+vid,'Nome role','Es. Un incontro inatteso') + '</td>' + 
   '<td style="width:32%; padding-left:6px; padding-right:6px; vertical-align:bottom;">' + inputText('voce-url-'+vid,'URL della role','https://...') + '</td>' + 
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
-  '<button onclick="spostaVoce(\'voce-row-'+vid+'\',-1)" title="Sposta su" style="background:#292354; color:#8FBEBA; border:1px solid #3B8686; padding:5px 8px; border-radius:6px 6px 0 0; cursor:pointer; display:block; width:100%;"><i class="fa-solid fa-chevron-up"></i></button>' + 
-  '<button onclick="spostaVoce(\'voce-row-'+vid+'\',1)" title="Sposta giù" style="background:#292354; color:#8FBEBA; border:1px solid #3B8686; border-top:none; padding:5px 8px; border-radius:0 0 6px 6px; cursor:pointer; display:block; width:100%;"><i class="fa-solid fa-chevron-down"></i></button>' + 
+  '<button onclick="spostaVoce(\'voce-row-'+vid+'\',-1)" title="Sposta su" style="background:var(--gs-scuro); color:var(--gs-tenue); border:1px solid var(--gs-medio); padding:5px 8px; border-radius:6px 6px 0 0; cursor:pointer; display:block; width:100%;"><i class="fa-solid fa-chevron-up"></i></button>' + 
+  '<button onclick="spostaVoce(\'voce-row-'+vid+'\',1)" title="Sposta giù" style="background:var(--gs-scuro); color:var(--gs-tenue); border:1px solid var(--gs-medio); border-top:none; padding:5px 8px; border-radius:0 0 6px 6px; cursor:pointer; display:block; width:100%;"><i class="fa-solid fa-chevron-down"></i></button>' + 
   '</td>' + 
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
-  '<button onclick="rimuoviElemento(\'voce-row-'+vid+'\')" title="Elimina voce" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
+  '<button onclick="rimuoviElemento(\'voce-row-'+vid+'\')" title="Elimina voce" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
   '</td></tr></table>' + 
   inputDataOG('voce-data-'+vid,'Data On-Game (facoltativa)') + 
   inputTextarea('voce-note-'+vid,'Note (facoltative — è ammesso codice HTML)','Note, esito, ricompense, resoconto... anche con tag HTML.', 3); 
