@@ -520,6 +520,7 @@ function resetOutputEAccrediti() {
  stato.progressione = null; 
  stato.schedaOriginale = null; 
  stato.pgId = null; 
+ stato.accStelleTot = 0; 
 } 
 
 function scegliModalita(modalita) { 
@@ -707,6 +708,9 @@ function costruisciForm() {
   // prima sezione. (Niente autosave qui: è un flusso staff basato 
   // sull'importazione della scheda esistente.) 
   accordionInit(); 
+  // Riepilogo di popolarità, reputazione, carisma e bonus, dal vivo 
+  riepilogoCollega(); 
+  aggiornaRiepilogoBonus(); 
   return; 
  } 
 
@@ -903,7 +907,7 @@ function costruisciFormAccrediti() {
  // collassabili (il badge staffer in cima non è una di esse). 
  // Senza questo reset erediterebbe i valori dell'ultimo form aperto. 
  _sezNum = 0; 
- _sezTot = 6; 
+ _sezTot = 7; 
 
  // Badge staffer + campo manuale (mostrato solo se nome non rilevato) 
  html += '<div style="' + STILE_SEZIONE + '">'; 
@@ -929,6 +933,9 @@ function costruisciFormAccrediti() {
 
  // Valori diretti 
  html += sezioneForm('<i class="fa-solid fa-coins"></i> Valori Diretti', costruisciValoriDiretti()); 
+
+ // Popolarità, Reputazione, Abitazione, Bonus Reclusione 
+ html += sezioneForm('<i class="fa-solid fa-house-flag"></i> Popolarità, Reputazione e Abitazione', htmlSelectPopRep() + costruisciExtraModifica(false)); 
 
  // Baule (riuso identico a modifica) 
  html += sezioneForm('<i class="fa-solid fa-bag-shopping"></i> Baule', costruisciBalue(false)); 
@@ -974,7 +981,7 @@ function costruisciStatAccrediti() {
  html += '<i class="fa-solid fa-coins" style="color:#CFF09E;"></i> '; 
  html += '<span id="acc-punti-counter" style="color:#8FBEBA; font-size:0.95em; font-weight:600;">0 punti da distribuire</span>'; 
  html += '</div>'; 
- html += '<p style="color:#8FBEBA; font-size:0.82em; margin-bottom:10px; font-style:italic;">Massimo 250 per statistica (400 se overlivellata). Puoi overlivellare al massimo 2 statistiche.</p>'; 
+ html += '<p style="color:#8FBEBA; font-size:0.82em; margin-bottom:10px; font-style:italic;">Massimo 250 per statistica (400 se overlivellata). Puoi overlivellare al massimo 2 statistiche. <b>Il Carisma è mostrato senza bonus</b>: popolarità e abitazione si sommano alla generazione (vedi il riepilogo in Status e Taglia).</p>'; 
  // Le 10 stat: valore corrente (readonly, da import) + extra distribuiti 
  var r1 = [], r2 = []; 
  for (var i = 0; i < 10; i++) { 
@@ -1102,6 +1109,19 @@ function costruisciStatusTaglia() {
   inputText('campo-valtaglia','Valore Taglia (Jenny)','Es. 1000') 
  ); 
  html += '</div>'; 
+ // Campi sbloccati dagli status (Grado Hunter, Ruolo nel Ragno...) 
+ html += '<div id="campi-status"></div>'; 
+ // Punti Stella da accreditare (solo se Hunter): promozione automatica 
+ html += '<div id="acc-stelle-wrap" style="display:none; background:#1a2e45; border:1px dashed #CFF09E; border-radius:8px; padding:12px 14px; margin-bottom:14px;">'; 
+ html += '<label style="'+STILE_LABEL+'">Punti Stella da accreditare</label>'; 
+ html += '<div style="display:flex; gap:8px; align-items:center;">'; 
+ html += '<input type="number" id="acc-stelle-delta" min="0" step="1" value="0" style="'+STILE_INPUT+' flex:1;">'; 
+ html += '<button type="button" onclick="accAccreditaStelle()" style="flex:none; background:#292354; color:#CFF09E; border:1px solid #3B8686; padding:10px 16px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-star"></i> Accredita</button>'; 
+ html += '</div>'; 
+ html += '<div id="acc-stelle-esito" style="color:#A8DBA8; font-size:0.88em; margin-top:8px;"></div>'; 
+ html += '</div>'; 
+ // Riepilogo calcolato (sola lettura) 
+ html += '<div id="riepilogo-bonus" style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px 16px; color:#8FBEBA; font-size:0.88em; line-height:1.7;"></div>'; 
  return html; 
 } 
 
@@ -1142,6 +1162,7 @@ function accCalcolaProgressione() {
  // Imposta il budget punti e aggiorna il contatore 
  accResetPuntiDistribuiti(); 
  accAggiornaContatore(); 
+ aggiornaRiepilogoBonus(); 
 } 
 
 function accResetPuntiDistribuiti() { 
@@ -1173,6 +1194,7 @@ function accModificaStat(stat, delta) {
  exEl.value = extra; 
  dispEl.textContent = baseV + extra; 
  accAggiornaContatore(); 
+ aggiornaRiepilogoBonus(); 
 } 
 
 // Overlivellamento in modalità accrediti: max 2 stat, alza il tetto a 400 
@@ -1377,13 +1399,7 @@ function costruisciDatiPersonali(isNuova) {
  } else { 
   // Modifica: si inseriscono i valori SENZA bonus. Quelli in scheda 
   // (con i bonus di status e abitazione) sono mostrati nel riepilogo. 
-  var opPop = '', opRep = ''; 
-  for (var pv = POPOLARITA_MIN; pv <= POPOLARITA_MAX; pv++) opPop += '<option value="'+pv+'">'+pv+'</option>'; 
-  for (var rv = REPUTAZIONE_MIN; rv <= REPUTAZIONE_MAX; rv++) opRep += '<option value="'+rv+'"'+(rv === 0 ? ' selected' : '')+'>'+formattaReputazione(rv)+'</option>'; 
-  html += riga2( 
-   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Popolarità (senza bonus)</label><select id="campo-popolarita" style="'+STILE_INPUT+' background:#292354;">'+opPop+'</select></div>', 
-   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Reputazione (senza bonus)</label><select id="campo-reputazione" style="'+STILE_INPUT+' background:#292354;">'+opRep+'</select></div>' 
-  ); 
+  html += htmlSelectPopRep(); 
  } 
  html += inputText('campo-mestiere','Mestiere','Es. Assassino'); 
  // Classe (visibile solo per Umani) 
@@ -1624,7 +1640,20 @@ function leggiCampiStatus() {
 // ============================================================
 // MODIFICA: abilità di specie, abitazione, bonus staff, riepilogo
 // ============================================================
-function costruisciExtraModifica() {
+// Popolarità e Reputazione SENZA bonus (Modifica e Accrediti)
+function htmlSelectPopRep() {
+ var opPop = '', opRep = '';
+ for (var pv = POPOLARITA_MIN; pv <= POPOLARITA_MAX; pv++) opPop += '<option value="' + pv + '">' + pv + '</option>';
+ for (var rv = REPUTAZIONE_MIN; rv <= REPUTAZIONE_MAX; rv++) opRep += '<option value="' + rv + '"' + (rv === 0 ? ' selected' : '') + '>' + formattaReputazione(rv) + '</option>';
+ var out = riga2(
+  '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Popolarità (senza bonus)</label><select id="campo-popolarita" style="' + STILE_INPUT + ' background:#292354;">' + opPop + '</select></div>',
+  '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Reputazione (senza bonus)</label><select id="campo-reputazione" style="' + STILE_INPUT + ' background:#292354;">' + opRep + '</select></div>'
+ );
+ return out;
+}
+
+function costruisciExtraModifica(conRiepilogo) {
+ if (conRiepilogo === undefined) conRiepilogo = true;
  var stileSel = STILE_INPUT + ' background:#292354;';
  var html = '';
  // Abitazione
@@ -1643,8 +1672,8 @@ function costruisciExtraModifica() {
  var opRec = '<option value="">Nessuno</option>';
  for (var b = 0; b < BONUS_RECLUSIONE.length; b++) opRec += '<option value="' + BONUS_RECLUSIONE[b] + '">' + BONUS_RECLUSIONE[b] + '</option>';
  html += '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Bonus Reclusione</label><select id="campo-bonus-reclusione" style="' + stileSel + '">' + opRec + '</select></div>';
- // Riepilogo calcolato (sola lettura)
- html += '<div id="riepilogo-bonus" style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px 16px; color:#8FBEBA; font-size:0.88em; line-height:1.7;"></div>';
+ // Riepilogo calcolato (sola lettura); in Accrediti sta in fondo al form
+ if (conRiepilogo) html += '<div id="riepilogo-bonus" style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px 16px; color:#8FBEBA; font-size:0.88em; line-height:1.7;"></div>';
  return html;
 }
 
@@ -1678,8 +1707,12 @@ function leggiParametriBonusModifica() {
 
 function aggiornaRiepilogoBonus() {
  var box = document.getElementById('riepilogo-bonus');
- if (!box || stato.modalita !== 'modifica') return;
- var p = leggiParametriBonusModifica();
+ if (!box || (stato.modalita !== 'modifica' && stato.modalita !== 'accrediti')) return;
+ var isAcc = stato.modalita === 'accrediti';
+ var p = isAcc ? leggiParametriBonusAccrediti() : leggiParametriBonusModifica();
+ // Punti Stella da accreditare: visibili solo se il PG è Hunter
+ var stW = document.getElementById('acc-stelle-wrap');
+ if (stW) stW.style.display = cfgHaStatus(p.status, 'Hunter') ? '' : 'none';
  var r = calcolaBonusPG(p);
  // Abilità di specie
  var abW = document.getElementById('campo-abilita-wrap');
@@ -1691,6 +1724,7 @@ function aggiornaRiepilogoBonus() {
  h += 'Popolarità: <b style="color:#E2F7C4;">' + r.popolarita + '</b>' + (r.popBonus ? ' (base ' + p.popBase + ' + ' + r.popBonus + ' da status)' : '') + '<br>';
  h += 'Reputazione: <b style="color:#E2F7C4;">' + formattaReputazione(r.reputazione) + '</b>' + (r.repBonus ? ' (base ' + formattaReputazione(p.repBase) + ', bonus ' + formattaReputazione(r.repBonus) + ')' : '') + '<br>';
  h += 'Carisma: <b style="color:#E2F7C4;">' + r.carisma + '</b>' + (r.carismaBonus ? ' (base ' + p.carismaBase + ' + ' + r.carismaBonus + ' bonus' + (r.carismaTagliato ? ', fermato al tetto di ' + r.carismaTetto : '') + ')' : '') + '<br>';
+ if (isAcc && r.abilitaSpecie) h += 'Abilità di Specie: <b style="color:#E2F7C4;">' + r.abilitaSpecie.split(' - ')[0] + '</b><br>';
  if (r.voci.length) {
   var nomi = [];
   for (var i = 0; i < r.voci.length; i++) nomi.push(r.voci[i].label.replace(/:$/, ''));
@@ -1699,6 +1733,17 @@ function aggiornaRiepilogoBonus() {
   h += 'Nessun bonus attivo.';
  }
  box['inn' + 'erHTML'] = h;
+}
+
+// Modifica: se il PG è Ricercato, posiziona la Reputazione (senza bonus)
+// sul valore della taglia. Da Incensurato non cambia nulla.
+function proponiReputazioneTaglia() {
+ var fe = document.getElementById('campo-fedina');
+ var ct = document.getElementById('campo-classtaglia');
+ var rep = document.getElementById('campo-reputazione');
+ if (!fe || !ct || !rep || fe.value !== 'Ricercato') return;
+ rep.value = String(reputazioneIniziale('Ricercato', ct.value));
+ if (typeof bozzaSalva === 'function') bozzaSalva();
 }
 
 // Collega il riepilogo a ogni modifica del form (solo Modifica)
@@ -1710,6 +1755,10 @@ function riepilogoCollega() {
   var t = e && e.target;
   // Cambio di status o di grado Hunter: i campi sbloccati vanno ricostruiti
   if (t && (t.id === 'cs-hunter-grado' || (t.closest && t.closest('#lista-status')))) { aggiornaCampiStatus(); return; }
+  // Cambio di fedina o taglia fatto dall'utente: propone la Reputazione
+  // della taglia (resta modificabile a mano). L'import e il ripristino
+  // della bozza non generano eventi, quindi non la toccano.
+  if (t && (t.id === 'campo-fedina' || t.id === 'campo-classtaglia') && e.type === 'change') proponiReputazioneTaglia();
   aggiornaRiepilogoBonus();
  }
  root.addEventListener('input', aggiorna);
@@ -3443,7 +3492,7 @@ function importaScheda() {
  } 
  
  // ── Popolarità, Reputazione, Abitazione, campi status, bonus staff ── 
- if (stato.modalita === 'modifica') importaCampiNuovi(temp); 
+ if (stato.modalita === 'modifica' || stato.modalita === 'accrediti') importaCampiNuovi(temp); 
  
  // ── EXP dalla span .dati-pg2 ─────────────────────────────── 
  for (var i = 0; i < spans.length; i++) { 
@@ -3926,10 +3975,13 @@ function accCatturaBase(temp) {
   razza: razza, specie: specie, stat: statVal, 
   jenny: jenny, hc: hc, nen: nen, 
   fedina: entryDopoLabel('Fedina Penale:') || 'Incensurato', 
-  classTaglia: entryDopoLabel('Classificazione Taglia:') || 'E', 
+  classTaglia: entryDopoLabel('Classificazione Taglia:') || '—', 
   valTaglia: (entryDopoLabel('Valore Taglia:') || '').replace(/\s*Jenny/i,'').trim(), 
-  status: statusAtt, baule: bauleAtt 
+  status: statusAtt, baule: bauleAtt, 
+  carismaBase: accLeggiCarismaBase(temp), 
+  voci: accVociRegistro(accLeggiVociScheda(temp)) 
  }; 
+ stato.accStelleTot = 0; 
 } 
 
 // Dopo l'import in accrediti: popola il riquadro "stato attuale", 
@@ -3949,6 +4001,10 @@ function accPopolaDopoImport() {
  var ls = ['forza','resistenza','velocita','riflessi','destrezza','mira','intelligenza','carisma','istinto','fortuna']; 
  for (var i = 0; i < ls.length; i++) { 
   var val = b.stat[ls[i]] != null ? b.stat[ls[i]] : 5; 
+  var valScheda = val; 
+  // Carisma: si distribuisce sul valore senza bonus; i bonus si 
+  // risommano alla generazione (vedi riepilogo) 
+  if (ls[i] === 'carisma' && b.carismaBase != null) val = b.carismaBase; 
   var baseEl = document.getElementById('accstat-base-'+ls[i]); 
   var dispEl = document.getElementById('accstat-'+ls[i]); 
   var exEl   = document.getElementById('accstat-extra-'+ls[i]); 
@@ -3957,7 +4013,7 @@ function accPopolaDopoImport() {
   if (exEl) exEl.value = '0'; 
   // Pre-attiva la checkbox "over" se la stat importata supera 250 
   var ovEl = document.getElementById('over-'+ls[i]); 
-  if (ovEl) ovEl.checked = (parseInt(val) > 250); 
+  if (ovEl) ovEl.checked = (parseInt(valScheda) > 250); 
  } 
  // Vita/Aura readonly 
  var vEl = document.getElementById('accstat-vita'); if (vEl) vEl.textContent = b.vita; 
@@ -3984,6 +4040,7 @@ function accPopolaDopoImport() {
  if (vtEl) vtEl.onchange = validaValoreTaglia; 
  if (typeof accAggiornaFedina === 'function') accAggiornaFedina(); 
  accAggiornaContatore(); 
+ aggiornaRiepilogoBonus(); 
 } 
  
 function rimuoviElemento(id) { 
@@ -4079,16 +4136,8 @@ function raccogliDatiAccrediti() {
  var nenEl = document.getElementById('acc-nen'); 
  var nen = (nenEl && nenEl.value.trim() !== '') ? (parseInt(nenEl.value) || 0) : (b.nen != null ? b.nen : 0); 
 
- var status = (function(){ 
-  var lista = document.getElementById('lista-status'); 
-  if (!lista) return 'Nessuno'; 
-  var valori = []; 
-  for (var si = 0; si < lista.children.length; si++) { 
-   var s = document.getElementById('campo-status-'+si); 
-   if (s && s.value) valori.push(s.value); 
-  } 
-  return valori.length > 0 ? valori.join(' | ') : 'Nessuno'; 
- })(); 
+ var statusLista = statusSelezionati(); 
+ var status = statusLista.length > 0 ? statusLista.join(' | ') : 'Nessuno'; 
 
  var feEl = document.getElementById('campo-fedina'); 
  var fedina = feEl ? feEl.value : 'Incensurato'; 
@@ -4127,6 +4176,11 @@ function raccogliDatiAccrediti() {
    } 
   } 
  } 
+
+ // Popolarità, Reputazione, Abitazione, status e bonus: il Carisma 
+ // distribuito è senza bonus, quello in scheda li include (tetto 250/400) 
+ var nuovi = accCalcolaNuovi(stat, ovSt, livello); 
+ stat.carisma = String(nuovi.bonus.carisma); 
 
  var nomecognomeEl = sel1('.nomecognome'); 
 
@@ -4175,6 +4229,14 @@ function raccogliDatiAccrediti() {
   jenny: jenny, hc: hc, 
   nen: nen, tenacia: tenacia, 
   stat: stat, ovSt: ovSt, baule: baule, 
+  // Popolarità, Reputazione, Abitazione, campi status, bonus 
+  popBase: nuovi.popBase, popolarita: nuovi.bonus.popolarita, 
+  repBase: nuovi.repBase, reputazione: nuovi.bonus.reputazione, 
+  carismaBase: nuovi.carismaBase, 
+  abitazione: nuovi.abitazione, 
+  abilitaSpecie: nuovi.bonus.abilitaSpecie, 
+  campiStatus: leggiCampiStatus(), 
+  bonusVoci: nuovi.bonus.voci, 
   // Campi non toccati: valori REALI dalla scheda importata 
   agg1: aggList[0] || '', agg2: aggList[1] || '', agg3: aggList[2] || '', 
   citazione: citazione, 
@@ -4554,6 +4616,15 @@ function accCalcolaDiff(b, d) {
   pushTxt('Classificazione Taglia', b.classTaglia, d.classTaglia);
   pushTxt('Valore Taglia', b.valTaglia, d.valTaglia);
  }
+ // Popolarità, Reputazione, Abitazione, campi degli status, Abilità di 
+ // Specie, Bonus Reclusione: ogni variazione finisce nel registro 
+ if (b.voci && d.bonusVoci !== undefined) { 
+  var vociNuove = accVociRegistro(accMappaDaDati(d)); 
+  for (var vk in vociNuove) { 
+   if (vociNuove.hasOwnProperty(vk)) pushTxt(vk, b.voci[vk], vociNuove[vk]); 
+  } 
+ } 
+ if (stato.accStelleTot) mod.push({ campo: 'Punti Stella accreditati', da: null, a: String(stato.accStelleTot), delta: 'info' }); 
  // Baule: confronto per categoria — aggiunta, rimozione, modifica (qt/lv/usi)
  var cats = ['armi','equip','oggetti','materiali'];
  var catNomi = { armi:'Armi', equip:'Equipaggiamento', oggetti:'Oggetti Extra', materiali:'Materiali' };
@@ -4641,4 +4712,134 @@ function accInviaLog() {
    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Conferma e invia al registro'; }
   });
  });
+}
+
+// ============================================================
+// ACCREDITI — Popolarità, Reputazione, Abitazione, status, bonus
+// ============================================================
+
+// Carisma senza bonus salvato in scheda (data-base), se presente
+function accLeggiCarismaBase(temp) {
+ var card = temp['getElements' + 'ByTagName']('div');
+ for (var i = 0; i < card.length; i++) {
+  if (card[i].className !== 'stat-card') continue;
+  var l = card[i].querySelector('.stat-label');
+  var v = card[i].querySelector('.stat-value');
+  if (l && v && l.textContent.trim() === 'Carisma') {
+   var b = v.getAttribute('data-base');
+   return b !== null ? (parseInt(b, 10) || 0) : null;
+  }
+ }
+ return null;
+}
+
+// Tutte le voci label/entry dei Dati Personali, come testo
+function accLeggiVociScheda(temp) {
+ var m = {};
+ var sp = temp['getElements' + 'ByTagName']('span');
+ for (var i = 0; i < sp.length - 1; i++) {
+  if (sp[i].className === 'scheda-label' && sp[i + 1].className === 'scheda-entry') {
+   var k = sp[i].textContent.trim();
+   if (m[k] === undefined) m[k] = sp[i + 1].textContent.trim();
+  }
+ }
+ return m;
+}
+
+// Le stesse voci, ricavate dai dati che stanno per essere scritti
+function accMappaDaDati(d) {
+ var m = {};
+ m['Popolarità:'] = String(d.popolarita);
+ m['Reputazione:'] = formattaReputazione(d.reputazione);
+ if (d.abilitaSpecie) m['Abilità di Specie:'] = d.abilitaSpecie;
+ var v = vociDopoSoldi(d);
+ for (var i = 0; i < v.length; i++) m[v[i].label] = String(v[i].valore).replace(/<[^>]*>/g, '').trim();
+ return m;
+}
+
+// Normalizza le voci da tracciare nel registro: stesse chiavi per il
+// prima e il dopo, così il confronto è voce per voce.
+function accVociRegistro(m) {
+ var chiavi = ['Popolarità:', 'Reputazione:', 'Abitazione:', 'Livello Abitazione:', 'Specializzazione Abitazione:'];
+ for (var st in STATUS_CONFIG) {
+  if (!STATUS_CONFIG.hasOwnProperty(st)) continue;
+  var cc = STATUS_CONFIG[st].campi;
+  for (var c = 0; c < cc.length; c++) if (chiavi.indexOf(cc[c].label) === -1) chiavi.push(cc[c].label);
+ }
+ var out = {};
+ for (var i = 0; i < chiavi.length; i++) out[chiavi[i].replace(/:$/, '')] = m[chiavi[i]] || '—';
+ out['Abilità di Specie'] = m['Abilità di Specie:'] ? m['Abilità di Specie:'].split(' - ')[0] : '—';
+ var rec = '—';
+ for (var r = 0; r < BONUS_RECLUSIONE.length; r++) if (m[etichettaReclusione(BONUS_RECLUSIONE[r])] !== undefined) rec = BONUS_RECLUSIONE[r];
+ out['Bonus Reclusione'] = rec;
+ return out;
+}
+
+// Parametri del motore bonus in Accrediti
+function accParametriBonus(carismaBase, carismaOver, livello) {
+ var b = stato.accBase || {};
+ function v(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+ return {
+  status: statusSelezionati(),
+  gradoHunter: v('cs-hunter-grado') || 'Hunter',
+  specHunter: v('cs-hunter-spec'),
+  popBase: parseInt(v('campo-popolarita'), 10) || 0,
+  repBase: parseInt(v('campo-reputazione'), 10) || 0,
+  carismaBase: carismaBase,
+  carismaOver: carismaOver,
+  abitazioneLv: v('campo-abitazione-lv'),
+  abitazioneSpec: v('campo-abitazione-spec'),
+  bonusReclusione: leggiBonusReclusione(),
+  razza: b.razza || 'Umano',
+  specie: b.specie || '',
+  livello: livello
+ };
+}
+
+// Per il riepilogo dal vivo: carisma = valore importato + punti distribuiti
+function leggiParametriBonusAccrediti() {
+ var b = stato.accBase || {};
+ var base = parseInt((document.getElementById('accstat-base-carisma') || {}).textContent, 10) || 0;
+ var extra = parseInt((document.getElementById('accstat-extra-carisma') || {}).value, 10) || 0;
+ var ov = document.getElementById('over-carisma');
+ var livello = stato.progressione ? stato.progressione.livelloA : (b.livello || 0);
+ return accParametriBonus(base + extra, !!(ov && ov.checked), livello);
+}
+
+// Per la generazione della scheda
+function accCalcolaNuovi(stat, ovSt, livello) {
+ var p = accParametriBonus(parseInt(stat.carisma, 10) || 5, ovSt.indexOf('carisma') !== -1, livello);
+ function v(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+ return {
+  popBase: p.popBase,
+  repBase: p.repBase,
+  carismaBase: p.carismaBase,
+  abitazione: { nome: v('campo-abitazione-nome'), link: v('campo-abitazione-link'), livello: p.abitazioneLv, spec: p.abitazioneSpec },
+  bonus: calcolaBonusPG(p)
+ };
+}
+
+// Punti Stella: accredita, promuove in automatico e riporta il resto
+function accAccreditaStelle() {
+ var dEl = document.getElementById('acc-stelle-delta');
+ var delta = dEl ? (parseInt(dEl.value, 10) || 0) : 0;
+ if (delta <= 0) { alert('Inserisci i Punti Stella da accreditare.'); return; }
+ var gEl = document.getElementById('cs-hunter-grado');
+ var pEl = document.getElementById('cs-hunter-stelle');
+ if (!gEl || !pEl) { alert('Il PG non ha lo status Hunter.'); return; }
+ var gradoDa = gEl.value;
+ var r = accreditaPuntiStella(gEl.value, pEl.value, delta);
+ gEl.value = r.grado;
+ aggiornaCampiStatus();
+ var p2 = document.getElementById('cs-hunter-stelle');
+ if (p2) p2.value = r.punti;
+ stato.accStelleTot = (stato.accStelleTot || 0) + delta;
+ dEl.value = '0';
+ var esito = document.getElementById('acc-stelle-esito');
+ if (esito) {
+  esito['inn' + 'erHTML'] = '+' + delta + ' Punti Stella: <b>' + r.grado + '</b> ' + r.punti + '/' + r.soglia +
+   (r.promozioni > 0 ? ' — promosso da ' + gradoDa + '!' : '') +
+   (stato.accStelleTot !== delta ? ' (totale accreditato: ' + stato.accStelleTot + ')' : '');
+ }
+ aggiornaRiepilogoBonus();
 }
