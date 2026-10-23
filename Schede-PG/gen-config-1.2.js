@@ -184,14 +184,18 @@ var POPOLARITA_CONFIG = {
 // ------------------------------------------------------------
 var REPUTAZIONE_MIN = -5, REPUTAZIONE_MAX = 5;
 
-// Reputazione di partenza per una scheda nuova.
-// Bestie A/B/C (Ricercate con taglia E): -1. Ricercati di grado D: -2.
+// Reputazione legata alla taglia dei Ricercati
+var REPUTAZIONE_TAGLIA = { 'SSS': -4, 'SS': -4, 'S': -4, 'A': -3, 'B': -3, 'C': -2, 'D': -2, 'E': -1 };
+
+// Reputazione di partenza in base a fedina e taglia. In Nuova è il
+// valore fisso; in Modifica è il valore proposto quando si cambia
+// fedina o taglia (lo staff può poi spostarlo a mano).
 // Incensurati: 0.
 function reputazioneIniziale(fedina, classTaglia) {
  if (fedina !== 'Ricercato') return 0;
- if (classTaglia === 'E') return -1;
- if (classTaglia === 'D') return -2;
- return 0;
+ var r = REPUTAZIONE_TAGLIA[classTaglia];
+ var out = r !== undefined ? r : 0;
+ return out;
 }
 
 // Reputazione come appare in scheda: +2, 0, -1
