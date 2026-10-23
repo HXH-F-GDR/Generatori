@@ -539,10 +539,10 @@ function scegliModalita(modalita) {
  // Reset visivo di tutte le righe (layout Variante A: accento a sinistra) 
  var boxes = [btnNuova, btnModifica, btnAccrediti]; 
  for (var bi = 0; bi < boxes.length; bi++) { 
-  if (boxes[bi]) { boxes[bi].style.borderLeftColor = '#3B8686'; boxes[bi].style.background = 'rgba(59,134,134,0.10)'; } 
+  if (boxes[bi]) { boxes[bi].style.borderLeftColor = 'var(--gs-medio)'; boxes[bi].style.background = 'rgba(var(--gs-medio-rgb),0.10)'; } 
  } 
  var attivo = modalita === 'nuova' ? btnNuova : (modalita === 'modifica' ? btnModifica : btnAccrediti); 
- if (attivo) { attivo.style.borderLeftColor = '#CFF09E'; attivo.style.background = 'rgba(207,240,158,0.12)'; } 
+ if (attivo) { attivo.style.borderLeftColor = 'var(--gs-accento)'; attivo.style.background = 'rgba(var(--gs-accento-rgb),0.12)'; } 
 
  // Accrediti: salta la palette, forza "mantieni", va dritto al form 
  if (modalita === 'accrediti') { 
@@ -565,13 +565,13 @@ function costruisciGalleriaPalette() {
  var html = ''; 
  
  if (stato.modalita === 'modifica') { 
-  html += '<div class="pal-card" onclick="selezionaPalette(\'mantieni\')" id="card-mantieni" style="cursor:pointer; border:2px dashed #3B8686; border-radius:12px; overflow:hidden; transition:all 0.3s; width:220px; display:inline-block; margin:12px; vertical-align:top; box-shadow:0 4px 15px rgba(0,0,0,0.3);">'; 
-  html += '<div style="height:140px; background:#0B486B; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">'; 
-  html += '<i class="fa-solid fa-rotate-left" style="font-size:2.2em; color:#8FBEBA;"></i>'; 
-  html += '<span style="color:#8FBEBA; font-size:0.85em; font-style:italic;">Modifica solo il contenuto, non la struttura!</span>'; 
+  html += '<div class="pal-card" onclick="selezionaPalette(\'mantieni\')" id="card-mantieni" style="cursor:pointer; border:2px dashed var(--gs-medio); border-radius:12px; overflow:hidden; transition:all 0.3s; width:220px; display:inline-block; margin:12px; vertical-align:top; box-shadow:0 4px 15px rgba(0,0,0,0.3);">'; 
+  html += '<div style="height:140px; background:var(--gs-fondo); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">'; 
+  html += '<i class="fa-solid fa-rotate-left" style="font-size:2.2em; color:var(--gs-tenue);"></i>'; 
+  html += '<span style="color:var(--gs-tenue); font-size:0.85em; font-style:italic;">Modifica solo il contenuto, non la struttura!</span>'; 
   html += '</div>'; 
-  html += '<div style="padding:10px 14px; background:#0B486B; border-top:1px solid #3B8686;">'; 
-  html += '<span style="color:#8FBEBA; font-family:\'Montserrat\'; font-size:1.2em;">Mantieni le Personalizzazioni!</span>'; 
+  html += '<div style="padding:10px 14px; background:var(--gs-fondo); border-top:1px solid var(--gs-medio);">'; 
+  html += '<span style="color:var(--gs-tenue); font-family:\'Montserrat\'; font-size:1.2em;">Mantieni le Personalizzazioni!</span>'; 
   html += '</div></div>'; 
  } 
  
@@ -620,8 +620,8 @@ function selezionaPalette(paletteId) {
  var sel = document.getElementById('card-' + paletteId); 
  if (sel) { 
   sel.style.transform = 'scale(1.05)'; 
-  sel.style.boxShadow = '0 0 25px rgba(207,240,158,0.35)'; 
-  sel.style.outline = '2px solid #CFF09E'; 
+  sel.style.boxShadow = '0 0 25px rgba(var(--gs-accento-rgb),0.35)'; 
+  sel.style.outline = '2px solid var(--gs-accento)'; 
  } 
  setTimeout(function() { 
   mostraSchermata('schermata-form'); 
@@ -632,10 +632,10 @@ function selezionaPalette(paletteId) {
 // ============================================================ 
 // STILI BASE 
 // ============================================================ 
-var STILE_SEZIONE = 'background:#0B486B; border:2px solid #292354; border-radius:12px; padding:25px; margin-bottom:20px;'; 
-var STILE_INPUT = 'width:100%; padding:10px 14px; background:#292354; border:1px solid #3B8686; border-radius:6px; color:#E2F7C4; font-family:\'Montserrat\'; font-size:1em; box-sizing:border-box; outline:none;'; 
-var STILE_LABEL = 'display:block; color:#CFF09E; font-size:0.9em; margin-bottom:5px; font-family:\'Montserrat\';'; 
-var STILE_READONLY = 'display:block; padding:10px 14px; background:#292354; border:1px solid #3B8686; border-radius:6px; color:#8FBEBA; font-family:\'Montserrat\'; font-size:1em; opacity:0.75;'; 
+var STILE_SEZIONE = 'background:var(--gs-fondo); border:2px solid var(--gs-scuro); border-radius:12px; padding:25px; margin-bottom:20px;'; 
+var STILE_INPUT = 'width:100%; padding:10px 14px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; color:var(--gs-chiaro); font-family:\'Montserrat\'; font-size:1em; box-sizing:border-box; outline:none;'; 
+var STILE_LABEL = 'display:block; color:var(--gs-accento); font-size:0.9em; margin-bottom:5px; font-family:\'Montserrat\';'; 
+var STILE_READONLY = 'display:block; padding:10px 14px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; color:var(--gs-tenue); font-family:\'Montserrat\'; font-size:1em; opacity:0.75;'; 
  
 // ============================================================ 
 // HELPERS LAYOUT 
@@ -733,7 +733,7 @@ function costruisciForm() {
  html += sezioneForm('<i class="fa-solid fa-music"></i> Musica', costruisciMusica()); 
  
  html += '<div style="text-align:center; margin-top:40px; padding-bottom:40px;">'; 
- html += '<button onclick="generaScheda()" style="background:linear-gradient(135deg,#A8DBA8 0%,#79BD9A 100%); color:#1a2e1a; border:none; padding:18px 60px; font-size:1.3em; font-weight:700; border-radius:10px; cursor:pointer; font-family:\'Montserrat\'; box-shadow:0 6px 25px rgba(0,0,0,0.4); text-transform:uppercase; letter-spacing:2px; transition:all 0.3s;">'; 
+ html += '<button onclick="generaScheda()" style="background:linear-gradient(135deg,var(--gs-verde) 0%,var(--gs-verde2) 100%); color:var(--gs-btn-testo); border:none; padding:18px 60px; font-size:1.3em; font-weight:700; border-radius:10px; cursor:pointer; font-family:\'Montserrat\'; box-shadow:0 6px 25px rgba(0,0,0,0.4); text-transform:uppercase; letter-spacing:2px; transition:all 0.3s;">'; 
  html += '<i class="fa-solid fa-wand-magic-sparkles"></i> Genera Scheda</button>'; 
  html += '</div>'; 
  
@@ -881,16 +881,16 @@ var _sezTot = 7;
 
 function sezioneForm(titolo, contenuto) { 
  _sezNum++; 
- var stileBox = 'background:#0B486B; border:2px solid #292354; border-radius:12px; margin-bottom:14px; overflow:hidden;'; 
+ var stileBox = 'background:var(--gs-fondo); border:2px solid var(--gs-scuro); border-radius:12px; margin-bottom:14px; overflow:hidden;'; 
  var stileHd = 'display:flex; align-items:center; gap:14px; padding:18px 24px; cursor:pointer; user-select:none;'; 
- var stileStrong = 'color:#CFF09E; font-family:\'Montserrat\'; font-size:1.25em; flex:1;'; 
- var stileNum = 'color:#8FBEBA; font-size:0.78em; border:1px solid #3B8686; border-radius:999px; padding:2px 11px; font-family:\'Montserrat\';'; 
- var stileBd = 'padding:22px 24px 25px; border-top:1px solid #292354;'; 
+ var stileStrong = 'color:var(--gs-accento); font-family:\'Montserrat\'; font-size:1.25em; flex:1;'; 
+ var stileNum = 'color:var(--gs-tenue); font-size:0.78em; border:1px solid var(--gs-medio); border-radius:999px; padding:2px 11px; font-family:\'Montserrat\';'; 
+ var stileBd = 'padding:22px 24px 25px; border-top:1px solid var(--gs-scuro);'; 
  return '<div class="form-sec" style="' + stileBox + '">' + 
   '<div class="form-sec-hd" onclick="accordionToggle(this)" style="' + stileHd + '">' + 
   '<span style="' + stileStrong + '">' + titolo + '</span>' + 
   '<span style="' + stileNum + '">' + _sezNum + ' / ' + _sezTot + '</span>' + 
-  '<i class="form-sec-chev fa-solid fa-chevron-down" style="color:#3B8686;"></i>' + 
+  '<i class="form-sec-chev fa-solid fa-chevron-down" style="color:var(--gs-medio);"></i>' + 
   '</div>' + 
   '<div class="form-sec-bd" style="' + stileBd + '">' + contenuto + '</div>' + 
   '</div>'; 
@@ -912,9 +912,9 @@ function costruisciFormAccrediti() {
  // Badge staffer + campo manuale (mostrato solo se nome non rilevato) 
  html += '<div style="' + STILE_SEZIONE + '">'; 
  html += '<div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">'; 
- html += '<i class="fa-solid fa-user-shield" style="color:#CFF09E; font-size:1.2em;"></i>'; 
- html += '<span style="color:#8FBEBA;">Accredito eseguito da:</span> '; 
- html += '<span id="acc-staffer-badge" style="color:#CFF09E; font-weight:700;">—</span>'; 
+ html += '<i class="fa-solid fa-user-shield" style="color:var(--gs-accento); font-size:1.2em;"></i>'; 
+ html += '<span style="color:var(--gs-tenue);">Accredito eseguito da:</span> '; 
+ html += '<span id="acc-staffer-badge" style="color:var(--gs-accento); font-weight:700;">—</span>'; 
  html += '</div>'; 
  html += '<div id="acc-staffer-wrap" style="display:none; margin-top:12px;">'; 
  html += '<label style="' + STILE_LABEL + '">Non riesco a identificarti automaticamente. Inserisci il tuo nome staff:</label>'; 
@@ -945,7 +945,7 @@ function costruisciFormAccrediti() {
 
  // Pulsante genera 
  html += '<div style="text-align:center; margin-top:40px; padding-bottom:40px;">'; 
- html += '<button onclick="generaScheda()" style="background:linear-gradient(135deg,#A8DBA8 0%,#79BD9A 100%); color:#1a2e1a; border:none; padding:18px 60px; font-size:1.3em; font-weight:700; border-radius:10px; cursor:pointer; font-family:\'Montserrat\'; box-shadow:0 6px 25px rgba(0,0,0,0.4); text-transform:uppercase; letter-spacing:2px;">'; 
+ html += '<button onclick="generaScheda()" style="background:linear-gradient(135deg,var(--gs-verde) 0%,var(--gs-verde2) 100%); color:var(--gs-btn-testo); border:none; padding:18px 60px; font-size:1.3em; font-weight:700; border-radius:10px; cursor:pointer; font-family:\'Montserrat\'; box-shadow:0 6px 25px rgba(0,0,0,0.4); text-transform:uppercase; letter-spacing:2px;">'; 
  html += '<i class="fa-solid fa-circle-check"></i> Registra Accredito</button>'; 
  html += '</div>'; 
 
@@ -961,14 +961,14 @@ function accAggiornaStafferManuale() {
 
 function costruisciProgressione() { 
  var html = ''; 
- html += '<p style="color:#8FBEBA; font-size:0.88em; margin-bottom:14px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Importa prima la scheda, poi inserisci l\'EXP da accreditare e premi "Calcola". Il livello, Vita, Aura, Tenacia e i punti da distribuire si calcolano in automatico.</p>'; 
+ html += '<p style="color:var(--gs-tenue); font-size:0.88em; margin-bottom:14px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Importa prima la scheda, poi inserisci l\'EXP da accreditare e premi "Calcola". Il livello, Vita, Aura, Tenacia e i punti da distribuire si calcolano in automatico.</p>'; 
  // Stato attuale (readonly, popolato all'import) 
- html += '<div id="prog-attuale" style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px 16px; margin-bottom:14px; color:#8FBEBA; font-size:0.9em;">Nessuna scheda importata.</div>'; 
+ html += '<div id="prog-attuale" style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px 16px; margin-bottom:14px; color:var(--gs-tenue); font-size:0.9em;">Nessuna scheda importata.</div>'; 
  // Campo EXP da accreditare + bottone sotto 
  html += '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">EXP da accreditare</label><input type="number" id="acc-exp-delta" min="0" step="1" value="0" style="'+STILE_INPUT+'"></div>'; 
- html += '<div style="margin-bottom:14px;"><button onclick="accCalcolaProgressione()" style="width:100%; background:#292354; color:#CFF09E; border:1px solid #3B8686; padding:11px 18px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; font-size:1em;"><i class="fa-solid fa-calculator"></i> Calcola progressione</button></div>'; 
+ html += '<div style="margin-bottom:14px;"><button onclick="accCalcolaProgressione()" style="width:100%; background:var(--gs-scuro); color:var(--gs-accento); border:1px solid var(--gs-medio); padding:11px 18px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; font-size:1em;"><i class="fa-solid fa-calculator"></i> Calcola progressione</button></div>'; 
  // Anteprima risultato 
- html += '<div id="prog-risultato" style="display:none; background:#0B486B; border:2px solid #3B8686; border-radius:8px; padding:16px; margin-top:6px;"></div>'; 
+ html += '<div id="prog-risultato" style="display:none; background:var(--gs-fondo); border:2px solid var(--gs-medio); border-radius:8px; padding:16px; margin-top:6px;"></div>'; 
  return html; 
 } 
 
@@ -976,26 +976,26 @@ function costruisciStatAccrediti() {
  var nomiStat = ['Forza','Resistenza','Velocità','Riflessi','Destrezza','Mira','Intelligenza','Carisma','Istinto','Fortuna']; 
  var ls = ['forza','resistenza','velocita','riflessi','destrezza','mira','intelligenza','carisma','istinto','fortuna']; 
  var html = ''; 
- html += '<p style="color:#8FBEBA; font-size:0.88em; margin-bottom:10px; font-style:italic;">I punti da level up vanno distribuiti <b>tutti</b> per registrare l\'accredito. Puoi comunque aggiungere ulteriori punti extra (per casi slegati dal level up).</p>'; 
- html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; align-items:center; gap:10px;">'; 
- html += '<i class="fa-solid fa-coins" style="color:#CFF09E;"></i> '; 
- html += '<span id="acc-punti-counter" style="color:#8FBEBA; font-size:0.95em; font-weight:600;">0 punti da distribuire</span>'; 
+ html += '<p style="color:var(--gs-tenue); font-size:0.88em; margin-bottom:10px; font-style:italic;">I punti da level up vanno distribuiti <b>tutti</b> per registrare l\'accredito. Puoi comunque aggiungere ulteriori punti extra (per casi slegati dal level up).</p>'; 
+ html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; align-items:center; gap:10px;">'; 
+ html += '<i class="fa-solid fa-coins" style="color:var(--gs-accento);"></i> '; 
+ html += '<span id="acc-punti-counter" style="color:var(--gs-tenue); font-size:0.95em; font-weight:600;">0 punti da distribuire</span>'; 
  html += '</div>'; 
- html += '<p style="color:#8FBEBA; font-size:0.82em; margin-bottom:10px; font-style:italic;">Massimo 250 per statistica (400 se overlivellata). Puoi overlivellare al massimo 2 statistiche. <b>Il Carisma è mostrato senza bonus</b>: popolarità e abitazione si sommano alla generazione (vedi il riepilogo in Status e Taglia).</p>'; 
+ html += '<p style="color:var(--gs-tenue); font-size:0.82em; margin-bottom:10px; font-style:italic;">Massimo 250 per statistica (400 se overlivellata). Puoi overlivellare al massimo 2 statistiche. <b>Il Carisma è mostrato senza bonus</b>: popolarità e abitazione si sommano alla generazione (vedi il riepilogo in Status e Taglia).</p>'; 
  // Le 10 stat: valore corrente (readonly, da import) + extra distribuiti 
  var r1 = [], r2 = []; 
  for (var i = 0; i < 10; i++) { 
   var cella = 
-   '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' + 
-   '<div style="color:#8FBEBA; font-size:0.75em; margin-bottom:4px;">'+nomiStat[i]+'</div>' + 
-   '<div id="accstat-'+ls[i]+'" style="color:#CFF09E; font-size:1.2em; font-weight:700;">5</div>' + 
+   '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:8px 4px;">' + 
+   '<div style="color:var(--gs-tenue); font-size:0.75em; margin-bottom:4px;">'+nomiStat[i]+'</div>' + 
+   '<div id="accstat-'+ls[i]+'" style="color:var(--gs-accento); font-size:1.2em; font-weight:700;">5</div>' + 
    '<span style="display:none;" id="accstat-base-'+ls[i]+'">5</span>' + 
    '<input type="hidden" id="accstat-extra-'+ls[i]+'" value="0">' + 
    '<div style="display:flex; justify-content:center; gap:4px; margin-top:5px;">' + 
-   '<button onclick="accModificaStat(\''+ls[i]+'\',-5)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
-   '<button onclick="accModificaStat(\''+ls[i]+'\',5)"  style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
+   '<button onclick="accModificaStat(\''+ls[i]+'\',-5)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
+   '<button onclick="accModificaStat(\''+ls[i]+'\',5)"  style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
    '</div>' + 
-   '<label style="display:block; color:#8FBEBA; font-size:0.72em; margin-top:5px; cursor:pointer;"><input type="checkbox" id="over-'+ls[i]+'" onchange="accToggleOver(this,\''+ls[i]+'\')"> over</label>' + 
+   '<label style="display:block; color:var(--gs-tenue); font-size:0.72em; margin-top:5px; cursor:pointer;"><input type="checkbox" id="over-'+ls[i]+'" onchange="accToggleOver(this,\''+ls[i]+'\')"> over</label>' + 
    '</div>'; 
   if (i < 5) r1.push(cella); else r2.push(cella); 
  } 
@@ -1003,15 +1003,15 @@ function costruisciStatAccrediti() {
  html += rigaStat5(r2); 
  // Vita e Aura: readonly, calcolati dal motore 
  html += riga2( 
-  '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:10px;"><div style="color:#8FBEBA; font-size:0.78em; margin-bottom:4px;">Vita</div><div id="accstat-vita" style="color:#CFF09E; font-size:1.3em; font-weight:700;">300</div></div>', 
-  '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:10px;"><div style="color:#8FBEBA; font-size:0.78em; margin-bottom:4px;">Aura</div><div id="accstat-aura" style="color:#CFF09E; font-size:1.3em; font-weight:700;">500</div></div>' 
+  '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:10px;"><div style="color:var(--gs-tenue); font-size:0.78em; margin-bottom:4px;">Vita</div><div id="accstat-vita" style="color:var(--gs-accento); font-size:1.3em; font-weight:700;">300</div></div>', 
+  '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:10px;"><div style="color:var(--gs-tenue); font-size:0.78em; margin-bottom:4px;">Aura</div><div id="accstat-aura" style="color:var(--gs-accento); font-size:1.3em; font-weight:700;">500</div></div>' 
  ); 
  return html; 
 } 
 
 function costruisciValoriDiretti() { 
  var html = ''; 
- var stileSel = STILE_INPUT + ' background:#292354;'; 
+ var stileSel = STILE_INPUT + ' background:var(--gs-scuro);'; 
  // Jenny: valore attuale (readonly) + operazione (aggiungi/sottrai) + importo 
  html += '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Jenny attuali</label>' + 
   '<div id="acc-jenny-attuale" style="'+STILE_READONLY+'">—</div></div>'; 
@@ -1034,7 +1034,7 @@ function costruisciValoriDiretti() {
  ); 
  // Nen: campo modificabile precompilato col valore attuale 
  html += '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Nen (%) — valore attuale, modificabile</label><input type="number" id="acc-nen" min="0" max="100" step="1" style="'+STILE_INPUT+'"></div>'; 
- html += '<p style="color:#8FBEBA; font-size:0.82em; font-style:italic; margin:0;"><i class="fa-solid fa-circle-info"></i> Tenacia non si modifica qui: si aggiorna da sola coi level up.</p>'; 
+ html += '<p style="color:var(--gs-tenue); font-size:0.82em; font-style:italic; margin:0;"><i class="fa-solid fa-circle-info"></i> Tenacia non si modifica qui: si aggiorna da sola coi level up.</p>'; 
  return html; 
 } 
 
@@ -1084,13 +1084,13 @@ function costruisciStatusTaglia() {
  html += '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Status</label>'; 
  html += '<div id="lista-status">'; 
  html += '<div id="status-row-0" style="display:flex; gap:6px; margin-bottom:6px; align-items:center;">'; 
- html += '<select id="campo-status-0" style="'+STILE_INPUT+' background:#292354; flex:1;">'+opzioni+'</select>'; 
+ html += '<select id="campo-status-0" style="'+STILE_INPUT+' background:var(--gs-scuro); flex:1;">'+opzioni+'</select>'; 
  html += '</div></div>'; 
- html += '<button onclick="aggiungiStatus()" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; margin-top:2px;"><i class="fa-solid fa-plus"></i> Aggiungi status</button>'; 
+ html += '<button onclick="aggiungiStatus()" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; margin-top:2px;"><i class="fa-solid fa-plus"></i> Aggiungi status</button>'; 
  html += '</div>'; 
  // Fedina + Taglia 
  html += '<div id="campo-fedina-wrap" style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Fedina Penale</label>' + 
-  '<select id="campo-fedina" onchange="accAggiornaFedina()" style="'+STILE_INPUT+' background:#292354;">' + 
+  '<select id="campo-fedina" onchange="accAggiornaFedina()" style="'+STILE_INPUT+' background:var(--gs-scuro);">' + 
   '<option value="Incensurato">Incensurato</option>' + 
   '<option value="Ricercato">Ricercato</option>' + 
   '</select></div>'; 
@@ -1105,23 +1105,23 @@ function costruisciStatusTaglia() {
  } 
  html += riga2( 
   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Classificazione Taglia</label>' + 
-  '<select id="campo-classtaglia" onchange="aggiornaTaglia()" style="'+STILE_INPUT+' background:#292354;">' + opzioniTaglia + '</select></div>', 
+  '<select id="campo-classtaglia" onchange="aggiornaTaglia()" style="'+STILE_INPUT+' background:var(--gs-scuro);">' + opzioniTaglia + '</select></div>', 
   inputText('campo-valtaglia','Valore Taglia (Jenny)','Es. 1000') 
  ); 
  html += '</div>'; 
  // Campi sbloccati dagli status (Grado Hunter, Ruolo nel Ragno...) 
  html += '<div id="campi-status"></div>'; 
  // Punti Stella da accreditare (solo se Hunter): promozione automatica 
- html += '<div id="acc-stelle-wrap" style="display:none; background:#1a2e45; border:1px dashed #CFF09E; border-radius:8px; padding:12px 14px; margin-bottom:14px;">'; 
+ html += '<div id="acc-stelle-wrap" style="display:none; background:var(--gs-box); border:1px dashed var(--gs-accento); border-radius:8px; padding:12px 14px; margin-bottom:14px;">'; 
  html += '<label style="'+STILE_LABEL+'">Punti Stella da accreditare</label>'; 
  html += '<div style="display:flex; gap:8px; align-items:center;">'; 
  html += '<input type="number" id="acc-stelle-delta" min="0" step="1" value="0" style="'+STILE_INPUT+' flex:1;">'; 
- html += '<button type="button" onclick="accAccreditaStelle()" style="flex:none; background:#292354; color:#CFF09E; border:1px solid #3B8686; padding:10px 16px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-star"></i> Accredita</button>'; 
+ html += '<button type="button" onclick="accAccreditaStelle()" style="flex:none; background:var(--gs-scuro); color:var(--gs-accento); border:1px solid var(--gs-medio); padding:10px 16px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-star"></i> Accredita</button>'; 
  html += '</div>'; 
- html += '<div id="acc-stelle-esito" style="color:#A8DBA8; font-size:0.88em; margin-top:8px;"></div>'; 
+ html += '<div id="acc-stelle-esito" style="color:var(--gs-verde); font-size:0.88em; margin-top:8px;"></div>'; 
  html += '</div>'; 
  // Riepilogo calcolato (sola lettura) 
- html += '<div id="riepilogo-bonus" style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px 16px; color:#8FBEBA; font-size:0.88em; line-height:1.7;"></div>'; 
+ html += '<div id="riepilogo-bonus" style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px 16px; color:var(--gs-tenue); font-size:0.88em; line-height:1.7;"></div>'; 
  return html; 
 } 
 
@@ -1141,16 +1141,16 @@ function accCalcolaProgressione() {
 
  // Anteprima 
  var box = document.getElementById('prog-risultato'); 
- var freccia = ' <i class="fa-solid fa-arrow-right" style="color:#8FBEBA;"></i> '; 
- var html = '<div style="color:#CFF09E; font-weight:700; margin-bottom:10px;"><i class="fa-solid fa-arrow-up-right-dots"></i> ' + (r.levelUps > 0 ? r.levelUps + ' Level Up!' : 'Nessun level up') + '</div>'; 
- html += '<div style="color:#E2F7C4; font-size:0.95em; line-height:1.9;">'; 
+ var freccia = ' <i class="fa-solid fa-arrow-right" style="color:var(--gs-tenue);"></i> '; 
+ var html = '<div style="color:var(--gs-accento); font-weight:700; margin-bottom:10px;"><i class="fa-solid fa-arrow-up-right-dots"></i> ' + (r.levelUps > 0 ? r.levelUps + ' Level Up!' : 'Nessun level up') + '</div>'; 
+ html += '<div style="color:var(--gs-chiaro); font-size:0.95em; line-height:1.9;">'; 
  html += 'Livello: <b>'+r.livelloDa+'</b>'+freccia+'<b>'+r.livelloA+'</b><br>'; 
  html += 'EXP residua: <b>'+r.expResidua+' / '+r.expTotProssima+'</b><br>'; 
  if (r.levelUps > 0) { 
   html += 'Vita: '+r.vitaDa+freccia+'<b>'+r.vitaA+'</b> (+'+r.deltaVita+')<br>'; 
   html += 'Aura: '+r.auraDa+freccia+'<b>'+r.auraA+'</b> (+'+r.deltaAura+')<br>'; 
   html += 'Tenacia: '+r.tenaciaDa+'%'+freccia+'<b>'+r.tenaciaA+'%</b><br>'; 
-  html += 'Punti da distribuire: <b style="color:#CFF09E;">'+r.puntiDaDistribuire+'</b>'; 
+  html += 'Punti da distribuire: <b style="color:var(--gs-accento);">'+r.puntiDaDistribuire+'</b>'; 
  } 
  html += '</div>'; 
  box.innerHTML = html; 
@@ -1252,14 +1252,14 @@ function accAggiornaContatore() {
  if (el) { 
   if (budget === 0) { 
    el.textContent = 'Nessun punto da level up' + (distribuito > 0 ? ' (aggiunti ' + distribuito + ' punti extra)' : ''); 
-   el.style.color = '#8FBEBA'; 
+   el.style.color = 'var(--gs-tenue)'; 
   } else if (rimastiLevelUp > 0) { 
    el.textContent = rimastiLevelUp + ' punti da distribuire (da level up)'; 
-   el.style.color = '#F9C6C6'; 
+   el.style.color = 'var(--gs-errore)'; 
   } else { 
    var extra = distribuito - budget; 
    el.textContent = 'Punti level up distribuiti ✓' + (extra > 0 ? ' — più ' + extra + ' punti extra' : ''); 
-   el.style.color = '#A8DBA8'; 
+   el.style.color = 'var(--gs-verde)'; 
   } 
  } 
  return rimastiLevelUp; 
@@ -1287,22 +1287,22 @@ function inputDate(id, label) {
  for (var a = 2017; a >= 1900; a--) { 
   opA += '<option value="' + a + '">' + a + '</option>'; 
  } 
- var sel = STILE_INPUT + ' background:#292354;'; 
+ var sel = STILE_INPUT + ' background:var(--gs-scuro);'; 
  return '<div style="margin-bottom:14px;">' + 
   '<label style="' + STILE_LABEL + '">' + label + '</label>' + 
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed;">' + 
   '<tr>' + 
   '<td style="width:25%; padding-right:6px; vertical-align:top;">' + 
   '<select id="' + id + '-g" style="' + sel + '">' + opG + '</select>' + 
-  '<div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Giorno</div>' + 
+  '<div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Giorno</div>' + 
   '</td>' + 
   '<td style="width:45%; padding-left:3px; padding-right:3px; vertical-align:top;">' + 
   '<select id="' + id + '-m" style="' + sel + '">' + opM + '</select>' + 
-  '<div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Mese</div>' + 
+  '<div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Mese</div>' + 
   '</td>' + 
   '<td style="width:30%; padding-left:6px; vertical-align:top;">' + 
   '<select id="' + id + '-a" style="' + sel + '">' + opA + '</select>' + 
-  '<div style="color:#8FBEBA; font-size:0.75em; text-align:center; margin-top:3px;">Anno</div>' + 
+  '<div style="color:var(--gs-tenue); font-size:0.75em; text-align:center; margin-top:3px;">Anno</div>' + 
   '</td>' + 
   '</tr></table>' + 
   '</div>'; 
@@ -1337,7 +1337,7 @@ function inputTextarea(id, label, placeholder, righe) {
 function inputSelect(id, label, opzioni) { 
  var html = '<div style="margin-bottom:14px;">' + 
   '<label style="' + STILE_LABEL + '">' + label + '</label>' + 
-  '<select id="' + id + '" style="' + STILE_INPUT + ' background:#292354;">'; 
+  '<select id="' + id + '" style="' + STILE_INPUT + ' background:var(--gs-scuro);">'; 
  for (var i = 0; i < opzioni.length; i++) { 
   html += '<option value="' + opzioni[i] + '">' + opzioni[i] + '</option>'; 
  } 
@@ -1360,7 +1360,7 @@ function costruisciDatiPersonali(isNuova) {
  html += riga2(inputText('campo-nome','Nome','Es. Gon'), inputText('campo-cognome','Cognome','Es. Freecss')); 
  html += riga2(inputText('campo-genere','Genere','Uomo / Donna / Neutro / Ecc.'), 
   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Razza</label>' + 
-  '<select id="campo-razza" onchange="aggiornaRazza('+isNuova+')" style="'+STILE_INPUT+' background:#292354;">' + 
+  '<select id="campo-razza" onchange="aggiornaRazza('+isNuova+')" style="'+STILE_INPUT+' background:var(--gs-scuro);">' + 
   '<option value="Umano">Umano</option>' + 
   '<option value="Bestia Demoniaca">Bestia Demoniaca</option>' + 
   '</select></div>' 
@@ -1368,7 +1368,7 @@ function costruisciDatiPersonali(isNuova) {
  // Specie (visibile solo se Bestia Demoniaca) 
  html += '<div id="campo-specie-wrap" style="display:none; margin-bottom:14px;">' + 
   '<label style="'+STILE_LABEL+'">Specie</label>' + 
-  '<select id="campo-specie" onchange="aggiornaRazza('+isNuova+')" style="'+STILE_INPUT+' background:#292354;">'; 
+  '<select id="campo-specie" onchange="aggiornaRazza('+isNuova+')" style="'+STILE_INPUT+' background:var(--gs-scuro);">'; 
  for (var sp = 0; sp < SPECIE_BESTIA.length; sp++) { 
   html += '<option value="'+SPECIE_BESTIA[sp]+'">'+SPECIE_BESTIA[sp]+'</option>'; 
  } 
@@ -1385,7 +1385,7 @@ function costruisciDatiPersonali(isNuova) {
  if (!isNuova) html += '<div id="campo-abilita-wrap" style="display:none; margin-bottom:14px;"><label style="'+STILE_LABEL+'">Abilità di Specie</label><div id="campo-abilita-val" style="'+STILE_READONLY+'">—</div></div>'; 
  // Luogo di nascita — menù unico, le opzioni vengono filtrate da aggiornaRazza 
  html += '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Luogo di nascita</label>' + 
-  '<select id="campo-luogo" onchange="aggiornaStatNuova()" style="'+STILE_INPUT+' background:#292354;"></select></div>'; 
+  '<select id="campo-luogo" onchange="aggiornaStatNuova()" style="'+STILE_INPUT+' background:var(--gs-scuro);"></select></div>'; 
  html += inputDate('campo-datanascita', 'Data di nascita'); 
  html += riga2(inputSelect('campo-segno','Segno zodiacale', SEGNI_ZODIACALI), inputSelect('campo-segnocinese','Segno zodiacale cinese', SEGNI_CINESI)); 
  html += inputSelect('campo-allineamento','Allineamento', ALLINEAMENTI); 
@@ -1405,7 +1405,7 @@ function costruisciDatiPersonali(isNuova) {
  // Classe (visibile solo per Umani) 
  html += '<div id="campo-classe-wrap">' + 
   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Classe</label>' + 
-  '<select id="campo-classe" style="'+STILE_INPUT+' background:#292354;"></select></div>' + 
+  '<select id="campo-classe" style="'+STILE_INPUT+' background:var(--gs-scuro);"></select></div>' + 
  '</div>'; 
  // Fedina penale 
  if (isNuova) { 
@@ -1414,13 +1414,13 @@ function costruisciDatiPersonali(isNuova) {
   // mostra l'uno o l'altro a seconda della razza/specie. 
   html += '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Fedina Penale</label>' + 
    '<div id="campo-fedina-val" style="'+STILE_READONLY+'; display:none;">Ricercato</div>' + 
-   '<select id="campo-fedina" onchange="aggiornaFedina(true)" style="'+STILE_INPUT+' background:#292354;">' + 
+   '<select id="campo-fedina" onchange="aggiornaFedina(true)" style="'+STILE_INPUT+' background:var(--gs-scuro);">' + 
    '<option value="Incensurato">Incensurato</option>' + 
    '<option value="Ricercato">Ricercato</option>' + 
    '</select></div>'; 
  } else { 
   html += '<div id="campo-fedina-wrap" style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Fedina Penale</label>' + 
-   '<select id="campo-fedina" style="'+STILE_INPUT+' background:#292354;">' + 
+   '<select id="campo-fedina" style="'+STILE_INPUT+' background:var(--gs-scuro);">' + 
    '<option value="Incensurato">Incensurato</option>' + 
    '<option value="Ricercato">Ricercato</option>' + 
    '</select></div>'; 
@@ -1450,7 +1450,7 @@ function costruisciDatiPersonali(isNuova) {
   } 
   html += riga2( 
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Classificazione Taglia</label>' + 
-   '<select id="campo-classtaglia" onchange="aggiornaTaglia()" style="'+STILE_INPUT+' background:#292354;">' + 
+   '<select id="campo-classtaglia" onchange="aggiornaTaglia()" style="'+STILE_INPUT+' background:var(--gs-scuro);">' + 
    opzioniTaglia + '</select></div>', 
    inputText('campo-valtaglia','Valore Taglia (Jenny)','Es. 1000') 
   ); 
@@ -1490,10 +1490,10 @@ function costruisciStatusMultipli() {
  html += '<label style="'+STILE_LABEL+'">Status</label>';
  html += '<div id="lista-status">';
  html += '<div id="status-row-0" style="display:flex; gap:6px; margin-bottom:6px; align-items:center;">';
- html += '<select id="campo-status-0" style="'+STILE_INPUT+' background:#292354; flex:1;">'+opzioni+'</select>';
+ html += '<select id="campo-status-0" style="'+STILE_INPUT+' background:var(--gs-scuro); flex:1;">'+opzioni+'</select>';
  html += '</div>';
  html += '</div>';
- html += '<button onclick="aggiungiStatus()" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; margin-top:2px;"><i class="fa-solid fa-plus"></i> Aggiungi status</button>';
+ html += '<button onclick="aggiungiStatus()" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; margin-top:2px;"><i class="fa-solid fa-plus"></i> Aggiungi status</button>';
  html += '</div>';
  // Campi sbloccati dagli status (Grado Hunter, Ruolo nel Ragno...)
  html += '<div id="campi-status"></div>';
@@ -1509,8 +1509,8 @@ function aggiungiStatus() {
  div.id = 'status-row-' + idx;
  div.style.cssText = 'display:flex; gap:6px; margin-bottom:6px; align-items:center;';
  div.innerHTML =
-  '<select id="campo-status-'+idx+'" style="'+STILE_INPUT+' background:#292354; flex:1;">'+opzioni+'</select>' +
-  '<button onclick="rimuoviElemento(\'status-row-'+idx+'\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:8px 10px; border-radius:6px; cursor:pointer; flex-shrink:0;"><i class="fa-solid fa-xmark"></i></button>';
+  '<select id="campo-status-'+idx+'" style="'+STILE_INPUT+' background:var(--gs-scuro); flex:1;">'+opzioni+'</select>' +
+  '<button onclick="rimuoviElemento(\'status-row-'+idx+'\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:8px 10px; border-radius:6px; cursor:pointer; flex-shrink:0;"><i class="fa-solid fa-xmark"></i></button>';
  lista.appendChild(div);
  if (typeof bozzaSalva === 'function') bozzaSalva();
 }
@@ -1567,7 +1567,7 @@ function aggiornaCampiStatus() {
  var grado = gradoEl ? gradoEl.value : (memo['cs-hunter-grado'] || 'Hunter');
  // 2) Ricostruisce
  var campi = campiStatusAttivi(statusSelezionati(), grado);
- var stileSel = STILE_INPUT + ' background:#292354;';
+ var stileSel = STILE_INPUT + ' background:var(--gs-scuro);';
  var html = '';
  for (var c = 0; c < campi.length; c++) {
   var campo = campi[c];
@@ -1591,7 +1591,7 @@ function aggiornaCampiStatus() {
   } else if (campo.tipo === 'stelle') {
    html += '<div style="display:flex; align-items:center; gap:8px;">';
    html += '<input type="number" id="' + id + '" min="0" step="1" value="0" style="' + STILE_INPUT + ' flex:1;">';
-   html += '<span id="' + id + '-soglia" style="color:#8FBEBA; flex:none;">/ ' + (SOGLIE_STELLE[grado] || 100) + '</span>';
+   html += '<span id="' + id + '-soglia" style="color:var(--gs-tenue); flex:none;">/ ' + (SOGLIE_STELLE[grado] || 100) + '</span>';
    html += '</div>';
   } else {
    html += '<input type="text" id="' + id + '" style="' + STILE_INPUT + '">';
@@ -1646,22 +1646,22 @@ function htmlSelectPopRep() {
  for (var pv = POPOLARITA_MIN; pv <= POPOLARITA_MAX; pv++) opPop += '<option value="' + pv + '">' + pv + '</option>';
  for (var rv = REPUTAZIONE_MIN; rv <= REPUTAZIONE_MAX; rv++) opRep += '<option value="' + rv + '"' + (rv === 0 ? ' selected' : '') + '>' + formattaReputazione(rv) + '</option>';
  var out = riga2(
-  '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Popolarità (senza bonus)</label><select id="campo-popolarita" style="' + STILE_INPUT + ' background:#292354;">' + opPop + '</select></div>',
-  '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Reputazione (senza bonus)</label><select id="campo-reputazione" style="' + STILE_INPUT + ' background:#292354;">' + opRep + '</select></div>'
+  '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Popolarità (senza bonus)</label><select id="campo-popolarita" style="' + STILE_INPUT + ' background:var(--gs-scuro);">' + opPop + '</select></div>',
+  '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Reputazione (senza bonus)</label><select id="campo-reputazione" style="' + STILE_INPUT + ' background:var(--gs-scuro);">' + opRep + '</select></div>'
  );
  return out;
 }
 
 function costruisciExtraModifica(conRiepilogo) {
  if (conRiepilogo === undefined) conRiepilogo = true;
- var stileSel = STILE_INPUT + ' background:#292354;';
+ var stileSel = STILE_INPUT + ' background:var(--gs-scuro);';
  var html = '';
  // Abitazione
  var opLv = '<option value="">—</option>';
  for (var l = 0; l < ABITAZIONE_LIVELLI.length; l++) opLv += '<option value="' + ABITAZIONE_LIVELLI[l] + '">' + ABITAZIONE_LIVELLI[l] + '</option>';
  var opSp = '<option value="">—</option>';
  for (var s = 0; s < ABITAZIONE_SPECIALIZZAZIONI.length; s++) opSp += '<option value="' + ABITAZIONE_SPECIALIZZAZIONI[s] + '">' + ABITAZIONE_SPECIALIZZAZIONI[s] + '</option>';
- html += '<div style="border-top:1px solid #3B8686; padding-top:14px; margin-top:4px;">';
+ html += '<div style="border-top:1px solid var(--gs-medio); padding-top:14px; margin-top:4px;">';
  html += riga2(inputText('campo-abitazione-nome', 'Abitazione (nome)', 'Es. Villa sul lago'), inputText('campo-abitazione-link', 'Abitazione (link al topic)', 'https://...'));
  html += riga2(
   '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Livello Abitazione</label><select id="campo-abitazione-lv" style="' + stileSel + '">' + opLv + '</select></div>',
@@ -1673,7 +1673,7 @@ function costruisciExtraModifica(conRiepilogo) {
  for (var b = 0; b < BONUS_RECLUSIONE.length; b++) opRec += '<option value="' + BONUS_RECLUSIONE[b] + '">' + BONUS_RECLUSIONE[b] + '</option>';
  html += '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Bonus Reclusione</label><select id="campo-bonus-reclusione" style="' + stileSel + '">' + opRec + '</select></div>';
  // Riepilogo calcolato (sola lettura); in Accrediti sta in fondo al form
- if (conRiepilogo) html += '<div id="riepilogo-bonus" style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px 16px; color:#8FBEBA; font-size:0.88em; line-height:1.7;"></div>';
+ if (conRiepilogo) html += '<div id="riepilogo-bonus" style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px 16px; color:var(--gs-tenue); font-size:0.88em; line-height:1.7;"></div>';
  return html;
 }
 
@@ -1720,11 +1720,11 @@ function aggiornaRiepilogoBonus() {
  if (abW) abW.style.display = r.abilitaSpecie ? '' : 'none';
  if (abV) abV.textContent = r.abilitaSpecie || '—';
  // Riepilogo
- var h = '<b style="color:#CFF09E;"><i class="fa-solid fa-calculator"></i> In scheda</b><br>';
- h += 'Popolarità: <b style="color:#E2F7C4;">' + r.popolarita + '</b>' + (r.popBonus ? ' (base ' + p.popBase + ' + ' + r.popBonus + ' da status)' : '') + '<br>';
- h += 'Reputazione: <b style="color:#E2F7C4;">' + formattaReputazione(r.reputazione) + '</b>' + (r.repBonus ? ' (base ' + formattaReputazione(p.repBase) + ', bonus ' + formattaReputazione(r.repBonus) + ')' : '') + '<br>';
- h += 'Carisma: <b style="color:#E2F7C4;">' + r.carisma + '</b>' + (r.carismaBonus ? ' (base ' + p.carismaBase + ' + ' + r.carismaBonus + ' bonus' + (r.carismaTagliato ? ', fermato al tetto di ' + r.carismaTetto : '') + ')' : '') + '<br>';
- if (isAcc && r.abilitaSpecie) h += 'Abilità di Specie: <b style="color:#E2F7C4;">' + r.abilitaSpecie.split(' - ')[0] + '</b><br>';
+ var h = '<b style="color:var(--gs-accento);"><i class="fa-solid fa-calculator"></i> In scheda</b><br>';
+ h += 'Popolarità: <b style="color:var(--gs-chiaro);">' + r.popolarita + '</b>' + (r.popBonus ? ' (base ' + p.popBase + ' + ' + r.popBonus + ' da status)' : '') + '<br>';
+ h += 'Reputazione: <b style="color:var(--gs-chiaro);">' + formattaReputazione(r.reputazione) + '</b>' + (r.repBonus ? ' (base ' + formattaReputazione(p.repBase) + ', bonus ' + formattaReputazione(r.repBonus) + ')' : '') + '<br>';
+ h += 'Carisma: <b style="color:var(--gs-chiaro);">' + r.carisma + '</b>' + (r.carismaBonus ? ' (base ' + p.carismaBase + ' + ' + r.carismaBonus + ' bonus' + (r.carismaTagliato ? ', fermato al tetto di ' + r.carismaTetto : '') + ')' : '') + '<br>';
+ if (isAcc && r.abilitaSpecie) h += 'Abilità di Specie: <b style="color:var(--gs-chiaro);">' + r.abilitaSpecie.split(' - ')[0] + '</b><br>';
  if (r.voci.length) {
   var nomi = [];
   for (var i = 0; i < r.voci.length; i++) nomi.push(r.voci[i].label.replace(/:$/, ''));
@@ -1866,14 +1866,14 @@ function campoCropHTML(campoId, label, cropId, slotW, slotH) {
  html += '<div style="margin-top:8px; display:flex; align-items:center; gap:10px;">';
  html += '<button type="button" id="crop-btn-'+cropId+'" '
   + 'onclick="cropApriModal(\''+cropId+'\','+slotW+','+slotH+')" '
-  + 'style="background:#292354; color:#CFF09E; border:1px solid #3B8686; '
+  + 'style="background:var(--gs-scuro); color:var(--gs-accento); border:1px solid var(--gs-medio); '
   + 'padding:7px 14px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; '
   + 'font-size:0.85em; display:flex; align-items:center; gap:8px; transition:border-color 0.2s;">'
   + '<i class="fa-solid fa-scissors"></i> Scegli inquadratura'
   + '<span class="crop-btn-thumb" style="display:none; width:40px; height:24px; '
-  + 'border-radius:3px; border:1px solid #3B8686; background-size:cover; flex-shrink:0;"></span>'
+  + 'border-radius:3px; border:1px solid var(--gs-medio); background-size:cover; flex-shrink:0;"></span>'
   + '</button>';
- html += '<span style="color:#8FBEBA; font-size:0.75em; font-style:italic;">Slot: '+slotW+'×'+slotH+'px</span>';
+ html += '<span style="color:var(--gs-tenue); font-size:0.75em; font-style:italic;">Slot: '+slotW+'×'+slotH+'px</span>';
  html += '</div>';
  // 4 hidden input: x, y, w, h (percentuali 0-100)
  html += '<input type="hidden" id="crop-x-'+cropId+'" value="0">';
@@ -1915,19 +1915,19 @@ function cropApriModal(id, slotW, slotH) {
   + 'display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
 
  overlay.innerHTML =
-  '<div id="crop-modal-box" style="background:#0B486B;border:2px solid #3B8686;border-radius:14px;'
+  '<div id="crop-modal-box" style="background:var(--gs-fondo);border:2px solid var(--gs-medio);border-radius:14px;'
   + 'padding:24px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;'
   + 'display:flex;flex-direction:column;gap:16px;font-family:\'Montserrat\';">'
 
   // Header
   + '<div style="display:flex;justify-content:space-between;align-items:center;width:100%;">'
-  + '<span style="font-size:1.15em;font-weight:700;color:#CFF09E;"><i class="fa-solid fa-scissors"></i> Scegli inquadratura</span>'
-  + '<button onclick="cropChiudiModal()" style="background:none;border:none;color:#8FBEBA;'
+  + '<span style="font-size:1.15em;font-weight:700;color:var(--gs-accento);"><i class="fa-solid fa-scissors"></i> Scegli inquadratura</span>'
+  + '<button onclick="cropChiudiModal()" style="background:none;border:none;color:var(--gs-tenue);'
   + 'font-size:1.2em;cursor:pointer;padding:4px 8px;border-radius:4px;">✕</button>'
   + '</div>'
 
   // Hint
-  + '<p style="margin:0;font-size:0.82em;color:#8FBEBA;">'
+  + '<p style="margin:0;font-size:0.82em;color:var(--gs-tenue);">'
   + 'Trascina il riquadro per spostarlo'
   + '</p>'
 
@@ -1938,12 +1938,12 @@ function cropApriModal(id, slotW, slotH) {
   + 'style="display:block;width:100%;height:auto;max-height:400px;object-fit:contain;pointer-events:none;" '
   + 'draggable="false" onload="cropModalImgCaricata()" '
   + 'onerror="document.getElementById(\'crop-canvas-err\').style.display=\'\'">'
-  + '<div id="crop-canvas-err" style="display:none;padding:20px;color:#F9C6C6;font-size:0.9em;">'
+  + '<div id="crop-canvas-err" style="display:none;padding:20px;color:var(--gs-errore);font-size:0.9em;">'
   + '⚠️ Immagine non caricabile. Controlla il URL.</div>'
   + '<div id="crop-darken" style="position:absolute;inset:0;background:rgba(0,0,0,0.5);pointer-events:none;display:none;"></div>'
   // Crop box
   + '<div id="crop-box" style="display:none;position:absolute;box-sizing:border-box;cursor:grab;'
-  + 'box-shadow:0 0 0 9999px rgba(0,0,0,0.52),inset 0 0 0 2px #CFF09E;">'
+  + 'box-shadow:0 0 0 9999px rgba(0,0,0,0.52),inset 0 0 0 2px var(--gs-accento);">'
   // Griglia 3x3 interna
   + '<div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);'
   + 'grid-template-rows:repeat(3,1fr);pointer-events:none;">'
@@ -1958,11 +1958,11 @@ function cropApriModal(id, slotW, slotH) {
   + '</div>'
 
   // Footer
-  + '<div style="display:flex;justify-content:flex-end;gap:12px;padding-top:12px;border-top:1px solid #3B8686;">'
-  + '<button onclick="cropChiudiModal()" style="background:#292354;color:#8FBEBA;border:1px solid #3B8686;'
+  + '<div style="display:flex;justify-content:flex-end;gap:12px;padding-top:12px;border-top:1px solid var(--gs-medio);">'
+  + '<button onclick="cropChiudiModal()" style="background:var(--gs-scuro);color:var(--gs-tenue);border:1px solid var(--gs-medio);'
   + 'padding:9px 22px;border-radius:6px;cursor:pointer;font-family:\'Montserrat\';">Annulla</button>'
-  + '<button onclick="cropConferma()" style="background:linear-gradient(135deg,#A8DBA8,#79BD9A);'
-  + 'color:#1a2e1a;border:none;padding:9px 22px;border-radius:6px;cursor:pointer;'
+  + '<button onclick="cropConferma()" style="background:linear-gradient(135deg,var(--gs-verde),var(--gs-verde2));'
+  + 'color:var(--gs-btn-testo);border:none;padding:9px 22px;border-radius:6px;cursor:pointer;'
   + 'font-family:\'Montserrat\';font-weight:700;">Conferma</button>'
   + '</div>'
   + '</div>';
@@ -2191,8 +2191,8 @@ function costruisciImmagini() {
  html += '<div style="margin-bottom:14px;">';
  html += '<label style="'+STILE_LABEL+'">Immagine slide Info</label>';
  html += '<div style="display:flex; gap:12px; margin-bottom:8px;">';
- html += '<label style="display:flex; align-items:center; gap:6px; color:#8FBEBA; font-size:0.85em; cursor:pointer;"><input type="radio" name="img-info-modo" value="1" checked onchange="aggiornaInputImgInfo()"> Una immagine</label>';
- html += '<label style="display:flex; align-items:center; gap:6px; color:#8FBEBA; font-size:0.85em; cursor:pointer;"><input type="radio" name="img-info-modo" value="2" onchange="aggiornaInputImgInfo()"> Due immagini</label>';
+ html += '<label style="display:flex; align-items:center; gap:6px; color:var(--gs-tenue); font-size:0.85em; cursor:pointer;"><input type="radio" name="img-info-modo" value="1" checked onchange="aggiornaInputImgInfo()"> Una immagine</label>';
+ html += '<label style="display:flex; align-items:center; gap:6px; color:var(--gs-tenue); font-size:0.85em; cursor:pointer;"><input type="radio" name="img-info-modo" value="2" onchange="aggiornaInputImgInfo()"> Due immagini</label>';
  html += '</div>';
 
  html += '<div id="img-info-wrap-1">';
@@ -2239,90 +2239,90 @@ function costruisciStatistiche(isNuova) {
  var ls = ['forza','resistenza','velocita','riflessi','destrezza','mira','intelligenza','carisma','istinto','fortuna']; 
  
  if (isNuova) { 
-  html += '<p style="color:#8FBEBA; font-size:0.9em; margin-bottom:8px; font-style:italic;">Statistiche di base calcolate da luogo e classe. Puoi ridistribuire <b>25 punti extra</b> (multipli di 5) a piacimento, escluse Vita e Aura.</p>'; 
-  html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; align-items:center; gap:10px;">'; 
-  html += '<i class="fa-solid fa-coins" style="color:#CFF09E;"></i> '; 
-  html += '<span id="punti-extra-counter" style="color:#8FBEBA; font-size:0.95em; font-weight:600;">25 punti rimanenti</span>'; 
+  html += '<p style="color:var(--gs-tenue); font-size:0.9em; margin-bottom:8px; font-style:italic;">Statistiche di base calcolate da luogo e classe. Puoi ridistribuire <b>25 punti extra</b> (multipli di 5) a piacimento, escluse Vita e Aura.</p>'; 
+  html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:10px 16px; margin-bottom:14px; display:flex; align-items:center; gap:10px;">'; 
+  html += '<i class="fa-solid fa-coins" style="color:var(--gs-accento);"></i> '; 
+  html += '<span id="punti-extra-counter" style="color:var(--gs-tenue); font-size:0.95em; font-weight:600;">25 punti rimanenti</span>'; 
   html += '</div>'; 
   var r1 = [], r2 = []; 
   for (var i = 0; i < 5; i++) { 
    r1.push( 
-    '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' + 
-    '<div style="color:#8FBEBA; font-size:0.75em; margin-bottom:4px;">'+nomiStat[i]+'</div>' + 
-    '<div id="stat-'+ls[i]+'" style="color:#CFF09E; font-size:1.2em; font-weight:700;">5</div>' + 
+    '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:8px 4px;">' + 
+    '<div style="color:var(--gs-tenue); font-size:0.75em; margin-bottom:4px;">'+nomiStat[i]+'</div>' + 
+    '<div id="stat-'+ls[i]+'" style="color:var(--gs-accento); font-size:1.2em; font-weight:700;">5</div>' + 
     '<span style="display:none;" id="stat-base-'+ls[i]+'">5</span>' + 
     '<input type="hidden" id="stat-extra-'+ls[i]+'" value="0">' + 
     '<div style="display:flex; justify-content:center; gap:4px; margin-top:5px;">' + 
-    '<button onclick="modificaStatExtra(\''+ls[i]+'\',-5)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">−</button>' + 
-    '<button onclick="modificaStatExtra(\''+ls[i]+'\',5)"  style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
+    '<button onclick="modificaStatExtra(\''+ls[i]+'\',-5)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">−</button>' + 
+    '<button onclick="modificaStatExtra(\''+ls[i]+'\',5)"  style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
     '</div></div>' 
    ); 
   } 
   for (var j = 5; j < 10; j++) { 
    r2.push( 
-    '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' + 
-    '<div style="color:#8FBEBA; font-size:0.75em; margin-bottom:4px;">'+nomiStat[j]+'</div>' + 
-    '<div id="stat-'+ls[j]+'" style="color:#CFF09E; font-size:1.2em; font-weight:700;">5</div>' + 
+    '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:8px 4px;">' + 
+    '<div style="color:var(--gs-tenue); font-size:0.75em; margin-bottom:4px;">'+nomiStat[j]+'</div>' + 
+    '<div id="stat-'+ls[j]+'" style="color:var(--gs-accento); font-size:1.2em; font-weight:700;">5</div>' + 
     '<span style="display:none;" id="stat-base-'+ls[j]+'">5</span>' + 
     '<input type="hidden" id="stat-extra-'+ls[j]+'" value="0">' + 
     '<div style="display:flex; justify-content:center; gap:4px; margin-top:5px;">' + 
-    '<button onclick="modificaStatExtra(\''+ls[j]+'\',-5)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">−</button>' + 
-    '<button onclick="modificaStatExtra(\''+ls[j]+'\',5)"  style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
+    '<button onclick="modificaStatExtra(\''+ls[j]+'\',-5)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">−</button>' + 
+    '<button onclick="modificaStatExtra(\''+ls[j]+'\',5)"  style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
     '</div></div>' 
    ); 
   } 
   html += rigaStat5(r1); 
   html += rigaStat5(r2); 
   html += riga2( 
-   '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:10px;"><div style="color:#8FBEBA; font-size:0.78em; margin-bottom:4px;">Vita</div><div id="stat-vita" style="color:#CFF09E; font-size:1.3em; font-weight:700;">300</div></div>', 
-   '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:10px;"><div style="color:#8FBEBA; font-size:0.78em; margin-bottom:4px;">Aura</div><div id="stat-aura" style="color:#CFF09E; font-size:1.3em; font-weight:700;">500</div></div>' 
+   '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:10px;"><div style="color:var(--gs-tenue); font-size:0.78em; margin-bottom:4px;">Vita</div><div id="stat-vita" style="color:var(--gs-accento); font-size:1.3em; font-weight:700;">300</div></div>', 
+   '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:10px;"><div style="color:var(--gs-tenue); font-size:0.78em; margin-bottom:4px;">Aura</div><div id="stat-aura" style="color:var(--gs-accento); font-size:1.3em; font-weight:700;">500</div></div>' 
   ); 
  } else { 
-  html += '<p style="color:#8FBEBA; font-size:0.85em; margin-bottom:15px; font-style:italic;">Multipli di 5 (Vita e Aura: multipli di 100). Max stat normali: 250 (400 se over), Vita: 3000, Aura: 5000. <b>Carisma: inserisci il valore senza bonus</b> (popolarità e abitazione vengono aggiunti in automatico, vedi il riepilogo in Dati Personali).</p>'; 
+  html += '<p style="color:var(--gs-tenue); font-size:0.85em; margin-bottom:15px; font-style:italic;">Multipli di 5 (Vita e Aura: multipli di 100). Max stat normali: 250 (400 se over), Vita: 3000, Aura: 5000. <b>Carisma: inserisci il valore senza bonus</b> (popolarità e abitazione vengono aggiunti in automatico, vedi il riepilogo in Dati Personali).</p>'; 
   var r3 = [], r4 = []; 
   for (var k = 0; k < 5; k++) { 
-   r3.push('<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' + 
-    '<div style="color:#8FBEBA; font-size:0.75em; margin-bottom:4px;">' + nomiStat[k] + '</div>' + 
-    '<input type="number" id="stat-' + ls[k] + '" value="5" min="5" max="400" step="5" onchange="validaStat(this,false)" style="width:60px; background:transparent; border:none; color:#CFF09E; font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' + 
+   r3.push('<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:8px 4px;">' + 
+    '<div style="color:var(--gs-tenue); font-size:0.75em; margin-bottom:4px;">' + nomiStat[k] + '</div>' + 
+    '<input type="number" id="stat-' + ls[k] + '" value="5" min="5" max="400" step="5" onchange="validaStat(this,false)" style="width:60px; background:transparent; border:none; color:var(--gs-accento); font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' + 
     '<div style="display:flex; justify-content:center; gap:4px; margin-top:5px;">' + 
-    '<button onclick="stepStat(\'' + ls[k] + '\',-5)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
-    '<button onclick="stepStat(\'' + ls[k] + '\',5)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
+    '<button onclick="stepStat(\'' + ls[k] + '\',-5)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
+    '<button onclick="stepStat(\'' + ls[k] + '\',5)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
     '</div>' + 
-    '<label style="display:block; color:#8FBEBA; font-size:0.72em; margin-top:5px; cursor:pointer;"><input type="checkbox" id="over-' + ls[k] + '" onchange="toggleOver(this,\'' + ls[k] + '\')"> over</label></div>'); 
+    '<label style="display:block; color:var(--gs-tenue); font-size:0.72em; margin-top:5px; cursor:pointer;"><input type="checkbox" id="over-' + ls[k] + '" onchange="toggleOver(this,\'' + ls[k] + '\')"> over</label></div>'); 
   } 
   for (var m2 = 5; m2 < 10; m2++) { 
-   r4.push('<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' + 
-    '<div style="color:#8FBEBA; font-size:0.75em; margin-bottom:4px;">' + nomiStat[m2] + '</div>' + 
-    '<input type="number" id="stat-' + ls[m2] + '" value="5" min="5" max="400" step="5" onchange="validaStat(this,false)" style="width:60px; background:transparent; border:none; color:#CFF09E; font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' + 
+   r4.push('<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:8px 4px;">' + 
+    '<div style="color:var(--gs-tenue); font-size:0.75em; margin-bottom:4px;">' + nomiStat[m2] + '</div>' + 
+    '<input type="number" id="stat-' + ls[m2] + '" value="5" min="5" max="400" step="5" onchange="validaStat(this,false)" style="width:60px; background:transparent; border:none; color:var(--gs-accento); font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' + 
     '<div style="display:flex; justify-content:center; gap:4px; margin-top:5px;">' + 
-    '<button onclick="stepStat(\'' + ls[m2] + '\',-5)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
-    '<button onclick="stepStat(\'' + ls[m2] + '\',5)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
+    '<button onclick="stepStat(\'' + ls[m2] + '\',-5)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
+    '<button onclick="stepStat(\'' + ls[m2] + '\',5)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
     '</div>' + 
-    '<label style="display:block; color:#8FBEBA; font-size:0.72em; margin-top:5px; cursor:pointer;"><input type="checkbox" id="over-' + ls[m2] + '" onchange="toggleOver(this,\'' + ls[m2] + '\')"> over</label></div>'); 
+    '<label style="display:block; color:var(--gs-tenue); font-size:0.72em; margin-top:5px; cursor:pointer;"><input type="checkbox" id="over-' + ls[m2] + '" onchange="toggleOver(this,\'' + ls[m2] + '\')"> over</label></div>'); 
   } 
   html += rigaStat5(r3); 
   html += rigaStat5(r4); 
   html += riga2( 
-   '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' + 
-   '<div style="color:#8FBEBA; font-size:0.75em; margin-bottom:4px;">Vita</div>' + 
-   '<input type="number" id="stat-vita" value="300" min="300" max="3000" step="100" onchange="validaStat(this,true)" style="width:70px; background:transparent; border:none; color:#CFF09E; font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' + 
+   '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:8px 4px;">' + 
+   '<div style="color:var(--gs-tenue); font-size:0.75em; margin-bottom:4px;">Vita</div>' + 
+   '<input type="number" id="stat-vita" value="300" min="300" max="3000" step="100" onchange="validaStat(this,true)" style="width:70px; background:transparent; border:none; color:var(--gs-accento); font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' + 
    '<div style="display:flex; justify-content:center; gap:4px; margin-top:5px;">' + 
-   '<button onclick="stepStat(\'vita\',-100)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
-   '<button onclick="stepStat(\'vita\',100)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
+   '<button onclick="stepStat(\'vita\',-100)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
+   '<button onclick="stepStat(\'vita\',100)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
    '</div></div>', 
-   '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' + 
-   '<div style="color:#8FBEBA; font-size:0.75em; margin-bottom:4px;">Aura</div>' + 
-   '<input type="number" id="stat-aura" value="500" min="500" max="5000" step="100" onchange="validaStat(this,true)" style="width:70px; background:transparent; border:none; color:#CFF09E; font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' + 
+   '<div style="text-align:center; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:8px 4px;">' + 
+   '<div style="color:var(--gs-tenue); font-size:0.75em; margin-bottom:4px;">Aura</div>' + 
+   '<input type="number" id="stat-aura" value="500" min="500" max="5000" step="100" onchange="validaStat(this,true)" style="width:70px; background:transparent; border:none; color:var(--gs-accento); font-size:1.2em; font-weight:700; text-align:center; padding:2px 0;">' + 
    '<div style="display:flex; justify-content:center; gap:4px; margin-top:5px;">' + 
-   '<button onclick="stepStat(\'aura\',-100)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
-   '<button onclick="stepStat(\'aura\',100)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
+   '<button onclick="stepStat(\'aura\',-100)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">&#8722;</button>' + 
+   '<button onclick="stepStat(\'aura\',100)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:24px; height:24px; cursor:pointer; font-size:0.9em; padding:0;">+</button>' + 
    '</div></div>' 
   ); 
-  html += '<div style="margin-top:22px; border-top:1px solid #3B8686; padding-top:18px;">'; 
-  html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:14px;"><i class="fa-solid fa-puzzle-piece"></i> Competenze</h4>'; 
+  html += '<div style="margin-top:22px; border-top:1px solid var(--gs-medio); padding-top:18px;">'; 
+  html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:14px;"><i class="fa-solid fa-puzzle-piece"></i> Competenze</h4>'; 
   for (var n = 0; n < 5; n++) { 
-   html += '<div id="comp-slot-'+n+'" style="background:#292354; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:10px;">'; 
-   html += '<div style="color:#8FBEBA; font-size:0.82em; margin-bottom:10px;" id="comp-slot-label-'+n+'"><i class="fa-solid fa-lock"></i> Slot ' + (n+1) + ' — sbloccabile al Lv. ' + SBLOCCO_COMPETENZE[n] + '</div>'; 
+   html += '<div id="comp-slot-'+n+'" style="background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:10px;">'; 
+   html += '<div style="color:var(--gs-tenue); font-size:0.82em; margin-bottom:10px;" id="comp-slot-label-'+n+'"><i class="fa-solid fa-lock"></i> Slot ' + (n+1) + ' — sbloccabile al Lv. ' + SBLOCCO_COMPETENZE[n] + '</div>'; 
    html += '<div id="comp-slot-fields-'+n+'">'; 
    html += inputText('comp-nome-'+n,'Nome competenza','Es. Spadaccino Provetto'); 
    html += riga2(inputText('comp-lv-'+n,'Livello','Es. 1'), inputText('comp-oggetto-'+n,'Oggetto','Es. Spada')); 
@@ -2337,7 +2337,7 @@ function costruisciStatistiche(isNuova) {
  
 function costruisciNen(isNuova) {
  if (isNuova) {
-  var html = '<p style="color:#8FBEBA; font-size:0.9em; margin-bottom:15px; font-style:italic;">L\'Hatsu viene sbloccato in seguito. Nen e Tenacia sono fissi.</p>';
+  var html = '<p style="color:var(--gs-tenue); font-size:0.9em; margin-bottom:15px; font-style:italic;">L\'Hatsu viene sbloccato in seguito. Nen e Tenacia sono fissi.</p>';
   html += riga2(campoReadonly('Nen', NEN_INIZIALE+'%'), campoReadonly('Tenacia', TENACIA_INIZIALE+'%'));
   html += campoReadonly('Hatsu', '<i class="mdi mdi-fire"></i> Non ancora sbloccato');
   return html;
@@ -2345,28 +2345,28 @@ function costruisciNen(isNuova) {
 
  // Import Hatsu approvato: riempie SOLO i dati Nen (non le percentuali). 
  // Disponibile solo in Modifica (isNuova è già stato gestito sopra). 
- var html = '<div style="background:#1a2e45; border:1px dashed #CFF09E; border-radius:8px; padding:14px; margin-bottom:18px;">'; 
- html += '<div style="color:#CFF09E; font-size:0.92em; font-weight:600; margin-bottom:8px;"><i class="fa-solid fa-file-import"></i> Importa Hatsu approvato</div>'; 
- html += '<p style="color:#8FBEBA; font-size:0.82em; margin:0 0 10px; font-style:italic;">Incolla qui il codice di un Hatsu gi&agrave; approvato dallo staff: verranno compilati solo i dati di Abilit&agrave; Nen qui sotto (tipo, potere, profili, tecniche, immagine). Nen % e Tenacia % restano invariati.</p>'; 
+ var html = '<div style="background:var(--gs-box); border:1px dashed var(--gs-accento); border-radius:8px; padding:14px; margin-bottom:18px;">'; 
+ html += '<div style="color:var(--gs-accento); font-size:0.92em; font-weight:600; margin-bottom:8px;"><i class="fa-solid fa-file-import"></i> Importa Hatsu approvato</div>'; 
+ html += '<p style="color:var(--gs-tenue); font-size:0.82em; margin:0 0 10px; font-style:italic;">Incolla qui il codice di un Hatsu gi&agrave; approvato dallo staff: verranno compilati solo i dati di Abilit&agrave; Nen qui sotto (tipo, potere, profili, tecniche, immagine). Nen % e Tenacia % restano invariati.</p>'; 
  html += '<textarea id="campo-importa-hatsu" placeholder="Incolla qui il codice HTML della scheda Hatsu..." style="' + STILE_INPUT + ' min-height:80px; resize:vertical;"></textarea>'; 
- html += '<button type="button" onclick="importaHatsu()" style="margin-top:10px; background:#292354; color:#CFF09E; border:1px solid #CFF09E; padding:9px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.9em;"><i class="fa-solid fa-file-import"></i> Importa Hatsu</button>'; 
+ html += '<button type="button" onclick="importaHatsu()" style="margin-top:10px; background:var(--gs-scuro); color:var(--gs-accento); border:1px solid var(--gs-accento); padding:9px 20px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.9em;"><i class="fa-solid fa-file-import"></i> Importa Hatsu</button>'; 
  html += '</div>'; 
 
  html += inputSelect('campo-hatsu','Tipo Hatsu', TIPI_HATSU);
  html += riga2(inputText('campo-nen','Nen (%)','Es. 95'), inputText('campo-tenacia','Tenacia (%)','Es. 75'));
 
  // Toggle modalità Hatsu
- html += '<div style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px; margin-bottom:16px;">';
- html += '<label style="display:block; color:#CFF09E; font-size:0.9em; margin-bottom:8px; font-family:\'Montserrat\';">Modalità Hatsu</label>';
+ html += '<div style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px; margin-bottom:16px;">';
+ html += '<label style="display:block; color:var(--gs-accento); font-size:0.9em; margin-bottom:8px; font-family:\'Montserrat\';">Modalità Hatsu</label>';
  html += '<div style="display:flex; gap:10px;">';
- html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:#292354; border:1px solid #3B8686; border-radius:6px; padding:8px 16px; color:#CFF09E; font-size:0.88em;"><input type="radio" name="nen-modalita" value="completo" checked onchange="aggiornaModoNen()"> Completo</label>';
- html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:#292354; border:1px solid #3B8686; border-radius:6px; padding:8px 16px; color:#CFF09E; font-size:0.88em;"><input type="radio" name="nen-modalita" value="speedduel" onchange="aggiornaModoNen()"> Speed Duel</label>';
+ html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; padding:8px 16px; color:var(--gs-accento); font-size:0.88em;"><input type="radio" name="nen-modalita" value="completo" checked onchange="aggiornaModoNen()"> Completo</label>';
+ html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:var(--gs-scuro); border:1px solid var(--gs-medio); border-radius:6px; padding:8px 16px; color:var(--gs-accento); font-size:0.88em;"><input type="radio" name="nen-modalita" value="speedduel" onchange="aggiornaModoNen()"> Speed Duel</label>';
  html += '</div></div>';
 
  // Box 1: Potere Nen
- html += '<div style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="mdi mdi-fire"></i> Potere Nen</h4>';
- html += '<p style="color:#8FBEBA; font-size:0.85em; margin-bottom:12px; font-style:italic;">Il titolo del box sarà il tipo di Hatsu selezionato sopra.</p>';
+ html += '<div style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="mdi mdi-fire"></i> Potere Nen</h4>';
+ html += '<p style="color:var(--gs-tenue); font-size:0.85em; margin-bottom:12px; font-style:italic;">Il titolo del box sarà il tipo di Hatsu selezionato sopra.</p>';
  html += inputText('nen-nomepotere', 'Nome potere', 'Es. Filo d\'Ambra');
  html += inputTextarea('nen-descrizione', 'Descrizione', 'Descrizione del potere...', 3);
  html += inputTextarea('nen-funzionamento', 'Funzionamento e regole', 'Come funziona il potere, le regole...', 3);
@@ -2375,17 +2375,17 @@ function costruisciNen(isNuova) {
  html += '</div>';
 
  // Immagine nen
- html += '<div style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-image"></i> Immagine Nen</h4>';
+ html += '<div style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-image"></i> Immagine Nen</h4>';
  html += campoCropHTML('nen-img', 'URL immagine — dimensioni ideali: 664×200px', 'img-nen', 664, 200);
  html += '</div>';
 
  // Box 2: Profili (nascosto in Speed Duel)
- html += '<div id="nen-sezione-profili" style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-layer-group"></i> Profili</h4>';
+ html += '<div id="nen-sezione-profili" style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-layer-group"></i> Profili</h4>';
  for (var p = 1; p <= 4; p++) {
-  html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:12px;">';
-  html += '<div style="color:#CFF09E; font-size:0.9em; font-weight:600; margin-bottom:10px;">Profilo ' + p + '</div>';
+  html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:12px;">';
+  html += '<div style="color:var(--gs-accento); font-size:0.9em; font-weight:600; margin-bottom:10px;">Profilo ' + p + '</div>';
   html += inputText('profilo-'+p+'-nome', 'Nome profilo', 'Es. Filo Singolo');
   html += inputTextarea('profilo-'+p+'-desc', 'Descrizione', 'Descrizione del profilo...', 2);
   html += inputTextarea('profilo-'+p+'-bonus', 'Effetti e/o Bonus', 'Descrizione degli effetti e/o bonus...', 2);
@@ -2409,11 +2409,11 @@ function costruisciNen(isNuova) {
 
 function costruisciBoxTecniche(id, label, num) {
  if (num === undefined) num = id === '100' ? 1 : 2;
- var html = '<div style="margin-top:16px; border-top:1px solid #3B8686; padding-top:16px;">';
- html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-bolt"></i> Tecniche ' + label + '</h4>';
+ var html = '<div style="margin-top:16px; border-top:1px solid var(--gs-medio); padding-top:16px;">';
+ html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; margin-bottom:12px;"><i class="fa-solid fa-bolt"></i> Tecniche ' + label + '</h4>';
  for (var t = 1; t <= num; t++) {
-  html += '<div style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:14px; margin-bottom:12px;">';
-  html += '<div style="color:#CFF09E; font-size:0.9em; font-weight:600; margin-bottom:10px;">Tecnica ' + t + '</div>';
+  html += '<div style="background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:14px; margin-bottom:12px;">';
+  html += '<div style="color:var(--gs-accento); font-size:0.9em; font-weight:600; margin-bottom:10px;">Tecnica ' + t + '</div>';
   html += inputText('tecnica-'+id+'-'+t+'-nome', 'Nome tecnica', 'Es. Taglio Rapido');
   html += inputTextarea('tecnica-'+id+'-'+t+'-desc', 'Descrizione', 'Descrizione della tecnica...', 2);
   html += inputTextarea('tecnica-'+id+'-'+t+'-bonus', 'Effetti e/o Bonus', 'Descrizione degli effetti e/o bonus...', 2);
@@ -2439,12 +2439,12 @@ function aggiungiTecnica() {
  var idx = lista.children.length; 
  var div = document.createElement('div'); 
  div.id = 'tecnica-row-' + idx; 
- div.style.cssText = 'background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px; margin-bottom:10px;'; 
+ div.style.cssText = 'background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px; margin-bottom:10px;'; 
  div.innerHTML = 
   '<table style="width:100%; border-collapse:collapse; table-layout:fixed; margin-bottom:6px;"><tr>' + 
   '<td style="width:88%; padding-right:6px; vertical-align:bottom;">' + inputText('tecnica-nome-'+idx,'Nome tecnica','Es. Scudo di Luce') + '</td>' + 
   '<td style="width:12%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
-  '<button onclick="rimuoviElemento(\'tecnica-row-'+idx+'\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
+  '<button onclick="rimuoviElemento(\'tecnica-row-'+idx+'\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
   '</td></tr></table>' + 
   inputTextarea('tecnica-desc-'+idx,'Descrizione','Descrizione della tecnica...', 3); 
  lista.appendChild(div); 
@@ -2453,7 +2453,7 @@ function aggiungiTecnica() {
  
 function costruisciBalue(isNuova) {
  if (isNuova) {
-  return '<p style="color:#8FBEBA; font-size:0.9em; font-style:italic;">' +
+  return '<p style="color:var(--gs-tenue); font-size:0.9em; font-style:italic;">' +
    '<i class="fa-solid fa-info-circle"></i> Un nuovo PG non ha ancora oggetti con sé. ' +
    'Il baule sarà vuoto nella scheda generata.</p>';
  }
@@ -2467,9 +2467,9 @@ function costruisciBalue(isNuova) {
  for (var i = 0; i < categorie.length; i++) {
   var cat = categorie[i];
   html += '<div style="margin-bottom:18px;">';
-  html += '<h4 style="color:#CFF09E; font-family:\'Montserrat\'; font-size:1.2em; margin-bottom:8px;">' + cat.nome + '</h4>';
+  html += '<h4 style="color:var(--gs-accento); font-family:\'Montserrat\'; font-size:1.2em; margin-bottom:8px;">' + cat.nome + '</h4>';
   html += '<div id="lista-' + cat.id + '"></div>';
-  html += '<button onclick="aggiungiItem(\'' + cat.id + '\')" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:6px 16px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; font-size:1em;"><i class="fa-solid fa-plus"></i> Aggiungi</button>';
+  html += '<button onclick="aggiungiItem(\'' + cat.id + '\')" style="background:transparent; color:var(--gs-tenue); border:1px dashed var(--gs-medio); padding:6px 16px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\'; font-size:1em;"><i class="fa-solid fa-plus"></i> Aggiungi</button>';
   html += '</div>';
  }
  return html;
@@ -2481,7 +2481,7 @@ function aggiungiItem(categoria) {
  var idx = lista.children.length; 
  var div = document.createElement('div'); 
  div.id = categoria + '-row-' + idx; 
- div.style.cssText = 'background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px; margin-bottom:10px;'; 
+ div.style.cssText = 'background:var(--gs-box); border:1px solid var(--gs-medio); border-radius:8px; padding:12px; margin-bottom:10px;'; 
  
  // Riga 1: Nome + Qt + Livello/Usi + pulsante rimuovi 
  var riga1 = ''; 
@@ -2491,7 +2491,7 @@ function aggiungiItem(categoria) {
    '<td style="width:78%; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-nome-'+idx,'Nome','Es. Erba medicinale') + '</td>' + 
    '<td style="width:12%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-qt-'+idx,'Qt','1') + '</td>' + 
    '<td style="width:10%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
-   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
+   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
    '</td></tr></table>'; 
  } else if (categoria === 'oggetti') { 
   riga1 = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' + 
@@ -2499,7 +2499,7 @@ function aggiungiItem(categoria) {
    '<td style="width:16%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-qt-'+idx,'Qt','1') + '</td>' + 
    '<td style="width:22%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-usi-'+idx,'Usi (es. 0/3)','0/3') + '</td>' + 
    '<td style="width:10%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
-   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
+   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
    '</td></tr></table>'; 
  } else { 
   // armi / equip 
@@ -2509,13 +2509,13 @@ function aggiungiItem(categoria) {
    '<td style="width:22%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + 
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Livello (max 5)</label>' + 
    '<div style="display:flex; align-items:center; gap:6px;">' + 
-   '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', -1)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">&#8722;</button>' + 
+   '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', -1)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">&#8722;</button>' + 
    '<input type="number" id="'+categoria+'-lv-'+idx+'" value="0" min="0" max="5" style="'+STILE_INPUT+' text-align:center; flex:1;">' + 
-   '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', 1)" style="background:#0B486B; color:#CFF09E; border:1px solid #3B8686; border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">+</button>' + 
+   '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', 1)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">+</button>' + 
    '</div></div>' + 
    '</td>' + 
    '<td style="width:10%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
-   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
+   '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
    '</td></tr></table>'; 
  } 
  
@@ -2527,7 +2527,7 @@ function aggiungiItem(categoria) {
 
  // Riga 3: Descrizione opzionale (HTML consentito)
  var riga3desc = '<div style="margin-bottom:6px;">' +
-  '<label style="'+STILE_LABEL+'">Descrizione <span style="color:#8FBEBA; font-size:0.85em; font-weight:400;">(opzionale — HTML consentito)</span></label>' +
+  '<label style="'+STILE_LABEL+'">Descrizione <span style="color:var(--gs-tenue); font-size:0.85em; font-weight:400;">(opzionale — HTML consentito)</span></label>' +
   '<textarea id="'+categoria+'-desc-'+idx+'" rows="2" placeholder="Es. Una spada antica forgiata in acciaio stellare..." style="'+STILE_INPUT+' font-family:\'Montserrat\'; font-size:0.95em; resize:vertical;"></textarea>' +
   '</div>';
 
@@ -2541,13 +2541,13 @@ function aggiungiItem(categoria) {
  
 function costruisciMusica() { 
  return '<div style="display:flex; gap:10px; margin-bottom:6px; align-items:center;">' +
-  '<label style="color:#8FBEBA; font-size:0.85em;">Piattaforma:</label>' +
-  '<select id="campo-musica-piattaforma" onchange="aggiornaMusicaHelp()" style="background:#292354; color:#CFF09E; border:1px solid #3B8686; border-radius:6px; padding:4px 8px; font-family:\'Montserrat\';">' +
+  '<label style="color:var(--gs-tenue); font-size:0.85em;">Piattaforma:</label>' +
+  '<select id="campo-musica-piattaforma" onchange="aggiornaMusicaHelp()" style="background:var(--gs-scuro); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:6px; padding:4px 8px; font-family:\'Montserrat\';">' +
   '<option value="youtube">YouTube</option>' +
   '<option value="soundcloud">SoundCloud</option>' +
   '</select></div>' +
   inputText('campo-musica','ID traccia','Es. cjqwwIRnmuQ') +
-  '<p id="musica-help" style="color:#8FBEBA; font-size:0.82em; margin-top:-10px; font-style:italic;">Inserisci SOLO l\'ID del video (Gli 11 caratteri dopo "watch?v=" nell\'URL di YouTube)</p>'; 
+  '<p id="musica-help" style="color:var(--gs-tenue); font-size:0.82em; margin-top:-10px; font-style:italic;">Inserisci SOLO l\'ID del video (Gli 11 caratteri dopo "watch?v=" nell\'URL di YouTube)</p>'; 
 }
 
 function aggiornaMusicaHelp() {
@@ -2565,10 +2565,10 @@ function aggiornaMusicaHelp() {
 } 
  
 function costruisciImporta() { 
- return '<p style="color:#8FBEBA; font-size:0.88em; margin-bottom:12px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Incolla il codice HTML della tua scheda esistente e premi "Importa Dati": i campi verranno popolati automaticamente. Potrai poi modificarli prima di generare.</p>' + 
+ return '<p style="color:var(--gs-tenue); font-size:0.88em; margin-bottom:12px; font-style:italic;"><i class="fa-solid fa-circle-info"></i> Incolla il codice HTML della tua scheda esistente e premi "Importa Dati": i campi verranno popolati automaticamente. Potrai poi modificarli prima di generare.</p>' + 
   '<label style="' + STILE_LABEL + '">Codice HTML della scheda esistente:</label>' + 
   '<textarea id="campo-importa" placeholder="Incolla il codice HTML della tua scheda..." rows="6" style="' + STILE_INPUT + ' font-family:\'Montserrat\'; font-size:1em; resize:vertical;"></textarea>' + 
-  '<button onclick="importaScheda()" style="margin-top:10px; background:#292354; color:#8FBEBA; border:1px solid #3B8686; padding:10px 25px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-file-import"></i> Importa Dati</button>'; 
+  '<button onclick="importaScheda()" style="margin-top:10px; background:var(--gs-scuro); color:var(--gs-tenue); border:1px solid var(--gs-medio); padding:10px 25px; border-radius:6px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-file-import"></i> Importa Dati</button>'; 
 } 
  
 // ============================================================ 
@@ -2834,7 +2834,7 @@ function aggiornaContatoreExtra() {
  var cEl = document.getElementById('punti-extra-counter'); 
  if (cEl) { 
   cEl.textContent = rimasti + ' punti rimanenti'; 
-  cEl.style.color = rimasti < 0 ? '#F9C6C6' : (rimasti === 0 ? '#CFF09E' : '#8FBEBA'); 
+  cEl.style.color = rimasti < 0 ? 'var(--gs-errore)' : (rimasti === 0 ? 'var(--gs-accento)' : 'var(--gs-tenue)'); 
  } 
  return rimasti; 
 } 
@@ -3018,10 +3018,10 @@ function aggiornaCompetenze() {
   var sbloccato  = lv >= SBLOCCO_COMPETENZE[n]; 
   // Bordo e sfondo 
   slot.style.opacity = sbloccato ? '1' : '0.45'; 
-  slot.style.borderColor = sbloccato ? '#3B8686' : '#292354'; 
+  slot.style.borderColor = sbloccato ? 'var(--gs-medio)' : 'var(--gs-scuro)'; 
   // Icona e testo label 
   label.innerHTML = sbloccato 
-   ? '<i class="fa-solid fa-lock-open" style="color:#CFF09E;"></i> Slot ' + (n+1) + ' — sbloccato al Lv. ' + SBLOCCO_COMPETENZE[n] 
+   ? '<i class="fa-solid fa-lock-open" style="color:var(--gs-accento);"></i> Slot ' + (n+1) + ' — sbloccato al Lv. ' + SBLOCCO_COMPETENZE[n] 
    : '<i class="fa-solid fa-lock"></i> Slot ' + (n+1) + ' — sbloccabile al Lv. ' + SBLOCCO_COMPETENZE[n]; 
   // Abilita / disabilita tutti gli input e textarea dentro il fields 
   var gbn = 'getElements' + 'ByTagName'; 
@@ -3991,11 +3991,11 @@ function accPopolaDopoImport() {
  if (!b) return; 
  var attuale = document.getElementById('prog-attuale'); 
  if (attuale) { 
-  attuale.innerHTML = '<b style="color:#CFF09E;">Livello attuale:</b> ' + b.livello + 
-   ' &nbsp;·&nbsp; <b style="color:#CFF09E;">EXP:</b> ' + b.exp + '/' + calcolaExpTot(b.livello) + 
-   ' &nbsp;·&nbsp; <b style="color:#CFF09E;">Vita:</b> ' + b.vita + 
-   ' &nbsp;·&nbsp; <b style="color:#CFF09E;">Aura:</b> ' + b.aura + 
-   ' &nbsp;·&nbsp; <b style="color:#CFF09E;">Tenacia:</b> ' + b.tenacia + '%'; 
+  attuale.innerHTML = '<b style="color:var(--gs-accento);">Livello attuale:</b> ' + b.livello + 
+   ' &nbsp;·&nbsp; <b style="color:var(--gs-accento);">EXP:</b> ' + b.exp + '/' + calcolaExpTot(b.livello) + 
+   ' &nbsp;·&nbsp; <b style="color:var(--gs-accento);">Vita:</b> ' + b.vita + 
+   ' &nbsp;·&nbsp; <b style="color:var(--gs-accento);">Aura:</b> ' + b.aura + 
+   ' &nbsp;·&nbsp; <b style="color:var(--gs-accento);">Tenacia:</b> ' + b.tenacia + '%'; 
  } 
  // Semina le stat base nella sezione distribuzione 
  var ls = ['forza','resistenza','velocita','riflessi','destrezza','mira','intelligenza','carisma','istinto','fortuna']; 
@@ -4704,7 +4704,7 @@ function accInviaLog() {
   ref.update(updates).then(function(){
    return ref.child('records').push(record);
   }).then(function(){
-   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Accredito registrato ✓'; btn.style.background = '#A8DBA8'; }
+   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Accredito registrato ✓'; btn.style.background = 'var(--gs-verde)'; }
    stato.diffAccredito = null; // evita doppio invio
   }).catch(function(e){
    console.error('[Accrediti] scrittura:', e);
