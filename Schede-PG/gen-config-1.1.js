@@ -48,6 +48,9 @@ var BONUS_SPECIALIZZAZIONE_HUNTER = [
  '+25% delle ricompense totali nelle Quest dove si sfrutta o approfondisce il proprio campo di ricerca'
 ];
 
+// Mercanti che possono sponsorizzare un Lottatore/trice Celeste
+var SPONSOR_MERCANTI = ['Alistair', 'Alycia', 'Bard', 'Eren', 'Farai', 'Lisbeth'];
+
 var LETTERE_GRECHE = [
  'Alfa', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta',
  'Iota', 'Kappa', 'Lambda', 'Mi', 'Ni', 'Xi', 'Omicron', 'Pi',
@@ -159,7 +162,7 @@ var STATUS_CONFIG = {
   ],
   campi: [
    { id: 'celeste-piano',   label: 'Piano alla Torre Celeste:', tipo: 'testo' },
-   { id: 'celeste-sponsor', label: 'Sponsorizzato da:',        tipo: 'testo' }
+   { id: 'celeste-sponsor', label: 'Sponsorizzato da:',        tipo: 'select', opzioni: SPONSOR_MERCANTI, vuota: '—' }
   ]
  }
 };
@@ -235,15 +238,21 @@ var ABILITA_SPECIE = {
 };
 
 // ------------------------------------------------------------
-// BONUS ASSEGNABILI DALLO STAFF
+// BONUS RECLUSIONE (assegnati dallo staff, al massimo uno)
+// In scheda la voce è "Bonus Reclusione (<nome>):"
 // ------------------------------------------------------------
-var BONUS_STAFF = ['Scorza dura', 'Imperturbabile', 'Sesto senso', 'Alcatraz'];
-var BONUS_STAFF_CONFIG = {
+var BONUS_RECLUSIONE = ['Scorza dura', 'Imperturbabile', 'Sesto senso', 'Alcatraz'];
+var BONUS_RECLUSIONE_CONFIG = {
  'Scorza dura':    ['+50% Punti Tenacia in una sola Fase per Combattimento'],
  'Imperturbabile': ['+1 a ogni lancio del dado su Intimidazione'],
  'Sesto senso':    ['Una sola volta per Quest, Istinto base +50'],
  'Alcatraz':       ['+50% Punti Tenacia in una sola Fase per Combattimento', '+1 a ogni lancio del dado su Intimidazione', 'Una sola volta per Quest, Istinto base +50']
 };
+
+function etichettaReclusione(nome) {
+ var out = 'Bonus Reclusione (' + nome + '):';
+ return out;
+}
 
 // ============================================================
 // MOTORE BONUS
@@ -270,7 +279,7 @@ function cfgHaStatus(lista, nome) {
 //  popBase: 0-5, repBase: -5/+5,
 //  carismaBase: numero, carismaOver: true/false,
 //  abitazioneLv: 0-5 (0 o vuoto = nessuna abitazione), abitazioneSpec: '...',
-//  bonusStaff: ['Scorza dura', ...],
+//  bonusReclusione: 'Alcatraz' (vuoto = nessuno),
 //  razza, specie, livello
 // }
 function calcolaBonusPG(p) {
@@ -315,10 +324,9 @@ function calcolaBonusPG(p) {
   }
  }
 
- // 4) Bonus staff
- var bs = p.bonusStaff || [];
- for (var b = 0; b < bs.length; b++) {
-  if (BONUS_STAFF_CONFIG[bs[b]]) voci.push({ tipo: 'bonus', label: 'Bonus ' + bs[b] + ':', righe: BONUS_STAFF_CONFIG[bs[b]] });
+ // 4) Bonus Reclusione (uno solo)
+ if (BONUS_RECLUSIONE_CONFIG[p.bonusReclusione]) {
+  voci.push({ tipo: 'bonus', label: etichettaReclusione(p.bonusReclusione), righe: BONUS_RECLUSIONE_CONFIG[p.bonusReclusione] });
  }
 
  // 5) Reputazione effettiva
