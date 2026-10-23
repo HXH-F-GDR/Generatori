@@ -23,12 +23,15 @@ function htmlDopoSoldi(d) {
  var h = ''; 
  // Abilità di specie (bestie dal Lv. 15) 
  if (d.abilitaSpecie) h += rigaDati('Abilità di Specie:', d.abilitaSpecie); 
- // Abitazione 
+ // Abitazione: le tre voci compaiono in scheda solo quando almeno una 
+ // è compilata (alla creazione il PG non ha ancora un'abitazione). 
  var ab = d.abitazione || {}; 
- var nomeAb = ab.nome ? (ab.link ? '<a href="' + ab.link + '">' + ab.nome + '</a>' : ab.nome) : '—'; 
- h += rigaDati('Abitazione:', nomeAb); 
- h += rigaDati('Livello Abitazione:', ab.livello || '—'); 
- h += rigaDati('Specializzazione Abitazione:', ab.spec || '—'); 
+ if (ab.nome || ab.livello || ab.spec) { 
+  var nomeAb = ab.nome ? (ab.link ? '<a href="' + ab.link + '">' + ab.nome + '</a>' : ab.nome) : '—'; 
+  h += rigaDati('Abitazione:', nomeAb); 
+  h += rigaDati('Livello Abitazione:', ab.livello || '—'); 
+  h += rigaDati('Specializzazione Abitazione:', ab.spec || '—'); 
+ } 
  // Campi sbloccati dagli status 
  var cs = d.campiStatus || []; 
  for (var i = 0; i < cs.length; i++) h += rigaDati(cs[i].label, cs[i].valore || '—'); 
