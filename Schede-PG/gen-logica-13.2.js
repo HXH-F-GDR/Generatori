@@ -1358,6 +1358,9 @@ function costruisciDatiPersonali(isNuova) {
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Stato di Conservazione</label><div id="campo-conservazione-val" style="'+STILE_READONLY+'">—</div></div>' 
   ) + 
  '</div>'; 
+ // Abilità di specie: sola lettura, visibile per le bestie dal Lv. 15 
+ // (solo Modifica: una scheda nuova parte dal Lv. 0) 
+ if (!isNuova) html += '<div id="campo-abilita-wrap" style="display:none; margin-bottom:14px;"><label style="'+STILE_LABEL+'">Abilità di Specie</label><div id="campo-abilita-val" style="'+STILE_READONLY+'">—</div></div>'; 
  // Luogo di nascita — menù unico, le opzioni vengono filtrate da aggiornaRazza 
  html += '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Luogo di nascita</label>' + 
   '<select id="campo-luogo" onchange="aggiornaStatNuova()" style="'+STILE_INPUT+' background:#292354;"></select></div>'; 
@@ -1624,8 +1627,6 @@ function leggiCampiStatus() {
 function costruisciExtraModifica() {
  var stileSel = STILE_INPUT + ' background:#292354;';
  var html = '';
- // Abilità di specie: sola lettura, visibile per le bestie dal Lv. 15
- html += '<div id="campo-abilita-wrap" style="display:none; margin-bottom:14px;"><label style="' + STILE_LABEL + '">Abilità di Specie</label><div id="campo-abilita-val" style="' + STILE_READONLY + '">—</div></div>';
  // Abitazione
  var opLv = '<option value="">—</option>';
  for (var l = 0; l < ABITAZIONE_LIVELLI.length; l++) opLv += '<option value="' + ABITAZIONE_LIVELLI[l] + '">' + ABITAZIONE_LIVELLI[l] + '</option>';
@@ -1638,23 +1639,18 @@ function costruisciExtraModifica() {
   '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Specializzazione Abitazione</label><select id="campo-abitazione-spec" style="' + stileSel + '">' + opSp + '</select></div>'
  );
  html += '</div>';
- // Bonus assegnati dallo staff
- html += '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Bonus assegnati dallo staff</label><div style="display:flex; flex-wrap:wrap; gap:8px;">';
- for (var b = 0; b < BONUS_STAFF.length; b++) {
-  html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:#292354; border:1px solid #3B8686; border-radius:6px; padding:7px 12px; color:#CFF09E; font-size:0.88em;"><input type="checkbox" id="bonus-staff-' + b + '" value="' + BONUS_STAFF[b] + '"> ' + BONUS_STAFF[b] + '</label>';
- }
- html += '</div></div>';
+ // Bonus Reclusione: assegnato dallo staff, al massimo uno
+ var opRec = '<option value="">Nessuno</option>';
+ for (var b = 0; b < BONUS_RECLUSIONE.length; b++) opRec += '<option value="' + BONUS_RECLUSIONE[b] + '">' + BONUS_RECLUSIONE[b] + '</option>';
+ html += '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Bonus Reclusione</label><select id="campo-bonus-reclusione" style="' + stileSel + '">' + opRec + '</select></div>';
  // Riepilogo calcolato (sola lettura)
  html += '<div id="riepilogo-bonus" style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px 16px; color:#8FBEBA; font-size:0.88em; line-height:1.7;"></div>';
  return html;
 }
 
-function leggiBonusStaff() {
- var out = [];
- for (var b = 0; b < BONUS_STAFF.length; b++) {
-  var c = document.getElementById('bonus-staff-' + b);
-  if (c && c.checked) out.push(BONUS_STAFF[b]);
- }
+function leggiBonusReclusione() {
+ var e = document.getElementById('campo-bonus-reclusione');
+ var out = e ? e.value : '';
  return out;
 }
 
@@ -1673,7 +1669,7 @@ function leggiParametriBonusModifica() {
   carismaOver: !!(ov && ov.checked),
   abitazioneLv: v('campo-abitazione-lv'),
   abitazioneSpec: v('campo-abitazione-spec'),
-  bonusStaff: leggiBonusStaff(),
+  bonusReclusione: leggiBonusReclusione(),
   razza: razza,
   specie: razza === 'Bestia Demoniaca' ? v('campo-specie') : '',
   livello: v('campo-livello') || 0
@@ -3204,7 +3200,7 @@ function importaPuliziaForm() {
  var azzera = { 'campo-popolarita':'0', 'campo-reputazione':'0', 'campo-abitazione-nome':'', 
   'campo-abitazione-link':'', 'campo-abitazione-lv':'', 'campo-abitazione-spec':'' }; 
  for (var az in azzera) { var ea = document.getElementById(az); if (ea) ea.value = azzera[az]; } 
- for (var bs = 0; bs < BONUS_STAFF.length; bs++) { var cb = document.getElementById('bonus-staff-'+bs); if (cb) cb.checked = false; } 
+ var brEl = document.getElementById('campo-bonus-reclusione'); if (brEl) brEl.value = ''; 
  var csBox = document.getElementById('campi-status'); 
  if (csBox) csBox['inn'+'erHTML'] = ''; 
  // 5) Cancella la bozza corrente: sta per essere rimpiazzata. 
@@ -3253,10 +3249,9 @@ function importaCampiNuovi(temp) {
  }
  imposta('campo-abitazione-lv', testo(entryEl('Livello Abitazione:')));
  imposta('campo-abitazione-spec', testo(entryEl('Specializzazione Abitazione:')));
- // Bonus staff: presenti se la scheda ha la voce "Bonus <nome>:"
- for (var b = 0; b < BONUS_STAFF.length; b++) {
-  var cb = document.getElementById('bonus-staff-' + b);
-  if (cb) cb.checked = !!entryEl('Bonus ' + BONUS_STAFF[b] + ':');
+ // Bonus Reclusione: quello la cui voce "Bonus Reclusione (<nome>):" è in scheda
+ for (var b = 0; b < BONUS_RECLUSIONE.length; b++) {
+  if (entryEl(etichettaReclusione(BONUS_RECLUSIONE[b]))) imposta('campo-bonus-reclusione', BONUS_RECLUSIONE[b]);
  }
  // Campi degli status: due giri, perché la Specializzazione Hunter
  // compare solo dopo aver impostato il grado.
@@ -4319,7 +4314,7 @@ function raccogliDati(isNuova) {
   nome: val('campo-abitazione-nome'), link: val('campo-abitazione-link'),
   livello: val('campo-abitazione-lv'), spec: val('campo-abitazione-spec')
  };
- var bonusStaff = isNuova ? [] : leggiBonusStaff();
+ var bonusReclusione = isNuova ? '' : leggiBonusReclusione();
  var carismaOver = ovSt.indexOf('carisma') !== -1;
  var bonusPG = calcolaBonusPG({
   status: statusLista,
@@ -4327,7 +4322,7 @@ function raccogliDati(isNuova) {
   popBase: popBase, repBase: repBase,
   carismaBase: stat.carisma, carismaOver: carismaOver,
   abitazioneLv: abitazione.livello, abitazioneSpec: abitazione.spec,
-  bonusStaff: bonusStaff,
+  bonusReclusione: bonusReclusione,
   razza: isBestia ? 'Bestia Demoniaca' : 'Umano', specie: specie,
   livello: isNuova ? LIVELLO_INIZIALE : (val('campo-livello')||'0')
  });
@@ -4367,7 +4362,7 @@ function raccogliDati(isNuova) {
   livello: isNuova ? LIVELLO_INIZIALE : (val('campo-livello')||'0'), 
   exp: isNuova ? EXP_INIZIALE : (val('campo-exp')||'0'), 
   exptot: isNuova ? EXP_MASSIMA : calcolaExpTot(val('campo-livello')||'0'), 
-  jenny: isNuova ? JENNY_INIZIALI : (val('campo-jenny')||'0'), 
+  jenny: isNuova ? JENNY_INIZIALI : (parseInt(val('campo-jenny').replace(/[^\d-]/g,''), 10) || 0), 
   hc: isNuova ? HC_INIZIALI : (val('campo-hc')||'0'), 
   imgLaterale: val('campo-img-laterale')||'https://via.placeholder.com/664x184',
   imgLateraleX: (function(){ var e=document.getElementById('crop-x-img-laterale'); return e?parseFloat(e.value)||0:0; })(),
