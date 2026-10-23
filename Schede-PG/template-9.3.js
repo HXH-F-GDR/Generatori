@@ -683,30 +683,30 @@ function accMostraConferma(diff) {
 
  var box = document.createElement('div'); 
  box.id = 'acc-conferma-box'; 
- box.style.cssText = 'background:#0B486B; border:2px solid #292354; border-radius:12px; padding:25px; margin-top:20px;'; 
- var html = '<h3 style="color:#CFF09E; font-size:1.35em; margin-bottom:15px; border-bottom:1px solid #3B8686; padding-bottom:10px;"><i class="fa-solid fa-clipboard-check"></i> Registro Accrediti</h3>'; 
+ box.style.cssText = 'background:var(--gs-fondo); border:2px solid var(--gs-scuro); border-radius:12px; padding:25px; margin-top:20px;'; 
+ var html = '<h3 style="color:var(--gs-accento); font-size:1.35em; margin-bottom:15px; border-bottom:1px solid var(--gs-medio); padding-bottom:10px;"><i class="fa-solid fa-clipboard-check"></i> Registro Accrediti</h3>'; 
 
  if (!diff || diff.length === 0) { 
-  html += '<p style="color:#8FBEBA; font-style:italic;">Nessuna modifica economica rilevata: non c\'è nulla da registrare nel log.</p>'; 
+  html += '<p style="color:var(--gs-tenue); font-style:italic;">Nessuna modifica economica rilevata: non c\'è nulla da registrare nel log.</p>'; 
   box.innerHTML = html; 
   out.appendChild(box); 
   return; 
  } 
 
- html += '<p style="color:#8FBEBA; font-size:0.9em; margin-bottom:12px;">Copia e incolla la scheda nel forum. Quando è tutto a posto, premi il bottone per registrare queste modifiche nel registro:</p>'; 
- html += '<div style="background:#292354; border-radius:8px; padding:14px 18px; margin-bottom:16px;">'; 
+ html += '<p style="color:var(--gs-tenue); font-size:0.9em; margin-bottom:12px;">Copia e incolla la scheda nel forum. Quando è tutto a posto, premi il bottone per registrare queste modifiche nel registro:</p>'; 
+ html += '<div style="background:var(--gs-scuro); border-radius:8px; padding:14px 18px; margin-bottom:16px;">'; 
  for (var i = 0; i < diff.length; i++) { 
   var m = diff[i]; 
-  html += '<div style="color:#E2F7C4; font-size:0.92em; padding:3px 0;">'; 
-  html += '<b style="color:#CFF09E;">' + m.campo + ':</b> '; 
+  html += '<div style="color:var(--gs-chiaro); font-size:0.92em; padding:3px 0;">'; 
+  html += '<b style="color:var(--gs-accento);">' + m.campo + ':</b> '; 
   if (m.delta === 'info') { html += '<b>' + m.a + '</b>'; } 
   else if (m.a === null) { html += 'rimosso <b>' + m.da + '</b>'; } 
   else if (m.da === null) { html += 'aggiunto <b>' + m.a + '</b>'; } 
-  else { html += m.da + ' <i class="fa-solid fa-arrow-right" style="color:#8FBEBA; font-size:0.85em;"></i> <b>' + m.a + '</b>'; if (m.delta) html += ' <span style="color:#A8DBA8;">(' + m.delta + ')</span>'; } 
+  else { html += m.da + ' <i class="fa-solid fa-arrow-right" style="color:var(--gs-tenue); font-size:0.85em;"></i> <b>' + m.a + '</b>'; if (m.delta) html += ' <span style="color:var(--gs-verde);">(' + m.delta + ')</span>'; } 
   html += '</div>'; 
  } 
  html += '</div>'; 
- html += '<button id="acc-conferma-btn" onclick="accInviaLog()" style="width:100%; background:linear-gradient(135deg,#A8DBA8,#79BD9A); color:#1a2e1a; border:none; padding:14px; font-size:1.05em; font-weight:700; border-radius:8px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-cloud-arrow-up"></i> Conferma e invia al registro</button>'; 
+ html += '<button id="acc-conferma-btn" onclick="accInviaLog()" style="width:100%; background:linear-gradient(135deg,var(--gs-verde),var(--gs-verde2)); color:var(--gs-btn-testo); border:none; padding:14px; font-size:1.05em; font-weight:700; border-radius:8px; cursor:pointer; font-family:\'Montserrat\';"><i class="fa-solid fa-cloud-arrow-up"></i> Conferma e invia al registro</button>'; 
  box.innerHTML = html; 
  out.appendChild(box); 
 } 
