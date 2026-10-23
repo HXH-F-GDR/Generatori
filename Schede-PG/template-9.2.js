@@ -19,26 +19,124 @@ function htmlPopRep(d) {
  return out; 
 } 
 
-function htmlDopoSoldi(d) { 
- var h = ''; 
- // Abilità di specie (bestie dal Lv. 15) 
- if (d.abilitaSpecie) h += rigaDati('Abilità di Specie:', d.abilitaSpecie); 
- // Abitazione: le tre voci compaiono in scheda solo quando almeno una 
- // è compilata (alla creazione il PG non ha ancora un'abitazione). 
+// Voci che vanno dopo Soldi: abitazione (solo se compilata), campi 
+// sbloccati dagli status e, per ultimi, bonus e malus. 
+function vociDopoSoldi(d) { 
+ var v = []; 
  var ab = d.abitazione || {}; 
  if (ab.nome || ab.livello || ab.spec) { 
   var nomeAb = ab.nome ? (ab.link ? '<a href="' + ab.link + '">' + ab.nome + '</a>' : ab.nome) : '—'; 
-  h += rigaDati('Abitazione:', nomeAb); 
-  h += rigaDati('Livello Abitazione:', ab.livello || '—'); 
-  h += rigaDati('Specializzazione Abitazione:', ab.spec || '—'); 
+  v.push({ label: 'Abitazione:', valore: nomeAb }); 
+  v.push({ label: 'Livello Abitazione:', valore: ab.livello || '—' }); 
+  v.push({ label: 'Specializzazione Abitazione:', valore: ab.spec || '—' }); 
  } 
- // Campi sbloccati dagli status 
  var cs = d.campiStatus || []; 
- for (var i = 0; i < cs.length; i++) h += rigaDati(cs[i].label, cs[i].valore || '—'); 
- // Bonus e malus: sempre le ultime voci 
+ for (var i = 0; i < cs.length; i++) v.push({ label: cs[i].label, valore: cs[i].valore || '—' }); 
  var bv = d.bonusVoci || []; 
- for (var b = 0; b < bv.length; b++) h += rigaDati(bv[b].label, bv[b].righe.join('<br>')); 
+ for (var b = 0; b < bv.length; b++) v.push({ label: bv[b].label, valore: bv[b].righe.join('<br>') }); 
+ return v; 
+} 
+
+function htmlDopoSoldi(d) { 
+ var v = vociDopoSoldi(d); 
+ var h = ''; 
+ for (var i = 0; i < v.length; i++) h += rigaDati(v[i].label, v[i].valore); 
  return h; 
+} 
+
+// ============================================================ 
+// MANTIENI: inserisce, aggiorna o rimuove le voci nuove nel DOM della 
+// scheda importata, lasciando intatto tutto il resto. 
+// Se un dato non è fornito (undefined, es. modalità Accrediti prima 
+// della fase 6) la voce corrispondente non viene toccata. 
+// ============================================================ 
+function aggiornaCampiNuovi(root, metodo, d) { 
+ var cont = (root.querySelector && root.querySelector('.div-dati')) || root; 
+ function tutteLeLabel() { 
+  var out = []; 
+  var sp = cont[metodo]('span'); 
+  for (var i = 0; i < sp.length; i++) if (sp[i].className === 'scheda-label') out.push(sp[i]); 
+  return out; 
+ } 
+ function trova(testo) { 
+  var l = tutteLeLabel(); 
+  for (var i = 0; i < l.length; i++) if (l[i].textContent.trim() === testo) return l[i]; 
+  return null; 
+ } 
+ function entryDi(label) { 
+  if (!label) return null; 
+  var n = label.nextSibling; 
+  while (n && !(n.nodeType === 1 && n.className === 'scheda-entry')) n = n.nextSibling; 
+  return n; 
+ } 
+ function rimuovi(label) { 
+  if (!label || !label.parentNode) return; 
+  var entry = entryDi(label); 
+  var parent = label.parentNode; 
+  var nodo = label.nextSibling; 
+  while (nodo && nodo !== entry) { var succ = nodo.nextSibling; if (nodo.nodeType === 3) parent.removeChild(nodo); nodo = succ; } 
+  if (entry) { 
+   var dopo = entry.nextSibling; 
+   if (dopo && dopo.nodeType === 3 && /^\s*$/.test(dopo.textContent)) parent.removeChild(dopo); 
+   parent.removeChild(entry); 
+  } 
+  parent.removeChild(label); 
+ } 
+ // Inserisce le voci subito dopo l'entry di riferimento, ognuna 
+ // preceduta da "\n" come le altre righe della scheda. 
+ function inserisciDopo(entryRif, voci) { 
+  if (!entryRif) return; 
+  var parent = entryRif.parentNode; 
+  var ref = entryRif.nextSibling; 
+  for (var i = 0; i < voci.length; i++) { 
+   parent.insertBefore(document.createTextNode('\n'), ref); 
+   var l = document.createElement('span'); l.className = 'scheda-label'; l.textContent = voci[i].label; 
+   var e = document.createElement('span'); e.className = 'scheda-entry'; 
+   if (voci[i].base !== undefined) e.setAttribute('data-base', voci[i].base); 
+   e['inn' + 'erHTML'] = voci[i].valore; 
+   parent.insertBefore(l, ref); 
+   parent.insertBefore(document.createTextNode(' '), ref); 
+   parent.insertBefore(e, ref); 
+  } 
+ } 
+
+ // 1) Popolarità e Reputazione, sotto Allineamento 
+ if (d.popolarita !== undefined) { 
+  var vPop = { label: 'Popolarità:', valore: String(d.popolarita), base: d.popBase }; 
+  var vRep = { label: 'Reputazione:', valore: formattaReputazione(d.reputazione), base: d.repBase }; 
+  var lPop = trova('Popolarità:'), lRep = trova('Reputazione:'); 
+  if (lPop && lRep) { 
+   var ePop = entryDi(lPop), eRep = entryDi(lRep); 
+   if (ePop) { ePop['inn' + 'erHTML'] = vPop.valore; ePop.setAttribute('data-base', vPop.base); } 
+   if (eRep) { eRep['inn' + 'erHTML'] = vRep.valore; eRep.setAttribute('data-base', vRep.base); } 
+  } else { 
+   rimuovi(lPop); rimuovi(lRep); 
+   inserisciDopo(entryDi(trova('Allineamento:')), [vPop, vRep]); 
+  } 
+ } 
+
+ // 2) Abilità di Specie, sotto Stato di Conservazione 
+ if (d.abilitaSpecie !== undefined) { 
+  rimuovi(trova('Abilità di Specie:')); 
+  if (d.abilitaSpecie) inserisciDopo(entryDi(trova('Stato di Conservazione:')), [{ label: 'Abilità di Specie:', valore: d.abilitaSpecie }]); 
+ } 
+
+ // 3) Dopo Soldi: abitazione, campi status, bonus. Si tolgono tutte le 
+ // voci gestite (anche di status non più presenti) e si reinseriscono. 
+ if (d.bonusVoci !== undefined) { 
+  var gestite = { 'Abitazione:': 1, 'Livello Abitazione:': 1, 'Specializzazione Abitazione:': 1 }; 
+  for (var st in STATUS_CONFIG) { 
+   if (!STATUS_CONFIG.hasOwnProperty(st)) continue; 
+   var cc = STATUS_CONFIG[st].campi; 
+   for (var c = 0; c < cc.length; c++) gestite[cc[c].label] = 1; 
+  } 
+  var labels = tutteLeLabel(); 
+  for (var i = 0; i < labels.length; i++) { 
+   var t = labels[i].textContent.trim(); 
+   if (gestite[t] || t.indexOf('Bonus ') === 0 || t.indexOf('Malus ') === 0) rimuovi(labels[i]); 
+  } 
+  inserisciDopo(entryDi(trova('Soldi:')), vociDopoSoldi(d)); 
+ } 
 } 
 
 // ── Helper: calcola object-position da valori crop x,y,w,h (%) ──────────
@@ -338,6 +436,10 @@ function aggiornaHTMLScheda(d) {
  // setEntry aggiorna solo campi già presenti, quindi qui li gestiamo a mano. 
  aggiornaCampiTaglia(root, metodo, d); 
  setEntry('Soldi:', d.jenny.toLocaleString() + ' Jenny / ' + d.hc + ' HC'); 
+ // Voci nuove: Popolarità/Reputazione, Abilità di Specie, Abitazione, 
+ // campi degli status e bonus. Possono comparire o sparire, quindi 
+ // vengono inserite/aggiornate/rimosse a mano. 
+ aggiornaCampiNuovi(root, metodo, d); 
  
  // ── Aggettivi ─────────────────────────────────────────────── 
  var aggs = qsa('.aggettivo'); 
@@ -381,6 +483,8 @@ function aggiornaHTMLScheda(d) {
       ? parseInt(d.stat[sid]).toLocaleString() 
       : d.stat[sid]; 
      val.textContent = newVal; 
+     // Carisma: valore senza bonus in data-base (se il form lo fornisce) 
+     if (sid === 'carisma' && d.carismaBase != null) val.setAttribute('data-base', d.carismaBase); 
      // gestione classe over sul label 
      var isOver = d.ovSt && d.ovSt.indexOf(sid) !== -1; 
      lbl.className = 'stat-label' + (isOver ? ' over' : ''); 
@@ -808,6 +912,7 @@ var htmlNen = '';
   (d.specie ? '<span class="scheda-label">Specie:</span> <span class="scheda-entry">'+d.specie+'</span>\n' : '') + 
   (d.rank && d.rank !== '—' ? '<span class="scheda-label">Rank di Pericolosità:</span> <span class="scheda-entry">'+d.rank+'</span>\n' : '') + 
   (d.conservazione && d.conservazione !== '—' ? '<span class="scheda-label">Stato di Conservazione:</span> <span class="scheda-entry">'+d.conservazione+'</span>\n' : '') + 
+  (d.abilitaSpecie ? rigaDati('Abilità di Specie:', d.abilitaSpecie) : '') + 
   '<span class="scheda-label">Luogo di nascita:</span> <span class="scheda-entry">'+d.luogo+'</span>\n' + 
   '<span class="scheda-label">Data di nascita:</span> <span class="scheda-entry">'+d.datanascita+'</span>\n' + 
   '<span class="scheda-label">Segno zodiacale:</span> <span class="scheda-entry">'+d.segno+'</span>\n' + 
