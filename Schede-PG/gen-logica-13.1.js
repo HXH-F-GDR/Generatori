@@ -783,6 +783,12 @@ function costruisciForm() {
    // RIapplica dopo il ripopolamento delle option e lo stato slot. 
    bozzaApplicaValori(pacchetto); 
    aggiornaCompetenze(); 
+   // Campi degli status: vanno creati prima di riempirli. Due giri 
+   // perché la Specializzazione Hunter compare solo dopo il grado. 
+   aggiornaCampiStatus(); 
+   bozzaApplicaValori(pacchetto); 
+   aggiornaCampiStatus(); 
+   bozzaApplicaValori(pacchetto); 
   } 
   // Ridisegna le anteprime di crop con URL e inquadrature ripristinati. 
   bozzaRidisegnaCrop(); 
@@ -791,6 +797,8 @@ function costruisciForm() {
  // Collega l'autosave dopo il ripristino, così il primo salvataggio 
  // riflette i valori reinseriti e non li sovrascrive con dei vuoti. 
  bozzaCollega(); 
+ // Modifica: riepilogo di bonus e valori in scheda, aggiornato dal vivo 
+ if (!isNuova) { riepilogoCollega(); aggiornaRiepilogoBonus(); } 
 } 
 
 // Dopo il ripristino in modalità NUOVA: ricalcola i totali visibili 
@@ -1363,6 +1371,16 @@ function costruisciDatiPersonali(isNuova) {
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Popolarità</label><div id="campo-popolarita-val" style="'+STILE_READONLY+'">0</div></div>', 
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Reputazione</label><div id="campo-reputazione-val" style="'+STILE_READONLY+'">0</div></div>' 
   ); 
+ } else { 
+  // Modifica: si inseriscono i valori SENZA bonus. Quelli in scheda 
+  // (con i bonus di status e abitazione) sono mostrati nel riepilogo. 
+  var opPop = '', opRep = ''; 
+  for (var pv = POPOLARITA_MIN; pv <= POPOLARITA_MAX; pv++) opPop += '<option value="'+pv+'">'+pv+'</option>'; 
+  for (var rv = REPUTAZIONE_MIN; rv <= REPUTAZIONE_MAX; rv++) opRep += '<option value="'+rv+'"'+(rv === 0 ? ' selected' : '')+'>'+formattaReputazione(rv)+'</option>'; 
+  html += riga2( 
+   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Popolarità (senza bonus)</label><select id="campo-popolarita" style="'+STILE_INPUT+' background:#292354;">'+opPop+'</select></div>', 
+   '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Reputazione (senza bonus)</label><select id="campo-reputazione" style="'+STILE_INPUT+' background:#292354;">'+opRep+'</select></div>' 
+  ); 
  } 
  html += inputText('campo-mestiere','Mestiere','Es. Assassino'); 
  // Classe (visibile solo per Umani) 
@@ -1442,6 +1460,7 @@ function costruisciDatiPersonali(isNuova) {
   ); 
   html += inputText('campo-exptot','EXP per level up','', '100', true); 
   html += riga2(inputText('campo-jenny','Jenny','Es. 10000'), inputText('campo-hc','HC','Es. 0')); 
+  html += costruisciExtraModifica(); 
  } 
  return html; 
 } 
@@ -1457,6 +1476,8 @@ function costruisciStatusMultipli() {
  html += '</div>';
  html += '<button onclick="aggiungiStatus()" style="background:transparent; color:#8FBEBA; border:1px dashed #3B8686; padding:5px 14px; border-radius:4px; cursor:pointer; font-family:\'Montserrat\'; font-size:0.85em; margin-top:2px;"><i class="fa-solid fa-plus"></i> Aggiungi status</button>';
  html += '</div>';
+ // Campi sbloccati dagli status (Grado Hunter, Ruolo nel Ragno...)
+ html += '<div id="campi-status"></div>';
  return html;
 }
 
@@ -1473,6 +1494,230 @@ function aggiungiStatus() {
   '<button onclick="rimuoviElemento(\'status-row-'+idx+'\')" style="background:rgba(80,0,0,0.4); color:#F9C6C6; border:1px solid #6b0b0b; padding:8px 10px; border-radius:6px; cursor:pointer; flex-shrink:0;"><i class="fa-solid fa-xmark"></i></button>';
  lista.appendChild(div);
  if (typeof bozzaSalva === 'function') bozzaSalva();
+}
+
+
+// ============================================================
+// RINUMERAZIONE RIGHE DINAMICHE
+// Status, baule e tecniche sono letti per indice: dopo aver eliminato
+// una riga in mezzo, le successive vengono rinumerate (id della riga,
+// id dei campi e indici negli onclick), così non restano buchi.
+// ============================================================
+function rinumeraRighe(contenitore) {
+ var righe = contenitore.children;
+ for (var i = 0; i < righe.length; i++) {
+  var m = (righe[i].id || '').match(/-(\d+)$/);
+  if (!m) continue;
+  var vecchio = m[1];
+  if (vecchio === String(i)) continue;
+  var reId = new RegExp('-' + vecchio + '$');
+  var reClick = new RegExp('-' + vecchio + "'", 'g');
+  var nodi = [righe[i]];
+  var figli = righe[i].querySelectorAll('*');
+  for (var f = 0; f < figli.length; f++) nodi.push(figli[f]);
+  for (var n = 0; n < nodi.length; n++) {
+   if (nodi[n].id) nodi[n].id = nodi[n].id.replace(reId, '-' + i);
+   var oc = nodi[n].getAttribute('onclick');
+   if (oc) nodi[n].setAttribute('onclick', oc.replace(reClick, '-' + i + "'"));
+  }
+ }
+}
+
+// ============================================================
+// CAMPI SBLOCCATI DAGLI STATUS (Modifica)
+// Ricostruisce i campi in #campi-status in base agli status scelti,
+// conservando i valori già inseriti.
+// ============================================================
+function statusSelezionati() {
+ var out = [];
+ var sel = document.querySelectorAll('#lista-status select');
+ for (var i = 0; i < sel.length; i++) {
+  if (sel[i].value && sel[i].value !== 'Nessuno' && out.indexOf(sel[i].value) === -1) out.push(sel[i].value);
+ }
+ return out;
+}
+
+function aggiornaCampiStatus() {
+ var box = document.getElementById('campi-status');
+ if (!box) return;
+ // 1) Memorizza i valori attuali
+ var memo = {};
+ var vecchi = box.querySelectorAll('input, select');
+ for (var v = 0; v < vecchi.length; v++) memo[vecchi[v].id] = vecchi[v].value;
+ var gradoEl = document.getElementById('cs-hunter-grado');
+ var grado = gradoEl ? gradoEl.value : (memo['cs-hunter-grado'] || 'Hunter');
+ // 2) Ricostruisce
+ var campi = campiStatusAttivi(statusSelezionati(), grado);
+ var stileSel = STILE_INPUT + ' background:#292354;';
+ var html = '';
+ for (var c = 0; c < campi.length; c++) {
+  var campo = campi[c];
+  var id = 'cs-' + campo.id;
+  var lab = campo.label.replace(/:$/, '');
+  html += '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">' + lab + '</label>';
+  if (campo.tipo === 'select') {
+   var opz = opzioniCampoStatus(campo);
+   html += '<select id="' + id + '" style="' + stileSel + '">';
+   if (campo.vuota) html += '<option value="">' + campo.vuota + '</option>';
+   for (var o = 0; o < opz.length; o++) html += '<option value="' + opz[o] + '">' + opz[o] + '</option>';
+   html += '</select>';
+  } else if (campo.tipo === 'ruolonum') {
+   var opr = opzioniCampoStatus(campo);
+   html += '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>';
+   html += '<td style="width:65%; padding-right:6px;"><select id="' + id + '-tipo" style="' + stileSel + '">';
+   for (var r = 0; r < opr.length; r++) html += '<option value="' + opr[r] + '">' + opr[r] + '</option>';
+   html += '</select></td>';
+   html += '<td style="width:35%; padding-left:6px;"><input type="number" id="' + id + '-num" min="0" step="1" placeholder="N°" style="' + STILE_INPUT + '"></td>';
+   html += '</tr></table>';
+  } else if (campo.tipo === 'stelle') {
+   html += '<div style="display:flex; align-items:center; gap:8px;">';
+   html += '<input type="number" id="' + id + '" min="0" step="1" value="0" style="' + STILE_INPUT + ' flex:1;">';
+   html += '<span id="' + id + '-soglia" style="color:#8FBEBA; flex:none;">/ ' + (SOGLIE_STELLE[grado] || 100) + '</span>';
+   html += '</div>';
+  } else {
+   html += '<input type="text" id="' + id + '" style="' + STILE_INPUT + '">';
+  }
+  html += '</div>';
+ }
+ box['inn' + 'erHTML'] = html;
+ // 3) Ripristina i valori
+ for (var k in memo) {
+  if (!memo.hasOwnProperty(k)) continue;
+  var el = document.getElementById(k);
+  if (el) el.value = memo[k];
+ }
+ if (typeof bozzaSalva === 'function') bozzaSalva();
+ aggiornaRiepilogoBonus();
+}
+
+// Legge i campi status e li restituisce come voci per la scheda
+function leggiCampiStatus() {
+ var grado = (document.getElementById('cs-hunter-grado') || {}).value || 'Hunter';
+ var campi = campiStatusAttivi(statusSelezionati(), grado);
+ var out = [];
+ for (var c = 0; c < campi.length; c++) {
+  var campo = campi[c];
+  var id = 'cs-' + campo.id;
+  var valore = '';
+  if (campo.tipo === 'ruolonum') {
+   var t = (document.getElementById(id + '-tipo') || {}).value || '';
+   var n = (document.getElementById(id + '-num') || {}).value || '';
+   valore = t + (n !== '' ? ' n° ' + n : '');
+  } else if (campo.tipo === 'stelle') {
+   var soglia = SOGLIE_STELLE[grado] || 100;
+   var pt = parseInt((document.getElementById(id) || {}).value, 10) || 0;
+   if (grado === 'Triple Hunter') pt = soglia;
+   valore = pt + '/' + soglia;
+  } else {
+   var e = document.getElementById(id);
+   valore = e ? e.value.trim() : '';
+   if (!valore && campo.vuota) valore = campo.vuota;
+  }
+  out.push({ label: campo.label, valore: valore || '—' });
+ }
+ return out;
+}
+
+// ============================================================
+// MODIFICA: abilità di specie, abitazione, bonus staff, riepilogo
+// ============================================================
+function costruisciExtraModifica() {
+ var stileSel = STILE_INPUT + ' background:#292354;';
+ var html = '';
+ // Abilità di specie: sola lettura, visibile per le bestie dal Lv. 15
+ html += '<div id="campo-abilita-wrap" style="display:none; margin-bottom:14px;"><label style="' + STILE_LABEL + '">Abilità di Specie</label><div id="campo-abilita-val" style="' + STILE_READONLY + '">—</div></div>';
+ // Abitazione
+ var opLv = '<option value="">—</option>';
+ for (var l = 0; l < ABITAZIONE_LIVELLI.length; l++) opLv += '<option value="' + ABITAZIONE_LIVELLI[l] + '">' + ABITAZIONE_LIVELLI[l] + '</option>';
+ var opSp = '<option value="">—</option>';
+ for (var s = 0; s < ABITAZIONE_SPECIALIZZAZIONI.length; s++) opSp += '<option value="' + ABITAZIONE_SPECIALIZZAZIONI[s] + '">' + ABITAZIONE_SPECIALIZZAZIONI[s] + '</option>';
+ html += '<div style="border-top:1px solid #3B8686; padding-top:14px; margin-top:4px;">';
+ html += riga2(inputText('campo-abitazione-nome', 'Abitazione (nome)', 'Es. Villa sul lago'), inputText('campo-abitazione-link', 'Abitazione (link al topic)', 'https://...'));
+ html += riga2(
+  '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Livello Abitazione</label><select id="campo-abitazione-lv" style="' + stileSel + '">' + opLv + '</select></div>',
+  '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Specializzazione Abitazione</label><select id="campo-abitazione-spec" style="' + stileSel + '">' + opSp + '</select></div>'
+ );
+ html += '</div>';
+ // Bonus assegnati dallo staff
+ html += '<div style="margin-bottom:14px;"><label style="' + STILE_LABEL + '">Bonus assegnati dallo staff</label><div style="display:flex; flex-wrap:wrap; gap:8px;">';
+ for (var b = 0; b < BONUS_STAFF.length; b++) {
+  html += '<label style="cursor:pointer; display:flex; align-items:center; gap:6px; background:#292354; border:1px solid #3B8686; border-radius:6px; padding:7px 12px; color:#CFF09E; font-size:0.88em;"><input type="checkbox" id="bonus-staff-' + b + '" value="' + BONUS_STAFF[b] + '"> ' + BONUS_STAFF[b] + '</label>';
+ }
+ html += '</div></div>';
+ // Riepilogo calcolato (sola lettura)
+ html += '<div id="riepilogo-bonus" style="background:#1a2e45; border:1px solid #3B8686; border-radius:8px; padding:12px 16px; color:#8FBEBA; font-size:0.88em; line-height:1.7;"></div>';
+ return html;
+}
+
+function leggiBonusStaff() {
+ var out = [];
+ for (var b = 0; b < BONUS_STAFF.length; b++) {
+  var c = document.getElementById('bonus-staff-' + b);
+  if (c && c.checked) out.push(BONUS_STAFF[b]);
+ }
+ return out;
+}
+
+// Parametri del motore bonus letti dal form di Modifica
+function leggiParametriBonusModifica() {
+ function v(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; }
+ var razza = v('campo-razza') === 'Bestia Demoniaca' ? 'Bestia Demoniaca' : 'Umano';
+ var ov = document.getElementById('over-carisma');
+ return {
+  status: statusSelezionati(),
+  gradoHunter: v('cs-hunter-grado') || 'Hunter',
+  specHunter: v('cs-hunter-spec'),
+  popBase: v('campo-popolarita') || 0,
+  repBase: v('campo-reputazione') || 0,
+  carismaBase: v('stat-carisma') || 5,
+  carismaOver: !!(ov && ov.checked),
+  abitazioneLv: v('campo-abitazione-lv'),
+  abitazioneSpec: v('campo-abitazione-spec'),
+  bonusStaff: leggiBonusStaff(),
+  razza: razza,
+  specie: razza === 'Bestia Demoniaca' ? v('campo-specie') : '',
+  livello: v('campo-livello') || 0
+ };
+}
+
+function aggiornaRiepilogoBonus() {
+ var box = document.getElementById('riepilogo-bonus');
+ if (!box || stato.modalita !== 'modifica') return;
+ var p = leggiParametriBonusModifica();
+ var r = calcolaBonusPG(p);
+ // Abilità di specie
+ var abW = document.getElementById('campo-abilita-wrap');
+ var abV = document.getElementById('campo-abilita-val');
+ if (abW) abW.style.display = r.abilitaSpecie ? '' : 'none';
+ if (abV) abV.textContent = r.abilitaSpecie || '—';
+ // Riepilogo
+ var h = '<b style="color:#CFF09E;"><i class="fa-solid fa-calculator"></i> In scheda</b><br>';
+ h += 'Popolarità: <b style="color:#E2F7C4;">' + r.popolarita + '</b>' + (r.popBonus ? ' (base ' + p.popBase + ' + ' + r.popBonus + ' da status)' : '') + '<br>';
+ h += 'Reputazione: <b style="color:#E2F7C4;">' + formattaReputazione(r.reputazione) + '</b>' + (r.repBonus ? ' (base ' + formattaReputazione(p.repBase) + ', bonus ' + formattaReputazione(r.repBonus) + ')' : '') + '<br>';
+ h += 'Carisma: <b style="color:#E2F7C4;">' + r.carisma + '</b>' + (r.carismaBonus ? ' (base ' + p.carismaBase + ' + ' + r.carismaBonus + ' bonus' + (r.carismaTagliato ? ', fermato al tetto di ' + r.carismaTetto : '') + ')' : '') + '<br>';
+ if (r.voci.length) {
+  var nomi = [];
+  for (var i = 0; i < r.voci.length; i++) nomi.push(r.voci[i].label.replace(/:$/, ''));
+  h += 'Voci: ' + nomi.join(' · ');
+ } else {
+  h += 'Nessun bonus attivo.';
+ }
+ box['inn' + 'erHTML'] = h;
+}
+
+// Collega il riepilogo a ogni modifica del form (solo Modifica)
+function riepilogoCollega() {
+ var root = document.getElementById('form-container');
+ if (!root || root._riepilogoBound) return;
+ root._riepilogoBound = true;
+ function aggiorna(e) {
+  var t = e && e.target;
+  // Cambio di status o di grado Hunter: i campi sbloccati vanno ricostruiti
+  if (t && (t.id === 'cs-hunter-grado' || (t.closest && t.closest('#lista-status')))) { aggiornaCampiStatus(); return; }
+  aggiornaRiepilogoBonus();
+ }
+ root.addEventListener('input', aggiorna);
+ root.addEventListener('change', aggiorna);
 }
 
 // ============================================================
@@ -1988,7 +2233,7 @@ function costruisciStatistiche(isNuova) {
    '<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:10px;"><div style="color:#8FBEBA; font-size:0.78em; margin-bottom:4px;">Aura</div><div id="stat-aura" style="color:#CFF09E; font-size:1.3em; font-weight:700;">500</div></div>' 
   ); 
  } else { 
-  html += '<p style="color:#8FBEBA; font-size:0.85em; margin-bottom:15px; font-style:italic;">Multipli di 5 (Vita e Aura: multipli di 100). Max stat normali: 250 (400 se over), Vita: 3000, Aura: 5000.</p>'; 
+  html += '<p style="color:#8FBEBA; font-size:0.85em; margin-bottom:15px; font-style:italic;">Multipli di 5 (Vita e Aura: multipli di 100). Max stat normali: 250 (400 se over), Vita: 3000, Aura: 5000. <b>Carisma: inserisci il valore senza bonus</b> (popolarità e abitazione vengono aggiunti in automatico, vedi il riepilogo in Dati Personali).</p>'; 
   var r3 = [], r4 = []; 
   for (var k = 0; k < 5; k++) { 
    r3.push('<div style="text-align:center; background:#292354; border:1px solid #3B8686; border-radius:8px; padding:8px 4px;">' + 
@@ -2954,9 +3199,91 @@ function importaPuliziaForm() {
   var b = document.getElementById('crop-btn-'+cid); 
   if (b) b.removeAttribute('data-crop-url'); 
  } 
- // 4) Cancella la bozza corrente: sta per essere rimpiazzata. 
+ // 4) Campi nuovi: popolarità/reputazione, abitazione, bonus staff, 
+ // campi degli status. 
+ var azzera = { 'campo-popolarita':'0', 'campo-reputazione':'0', 'campo-abitazione-nome':'', 
+  'campo-abitazione-link':'', 'campo-abitazione-lv':'', 'campo-abitazione-spec':'' }; 
+ for (var az in azzera) { var ea = document.getElementById(az); if (ea) ea.value = azzera[az]; } 
+ for (var bs = 0; bs < BONUS_STAFF.length; bs++) { var cb = document.getElementById('bonus-staff-'+bs); if (cb) cb.checked = false; } 
+ var csBox = document.getElementById('campi-status'); 
+ if (csBox) csBox['inn'+'erHTML'] = ''; 
+ // 5) Cancella la bozza corrente: sta per essere rimpiazzata. 
  if (typeof bozzaCancella === 'function') bozzaCancella(); 
 } 
+
+// ============================================================
+// IMPORT DEI CAMPI NUOVI (Popolarità, Reputazione, Abitazione,
+// campi degli status, bonus staff). Popolarità e Reputazione usano il
+// valore senza bonus salvato in data-base, se presente.
+// ============================================================
+function importaCampiNuovi(temp) {
+ var spans = temp['getElements' + 'ByTagName']('span');
+ function entryEl(label) {
+  for (var i = 0; i < spans.length - 1; i++) {
+   if (spans[i].className === 'scheda-label' && spans[i].textContent.trim() === label && spans[i + 1].className === 'scheda-entry') return spans[i + 1];
+  }
+  return null;
+ }
+ function testo(el) {
+  if (!el) return '';
+  var t = el.textContent.trim();
+  return t === '—' ? '' : t;
+ }
+ function imposta(id, val) {
+  var e = document.getElementById(id);
+  if (e && val !== null && val !== undefined && val !== '') e.value = val;
+ }
+ // Popolarità e Reputazione
+ var ePop = entryEl('Popolarità:');
+ if (ePop) {
+  var pb = ePop.getAttribute('data-base');
+  imposta('campo-popolarita', String(pb !== null ? parseInt(pb, 10) : (parseInt(testo(ePop), 10) || 0)));
+ }
+ var eRep = entryEl('Reputazione:');
+ if (eRep) {
+  var rb = eRep.getAttribute('data-base');
+  imposta('campo-reputazione', String(rb !== null ? parseInt(rb, 10) : (parseInt(testo(eRep).replace('+', ''), 10) || 0)));
+ }
+ // Abitazione
+ var eAb = entryEl('Abitazione:');
+ if (eAb) {
+  var a = eAb.querySelector ? eAb.querySelector('a') : null;
+  imposta('campo-abitazione-nome', a ? a.textContent.trim() : testo(eAb));
+  if (a) imposta('campo-abitazione-link', a.getAttribute('href') || '');
+ }
+ imposta('campo-abitazione-lv', testo(entryEl('Livello Abitazione:')));
+ imposta('campo-abitazione-spec', testo(entryEl('Specializzazione Abitazione:')));
+ // Bonus staff: presenti se la scheda ha la voce "Bonus <nome>:"
+ for (var b = 0; b < BONUS_STAFF.length; b++) {
+  var cb = document.getElementById('bonus-staff-' + b);
+  if (cb) cb.checked = !!entryEl('Bonus ' + BONUS_STAFF[b] + ':');
+ }
+ // Campi degli status: due giri, perché la Specializzazione Hunter
+ // compare solo dopo aver impostato il grado.
+ for (var giro = 0; giro < 2; giro++) {
+  aggiornaCampiStatus();
+  var grado = (document.getElementById('cs-hunter-grado') || {}).value || 'Hunter';
+  var campi = campiStatusAttivi(statusSelezionati(), grado);
+  for (var c = 0; c < campi.length; c++) {
+   var campo = campi[c];
+   var id = 'cs-' + campo.id;
+   var t = testo(entryEl(campo.label));
+   if (!t) continue;
+   if (campo.tipo === 'ruolonum') {
+    var m = t.match(/^(.*?)(?:\s+n°\s*(\d+))?$/);
+    imposta(id + '-tipo', m ? m[1].trim() : t);
+    if (m && m[2]) imposta(id + '-num', m[2]);
+   } else if (campo.tipo === 'stelle') {
+    imposta(id, String(parseInt(t.split('/')[0], 10) || 0));
+   } else if (campo.vuota && t === campo.vuota) {
+    imposta(id, '');
+   } else {
+    imposta(id, t);
+   }
+  }
+ }
+ aggiornaCampiStatus();
+}
 
 function importaScheda() { 
  var htmlScheda = document.getElementById('campo-importa').value.trim(); 
@@ -3120,6 +3447,9 @@ function importaScheda() {
   } 
  } 
  
+ // ── Popolarità, Reputazione, Abitazione, campi status, bonus staff ── 
+ if (stato.modalita === 'modifica') importaCampiNuovi(temp); 
+ 
  // ── EXP dalla span .dati-pg2 ─────────────────────────────── 
  for (var i = 0; i < spans.length; i++) { 
   if (spans[i].className === 'dati-pg2') { 
@@ -3202,7 +3532,9 @@ function importaScheda() {
     var statId   = mapStat[statNome]; 
     if (statId) { 
      var inp = document.getElementById('stat-' + statId); 
-     if (inp) inp.value = statVal; 
+     // Carisma: nel form va il valore senza bonus (data-base), se c'è 
+     var baseAttr = statId === 'carisma' ? valueEl.getAttribute('data-base') : null; 
+     if (inp) inp.value = baseAttr !== null ? baseAttr : statVal; 
      if (parseInt(statVal) > 250) { 
       var ov = document.getElementById('over-' + statId); 
       if (ov) { ov.checked = true; if (inp) inp.max = 400; } 
@@ -3462,6 +3794,7 @@ function importaScheda() {
  } 
 
  aggiornaCompetenze(); 
+ if (typeof aggiornaRiepilogoBonus === 'function') aggiornaRiepilogoBonus(); 
  // Salva la bozza con i dati appena importati: i setVal dell'import 
  // non emettono eventi, quindi senza questa scrittura esplicita la 
  // scheda importata non finirebbe in memoria (e ricaricando la 
@@ -3660,7 +3993,12 @@ function accPopolaDopoImport() {
  
 function rimuoviElemento(id) { 
  var el = document.getElementById(id); 
- if (el && el.parentNode) el.parentNode.removeChild(el); 
+ var padre = el ? el.parentNode : null; 
+ if (el && padre) padre.removeChild(el); 
+ // Le righe sono lette per indice (0, 1, 2...): dopo un'eliminazione 
+ // in mezzo vanno rinumerate, altrimenti l'ultima riga va persa. 
+ if (padre) rinumeraRighe(padre); 
+ if (padre && padre.id === 'lista-status') aggiornaCampiStatus(); 
  if (typeof bozzaSalva === 'function') bozzaSalva(); 
 } 
 
@@ -3974,23 +4312,22 @@ function raccogliDati(isNuova) {
  // Nuova: popolarità 0, reputazione iniziale da fedina/taglia, nessuna
  // abitazione. In Modifica i campi arriveranno con la fase 4: per ora
  // si usano gli stessi valori di partenza.
- var statusLista = [];
- if (!isNuova) {
-  var selStatus = document.querySelectorAll('#lista-status select');
-  for (var sl = 0; sl < selStatus.length; sl++) {
-   if (selStatus[sl].value && selStatus[sl].value !== 'Nessuno') statusLista.push(selStatus[sl].value);
-  }
- }
- var popBase = 0;
- var repBase = reputazioneIniziale(fedina, classTaglia);
- var abitazione = { nome: '', link: '', livello: '', spec: '' };
+ var statusLista = isNuova ? [] : statusSelezionati();
+ var popBase = isNuova ? 0 : (parseInt(val('campo-popolarita'), 10) || 0);
+ var repBase = isNuova ? reputazioneIniziale(fedina, classTaglia) : (parseInt(val('campo-reputazione'), 10) || 0);
+ var abitazione = isNuova ? { nome: '', link: '', livello: '', spec: '' } : {
+  nome: val('campo-abitazione-nome'), link: val('campo-abitazione-link'),
+  livello: val('campo-abitazione-lv'), spec: val('campo-abitazione-spec')
+ };
+ var bonusStaff = isNuova ? [] : leggiBonusStaff();
  var carismaOver = ovSt.indexOf('carisma') !== -1;
  var bonusPG = calcolaBonusPG({
   status: statusLista,
+  gradoHunter: val('cs-hunter-grado') || 'Hunter', specHunter: val('cs-hunter-spec'),
   popBase: popBase, repBase: repBase,
   carismaBase: stat.carisma, carismaOver: carismaOver,
   abitazioneLv: abitazione.livello, abitazioneSpec: abitazione.spec,
-  bonusStaff: [],
+  bonusStaff: bonusStaff,
   razza: isBestia ? 'Bestia Demoniaca' : 'Umano', specie: specie,
   livello: isNuova ? LIVELLO_INIZIALE : (val('campo-livello')||'0')
  });
@@ -4026,16 +4363,7 @@ function raccogliDati(isNuova) {
   allineamento: val('campo-allineamento')||'—', 
   mestiere: val('campo-mestiere')||'—', 
   classe: isBestia ? '—' : (val('campo-classe')||'—'), 
-  status: isNuova ? 'Nessuno' : (function(){
-   var lista = document.getElementById('lista-status');
-   if (!lista) return val('campo-status')||'Nessuno';
-   var valori = [];
-   for (var si=0; si<lista.children.length; si++) {
-    var sel = document.getElementById('campo-status-'+si);
-    if (sel && sel.value) valori.push(sel.value);
-   }
-   return valori.length > 0 ? valori.join(' | ') : 'Nessuno';
-  })(), 
+  status: statusLista.length > 0 ? statusLista.join(' | ') : 'Nessuno', 
   livello: isNuova ? LIVELLO_INIZIALE : (val('campo-livello')||'0'), 
   exp: isNuova ? EXP_INIZIALE : (val('campo-exp')||'0'), 
   exptot: isNuova ? EXP_MASSIMA : calcolaExpTot(val('campo-livello')||'0'), 
@@ -4113,7 +4441,7 @@ function raccogliDati(isNuova) {
   carismaBase: carismaBase, 
   abitazione: abitazione, 
   abilitaSpecie: bonusPG.abilitaSpecie, 
-  campiStatus: [], 
+  campiStatus: isNuova ? [] : leggiCampiStatus(), 
   bonusVoci: bonusPG.voci, 
   stat: stat, ovSt: ovSt, baule: baule, competenze: competenze 
  }; 
