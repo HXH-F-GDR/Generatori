@@ -2675,7 +2675,7 @@ function aggiungiItem(categoria) {
  // Materiali: solo Nome + Quantità (niente espansione né descrizione). 
  // Le altre categorie hanno anche espansione e descrizione. 
  if (categoria === 'materiali') div.innerHTML = riga1; 
- else div.innerHTML = riga1 + riga2esp + riga3desc; 
+ else div.innerHTML = riga1 + htmlCampoSlot(categoria+'-slot-'+idx) + riga2esp + riga3desc; 
  lista.appendChild(div); 
  if (typeof bozzaSalva === 'function') bozzaSalva(); 
 } 
@@ -3022,6 +3022,54 @@ function stepStat(sId, delta) {
  if (typeof bozzaSalva === 'function') bozzaSalva(); 
 } 
  
+// ============================================================ 
+// SLOT INVENTARIO (Armi, Equipaggiamento, Oggetti Extra) 
+// Quanti slot dell'inventario delle Quest occupa l'oggetto: da 0 a 5, 
+// 1 se non specificato. I Materiali non hanno slot. 
+// ============================================================ 
+var SLOT_MIN = 0, SLOT_MAX = 5, SLOT_DEFAULT = 1; 
+
+// Riporta un valore qualsiasi a un numero di slot valido (vuoto o non 
+// numerico = 1). Attenzione: 0 è un valore valido, non va confuso col vuoto. 
+function normalizzaSlot(v) { 
+ var s = String(v === undefined || v === null ? '' : v).trim(); 
+ var n = parseInt(s, 10); 
+ if (s === '' || isNaN(n)) n = SLOT_DEFAULT; 
+ if (n < SLOT_MIN) n = SLOT_MIN; 
+ if (n > SLOT_MAX) n = SLOT_MAX; 
+ return n; 
+} 
+
+function stepSlot(id, delta) { 
+ var el = document.getElementById(id); 
+ if (!el) return; 
+ var nv = normalizzaSlot(el.value) + delta; 
+ if (nv < SLOT_MIN) nv = SLOT_MIN; 
+ if (nv > SLOT_MAX) nv = SLOT_MAX; 
+ el.value = nv; 
+ if (typeof bozzaSalva === 'function') bozzaSalva(); 
+} 
+
+// Valore scritto a mano: lo riporta nei limiti 
+function validaSlot(el) { 
+ if (!el) return; 
+ el.value = normalizzaSlot(el.value); 
+ if (typeof bozzaSalva === 'function') bozzaSalva(); 
+} 
+
+// Campo Slot del form, con la nota sotto 
+function htmlCampoSlot(id) { 
+ var btn = 'background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;'; 
+ return '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Slot (da 0 a 5)</label>' + 
+  '<div style="display:flex; align-items:center; gap:6px; max-width:180px;">' + 
+  '<button type="button" onclick="stepSlot(\''+id+'\', -1)" style="'+btn+'">&#8722;</button>' + 
+  '<input type="number" id="'+id+'" value="'+SLOT_DEFAULT+'" min="'+SLOT_MIN+'" max="'+SLOT_MAX+'" onchange="validaSlot(this)" style="'+STILE_INPUT+' text-align:center; flex:1;">' + 
+  '<button type="button" onclick="stepSlot(\''+id+'\', 1)" style="'+btn+'">+</button>' + 
+  '</div>' + 
+  '<div style="color:var(--gs-tenue); font-size:0.78em; font-style:italic; margin-top:5px;"><i class="fa-solid fa-circle-info"></i> Se non specificato diversamente, lo slot occupato è sempre 1</div>' + 
+  '</div>'; 
+} 
+
 function stepLv(id, delta) { 
  var el = document.getElementById(id); 
  if (!el) return; 
@@ -3888,6 +3936,8 @@ function importaScheda() {
       if (lvVal > 5) lvVal = 5; 
       setVal(catId + '-lv-' + bIdx, lvVal); 
      } 
+     var slotMatch = infoTesto.match(/Slot:\s*(\d+)/); 
+     if (slotMatch && catId !== 'materiali') setVal(catId + '-slot-' + bIdx, String(normalizzaSlot(slotMatch[1]))); 
      var usiMatch = infoTesto.match(/Usi:\s*(\S+)/); 
      if (usiMatch && catId === 'oggetti') setVal(catId + '-usi-' + bIdx, usiMatch[1]); 
      // Espansione: legge il link se presente, altrimenti il testo 
@@ -4101,11 +4151,13 @@ function accCatturaBase(temp) {
      var qtM = infoTxt.match(/Qt:\s*(\S+)/); 
      var lvM = infoTxt.match(/Lv\.\s*(\S+)/); 
      var usiM = infoTxt.match(/Usi:\s*(\S+)/); 
+     var slotM = infoTxt.match(/Slot:\s*(\d+)/); 
      bauleAtt[catId2].push({ 
       nome: nmEl.textContent.trim(), 
       qt: qtM ? qtM[1] : '', 
       lv: lvM ? lvM[1] : '', 
-      usi: usiM ? usiM[1] : '' 
+      usi: usiM ? usiM[1] : '', 
+      slot: catId2 === 'materiali' ? '' : String(normalizzaSlot(slotM ? slotM[1] : '')) 
      }); 
     } 
    } 
@@ -4311,6 +4363,7 @@ function raccogliDatiAccrediti() {
     var enE=document.getElementById(cats[cc]+'-exp-nome-'+bb); 
     var elE=document.getElementById(cats[cc]+'-exp-link-'+bb); 
     var dE=document.getElementById(cats[cc]+'-desc-'+bb); 
+    if (cats[cc]!=='materiali') { var sE=document.getElementById(cats[cc]+'-slot-'+bb); item.slot=String(normalizzaSlot(sE?sE.value:'')); } 
     item.expNome=enE?enE.value.trim():''; 
     item.expLink=elE?elE.value.trim():''; 
     item.desc=dE?dE.value.trim():''; 
@@ -4445,6 +4498,7 @@ function raccogliDati(isNuova) {
     var enE=document.getElementById(cats[c]+'-exp-nome-'+bb); 
     var elE=document.getElementById(cats[c]+'-exp-link-'+bb); 
     var dE=document.getElementById(cats[c]+'-desc-'+bb);
+    if (cats[c]!=='materiali') { var sE=document.getElementById(cats[c]+'-slot-'+bb); item.slot=String(normalizzaSlot(sE?sE.value:'')); } 
     item.expNome=enE?enE.value.trim():''; 
     item.expLink=elE?elE.value.trim():'';
     item.desc=dE?dE.value.trim():''; 
@@ -4775,6 +4829,7 @@ function accCalcolaDiff(b, d) {
   if (it.qt !== undefined && it.qt !== '' && it.qt !== null) parti.push('Qt ' + it.qt);
   if (it.lv !== undefined && it.lv !== '' && it.lv !== null && it.lv !== '0') parti.push('Lv ' + it.lv);
   if (it.usi !== undefined && it.usi !== '' && it.usi !== null) parti.push('Usi ' + it.usi);
+  if (it.slot !== undefined && it.slot !== '' && it.slot !== null) parti.push('Slot ' + it.slot);
   return parti.join(', ');
  }
  function bauleCampiDiversi(v, n) {
@@ -4782,7 +4837,8 @@ function accCalcolaDiff(b, d) {
   var lv2 = String(v.lv||''), ln = String(n.lv||'');
   var uv = String(v.usi||''), un = String(n.usi||'');
   if ((lv2==='0'||lv2==='') && (ln==='0'||ln==='')) { lv2=''; ln=''; }
-  return qv!==qn || lv2!==ln || uv!==un;
+  var sv = String(v.slot||''), sn = String(n.slot||'');
+  return qv!==qn || lv2!==ln || uv!==un || sv!==sn;
  }
  for (var c = 0; c < cats.length; c++) {
   var listaV = (b.baule && b.baule[cats[c]]) ? b.baule[cats[c]] : [];
