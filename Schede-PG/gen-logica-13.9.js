@@ -2636,18 +2636,19 @@ function aggiungiItem(categoria) {
    '</td></tr></table>'; 
  } else if (categoria === 'oggetti') { 
   riga1 = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' + 
-   '<td style="width:52%; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-nome-'+idx,'Nome','Es. Pozione') + '</td>' + 
-   '<td style="width:16%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-qt-'+idx,'Qt','1') + '</td>' + 
-   '<td style="width:22%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-usi-'+idx,'Usi (es. 0/3)','0/3') + '</td>' + 
+   '<td style="width:40%; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-nome-'+idx,'Nome','Es. Pozione') + '</td>' + 
+   '<td style="width:12%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-qt-'+idx,'Qt','1') + '</td>' + 
+   '<td style="width:19%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-usi-'+idx,'Usi (es. 0/3)','0/3') + '</td>' + 
+   '<td style="width:19%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + htmlCampoSlot(categoria+'-slot-'+idx) + '</td>' + 
    '<td style="width:10%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
    '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
    '</td></tr></table>'; 
  } else { 
   // armi / equip 
   riga1 = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' + 
-   '<td style="width:52%; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-nome-'+idx,'Nome','Es. Spada') + '</td>' + 
-   '<td style="width:16%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-qt-'+idx,'Qt','1') + '</td>' + 
-   '<td style="width:22%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + 
+   '<td style="width:36%; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-nome-'+idx,'Nome','Es. Spada') + '</td>' + 
+   '<td style="width:12%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + inputText(categoria+'-qt-'+idx,'Qt','1') + '</td>' + 
+   '<td style="width:21%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + 
    '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Livello (max 5)</label>' + 
    '<div style="display:flex; align-items:center; gap:6px;">' + 
    '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', -1)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">&#8722;</button>' + 
@@ -2655,6 +2656,7 @@ function aggiungiItem(categoria) {
    '<button onclick="stepLv(\''+categoria+'-lv-'+idx+'\', 1)" style="background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;">+</button>' + 
    '</div></div>' + 
    '</td>' + 
+   '<td style="width:21%; padding-left:4px; padding-right:4px; vertical-align:bottom;">' + htmlCampoSlot(categoria+'-slot-'+idx) + '</td>' + 
    '<td style="width:10%; vertical-align:bottom; padding-bottom:14px; text-align:center;">' + 
    '<button onclick="rimuoviElemento(\'' + categoria + '-row-' + idx + '\')" style="background:var(--gs-errore-fondo); color:var(--gs-errore); border:1px solid var(--gs-errore-bordo); padding:10px 12px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>' + 
    '</td></tr></table>'; 
@@ -2675,7 +2677,7 @@ function aggiungiItem(categoria) {
  // Materiali: solo Nome + Quantità (niente espansione né descrizione). 
  // Le altre categorie hanno anche espansione e descrizione. 
  if (categoria === 'materiali') div.innerHTML = riga1; 
- else div.innerHTML = riga1 + htmlCampoSlot(categoria+'-slot-'+idx) + riga2esp + riga3desc; 
+ else div.innerHTML = riga1 + htmlNotaSlot() + riga2esp + riga3desc; 
  lista.appendChild(div); 
  if (typeof bozzaSalva === 'function') bozzaSalva(); 
 } 
@@ -3057,17 +3059,20 @@ function validaSlot(el) {
  if (typeof bozzaSalva === 'function') bozzaSalva(); 
 } 
 
-// Campo Slot del form, con la nota sotto 
+// Campo Slot del form: stesso schema del campo Livello, va in colonna 
+// nella riga di Nome e Qt. La nota sta sotto l'intera riga. 
 function htmlCampoSlot(id) { 
  var btn = 'background:var(--gs-fondo); color:var(--gs-accento); border:1px solid var(--gs-medio); border-radius:4px; width:28px; height:28px; cursor:pointer; font-size:1em; padding:0; flex-shrink:0;'; 
- return '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Slot (da 0 a 5)</label>' + 
-  '<div style="display:flex; align-items:center; gap:6px; max-width:180px;">' + 
+ return '<div style="margin-bottom:14px;"><label style="'+STILE_LABEL+'">Slot (max 5)</label>' + 
+  '<div style="display:flex; align-items:center; gap:6px;">' + 
   '<button type="button" onclick="stepSlot(\''+id+'\', -1)" style="'+btn+'">&#8722;</button>' + 
   '<input type="number" id="'+id+'" value="'+SLOT_DEFAULT+'" min="'+SLOT_MIN+'" max="'+SLOT_MAX+'" onchange="validaSlot(this)" style="'+STILE_INPUT+' text-align:center; flex:1;">' + 
   '<button type="button" onclick="stepSlot(\''+id+'\', 1)" style="'+btn+'">+</button>' + 
-  '</div>' + 
-  '<div style="color:var(--gs-tenue); font-size:0.78em; font-style:italic; margin-top:5px;"><i class="fa-solid fa-circle-info"></i> Se non specificato diversamente, lo slot occupato è sempre 1</div>' + 
-  '</div>'; 
+  '</div></div>'; 
+} 
+
+function htmlNotaSlot() { 
+ return '<div style="color:var(--gs-tenue); font-size:0.78em; font-style:italic; margin:-6px 0 12px;"><i class="fa-solid fa-circle-info"></i> Se non specificato diversamente, lo slot occupato è sempre 1</div>'; 
 } 
 
 function stepLv(id, delta) { 
