@@ -1,3 +1,9 @@
+// Slot occupati da un oggetto del baule (0 è valido, vuoto = 1) 
+function htmlSlotItem(itm) { 
+ var out = typeof normalizzaSlot === 'function' ? normalizzaSlot(itm.slot) : (itm.slot !== undefined && itm.slot !== '' ? itm.slot : '1'); 
+ return out; 
+} 
+
 // ============================================================ 
 // VOCI NUOVE DEI DATI PERSONALI (aggiornamento status/bonus) 
 // Ogni voce segue lo schema label + entry seguito da \n, come le altre. 
@@ -564,8 +570,8 @@ function aggiornaHTMLScheda(d) {
      var expTag  = expLink ? '<a href="'+expLink+'">'+expNome+'</a>' : expNome; 
      var hasExp  = !!(expNome || expLink); 
      var info = 'Qt: '+(itm.qt||'1'); 
-     if (tipo==='armi'||tipo==='equip') info += ' · Lv. '+(itm.lv||'0') + (hasExp ? ' · Espansione: '+expTag : ''); 
-     if (tipo==='oggetti')              info += ' · Usi: '+(itm.usi||'0/1') + (hasExp ? ' · Espansione: '+expTag : ''); 
+     if (tipo==='armi'||tipo==='equip') info += ' · Lv. '+(itm.lv||'0') + ' · Slot: '+htmlSlotItem(itm) + (hasExp ? ' · Espansione: '+expTag : ''); 
+     if (tipo==='oggetti')              info += ' · Usi: '+(itm.usi||'0/1') + ' · Slot: '+htmlSlotItem(itm) + (hasExp ? ' · Espansione: '+expTag : ''); 
      if (tipo==='materiali' && hasExp)  info += ' · Espansione: '+expTag; 
      var descHtml = itm.desc ? '<div class="equip-item-desc">'+itm.desc+'</div>' : '';
      nuovoLi += '<li><span class="equip-item-name">'+itm.nome+'</span> <span class="equip-item-info">'+info+'</span>'+descHtml+'</li>'; 
@@ -763,8 +769,8 @@ function costruisciHTMLScheda(d, isNuova, classeContenitore, classeOriginale, st
     var expTag = expLink ? '<a href="'+expLink+'">'+expNome+'</a>' : expNome; 
     var hasExp = !!(expNome || expLink); 
     var info='Qt: '+(itm.qt||'1'); 
-    if (tipo==='armi'||tipo==='equip') info+=' · Lv. '+(itm.lv||'0') + (hasExp ? ' · Espansione: '+expTag : ''); 
-    if (tipo==='oggetti') info+=' · Usi: '+(itm.usi||'0/1') + (hasExp ? ' · Espansione: '+expTag : ''); 
+    if (tipo==='armi'||tipo==='equip') info+=' · Lv. '+(itm.lv||'0') + ' · Slot: '+htmlSlotItem(itm) + (hasExp ? ' · Espansione: '+expTag : ''); 
+    if (tipo==='oggetti') info+=' · Usi: '+(itm.usi||'0/1') + ' · Slot: '+htmlSlotItem(itm) + (hasExp ? ' · Espansione: '+expTag : ''); 
     if (tipo==='materiali' && hasExp) info+=' · Espansione: '+expTag; 
     var descHtml = itm.desc ? '<div class="equip-item-desc">'+itm.desc+'</div>' : '';
     li+='<li><span class="equip-item-name">'+itm.nome+'</span> <span class="equip-item-info">'+info+'</span>'+descHtml+'</li>'; 
