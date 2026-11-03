@@ -83,7 +83,7 @@ var TIPI_HATSU = [
  'Specializzazione (&#29305;&#36074;)'
 ];
 
-var STATUS = ['Sconosciuto', 'Nessuno', 'Criminale', 'Hunter', 'Lottatore/trice Celeste', 'Assassino/a', 'Zampa'];
+var STATUS = ['Sconosciuto', 'Nessuno', 'Criminale', 'Hunter', 'Presidente dell’Associazione Hunter', 'Zodiaco', 'Ombra', 'Lottatore/trice Celeste', 'Assassino/a', 'Ragno'];
 
 var SEGNI_ZODIACALI = [
  'Ariete', 'Toro', 'Gemelli', 'Cancro', 'Leone', 'Vergine',
