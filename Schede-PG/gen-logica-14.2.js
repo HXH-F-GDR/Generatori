@@ -2668,7 +2668,7 @@ function aggiungiItem(categoria) {
  
  // Riga 2: Origine (nome + link) — per tutte le categorie 
  var riga2esp = '<table style="width:100%; border-collapse:collapse; table-layout:fixed;"><tr>' + 
-  '<td style="width:50%; padding-right:6px; vertical-align:bottom;">' + inputText(categoria+'-exp-nome-'+idx,'Nome origine','Es. Deathbringer') + '</td>' + 
+  '<td style="width:50%; padding-right:6px; vertical-align:bottom;">' + inputText(categoria+'-exp-nome-'+idx,'Origine','Es. Deathbringer') + '</td>' + 
   '<td style="width:50%; padding-left:6px; vertical-align:bottom;">' + inputText(categoria+'-exp-link-'+idx,'Link origine','https://...') + '</td>' + 
   '</tr></table>';
 
